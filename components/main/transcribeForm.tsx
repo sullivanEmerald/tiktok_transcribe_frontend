@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
 import { Clipboard, Download } from "lucide-react";
+import { copyToClipboard, downLoadFile } from "@/lib/utils";
 
 export default function TranscribeSection() {
     const [videoUrl, setVideoUrl] = useState("");
@@ -39,14 +40,13 @@ export default function TranscribeSection() {
 
     return (
         <>
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-4 flex flex-col justify-center items-center" onSubmit={handleSubmit} >
                 <div>
-                    <h1 className="text-2xl font-bold">Video Transcript Generator</h1>
-                    <p className="text-muted-foreground">
+                    <h1 className="text-2xl font-bold text-center">Video Transcript Generator</h1>
+                    <p className="text-muted-foreground text-center mt-1">
                         Paste a TikTok, Instagram Reel, or YouTube Shorts link and get an instant transcript.
                     </p>
                 </div>
-                <label htmlFor="videoUrl" className="block text-sm font-medium text-primary mb-1">Video URL</label>
                 <Input
                     id="videoUrl"
                     name="videoUrl"
@@ -55,13 +55,13 @@ export default function TranscribeSection() {
                     required
                     value={videoUrl}
                     onChange={(e) => setVideoUrl(e.target.value)}
-                    className="border-2 border-primary focus:border-primary focus:ring-primary rounded-lg px-4 py-6 text-primary placeholder:text-primary/60 bg-transparent"
+                    className="border-2 border-primary focus:border-primary focus:ring-primary rounded-3xl px-4 py-8 w-full md:w-1/2 placeholder:text-primary/60 bg-transparent"
                     placeholder="Paste TikTok, Instagram Reel, or YouTube Shorts URL"
                 />
                 <Recaptcha onChange={onCaptchaChange} />
                 <button
                     type="submit"
-                    className="w-full bg-primary text-white py-2 rounded-lg font-semibold mt-2 disabled:opacity-50"
+                    className="w-full md:w-1/2 bg-primary text-white py-4 rounded-3xl font-semibold mt-2 disabled:opacity-50 hover:bg-primary/80 transition-colors duration-200"
                     disabled={loading || !captchaToken}
                 >
                     {loading ? "Transcribing..." : "Generate Transcript"}
@@ -85,28 +85,14 @@ export default function TranscribeSection() {
                                         <Button
                                             variant="default"
                                             className="flex items-center gap-2 bg-primary text-white hover:bg-primary/80"
-                                            onClick={() => {
-                                                navigator.clipboard.writeText(transcript.transcript);
-                                                toast.success("Transcript copied to clipboard!");
-                                            }}
+                                            onClick={() => copyToClipboard(transcript.transcript)}
                                         >
                                             <Clipboard className="w-4 h-4" /> Copy
                                         </Button>
                                         <Button
                                             variant="default"
                                             className="flex items-center gap-2 bg-[#ff3040] text-white hover:bg-[#e62a38]"
-                                            onClick={() => {
-                                                const blob = new Blob([transcript.transcript], { type: "text/plain" });
-                                                const url = URL.createObjectURL(blob);
-                                                const a = document.createElement("a");
-                                                a.href = url;
-                                                a.download = "transcript.txt";
-                                                document.body.appendChild(a);
-                                                a.click();
-                                                document.body.removeChild(a);
-                                                URL.revokeObjectURL(url);
-                                                toast.success("Transcript downloaded!");
-                                            }}
+                                            onClick={() => downLoadFile(transcript.transcript)}
                                         >
                                             <Download className="w-4 h-4" /> Download
                                         </Button>

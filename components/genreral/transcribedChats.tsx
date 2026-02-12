@@ -1,25 +1,51 @@
-import { History } from "lucide-react";
+import { History, ChevronLeft, X } from "lucide-react";
 import { useEffect } from "react";
 import { useTranscription } from "@/hooks/useTranscribe";
 import { Skeleton } from "../ui/skeleton";
 import moment from "moment";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-export default function TranscribedChats() {
+interface TranscribedChatsProps {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+}
+
+export default function TranscribedChats({ open, setOpen }: TranscribedChatsProps) {
     const { isFetching, fetchRecentTranscripts, recentTranscripts } = useTranscription();
 
     useEffect(() => {
-        fetchRecentTranscripts();
-    }, [fetchRecentTranscripts]);
+        if (open) fetchRecentTranscripts();
+    }, [fetchRecentTranscripts, open]);
+
+    if (!open) {
+        return (
+            // <Button
+            //     className="bg-white border border-slate-200 rounded-r-lg shadow px-2 py-1 flex items-center transition-all duration-300 hover:bg-slate-50 fixed top-4 left-0 z-40"
+            //     onClick={() => setOpen(true)}
+            //     aria-label="Open sidebar"
+            // >
+            //     <ChevronLeft className="w-4 h-4 text-primary" />
+            // </Button>
+            null
+        );
+    }
 
     return (
-        <aside className="w-80 h-screen border border-slate-200 bg-white flex flex-col rounded-lg shadow-sm fixed left-0 top-0 z-30 overflow-auto">
+        <aside className="w-80 h-screen border border-slate-200 bg-white flex flex-col rounded-lg shadow-sm fixed left-0 top-0 z-30 overflow-auto transition-all duration-300">
             {/* Header */}
             <div className="px-5 py-4 border-b border-slate-200 flex items-center gap-2">
                 <History className="w-4 h-4 text-[#0209b2]" />
                 <h2 className="text-lg font-bold text-primary">
                     Recent Transcripts
                 </h2>
+                <Button
+                    className="bg-white ml-auto hover:bg-transparent cursor-pointer"
+                    onClick={() => setOpen(false)}
+                    aria-label="Close sidebar"
+                >
+                    <X className="w-4 h-4 text-primary" />
+                </Button>
             </div>
 
             {/* List */}
@@ -38,6 +64,10 @@ export default function TranscribedChats() {
                             href={`/transcript/${chat._id}`}
                             key={index}
                             className="w-full flex flex-col px-5 py-4 border-b border-slate-100 hover:bg-[#0209b2]/5 transition group cursor-pointer"
+                            onClick={() => {
+                                // Only close sidebar on mobile
+                                if (window.innerWidth < 640) setOpen(false);
+                            }}
                         >
                             <div className="flex items-center justify-between">
                                 <h3 className="text-md font-medium text-slate-900 truncate">

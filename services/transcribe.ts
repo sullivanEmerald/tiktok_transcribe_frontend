@@ -1,4 +1,5 @@
 import { axiosInstance } from "@/lib/utils";
+import { get } from "http";
 
 
 export const TranscribeService = {
@@ -31,6 +32,12 @@ export const TranscribeService = {
     getRecentTranscripts: async () => {
         const response = await axiosInstance.get('/transcription/recent');
         console.log("Recent transcripts fetched:", response.data);
+        return response.data;
+    },
+
+    getTranscriptById: async (id: string) => {
+        const response = await axiosInstance.get(`/transcription/${id}`);
+        console.log(`Transcript for job ${id} fetched:`, response.data);
         return response.data;
     }
 }

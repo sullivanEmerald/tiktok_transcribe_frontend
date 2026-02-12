@@ -2,7 +2,7 @@
 
 export const mainNavigation = [
     {
-        name: 'About Us',
+        name: 'Home',
         href: '#',
     },
     {
