@@ -12,6 +12,18 @@ export function useTranscription() {
     const [progress, setProgress] = useState(0);
 
 
+    const fetchRecentTranscripts = useCallback(async () => {
+        setIsFetching(true);
+        try {
+            const res = await TranscribeService.getRecentTranscripts();
+            setRecentTranscripts(res);
+        } catch (error) {
+            console.error("Error fetching recent transcripts:", error);
+        } finally {
+            setIsFetching(false);
+        }
+    }, []);
+
     const submitTranscription = useCallback(async (videoUrl: string, captchaToken: string) => {
         setLoading(true);
         setError(null);
@@ -26,13 +38,15 @@ export function useTranscription() {
                 status: result.status,
                 jobId: result.jobId
             });
-            fetchRecentTranscripts();
+
+            // Immediately refetch recent transcripts and wait for it to complete
+            await fetchRecentTranscripts();
         } catch (err: any) {
             showToaster(err.message || 'Failed to generate transcript',);
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [fetchRecentTranscripts]);
 
 
 
@@ -66,18 +80,6 @@ export function useTranscription() {
         });
     };
 
-
-    const fetchRecentTranscripts = useCallback(async () => {
-        setIsFetching(true);
-        try {
-            const res = await TranscribeService.getRecentTranscripts();
-            setRecentTranscripts(res);
-        } catch (error) {
-            console.error("Error fetching recent transcripts:", error);
-        } finally {
-            setIsFetching(false);
-        }
-    }, []);
 
     return {
         loading,
