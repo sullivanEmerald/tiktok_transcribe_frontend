@@ -12,11 +12,31 @@ import { Button } from "@/components/ui/button";
 import { Clipboard, Download } from "lucide-react";
 import moment from "moment";
 
+// Helper function to download video
+function downLoadVideoss(url?: string) {
+    if (!url) return;
+    const link = document.createElement("a");
+    link.href = url;
+    // Try to extract filename from URL or fallback
+    const filename = url.split("/").pop() || "video.mp4";
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
 export default function TranscriptPage() {
     const { id } = useParams();
     const { recentTranscripts, } = useTranscription();
     const [singleTranscript, setSingleTranscript] = useState<RecentTranscriptData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+
+    const downLoadVideo = async (jobId?: string) => {
+        if (!jobId) return;
+        const response = await TranscribeService.getVideoUrl(jobId);
+        console.log("Video URL fetched for download:", response);
+    };
 
     useEffect(() => {
         const fetchTranscript = async () => {
@@ -76,7 +96,14 @@ export default function TranscriptPage() {
                             className="flex items-center gap-2 bg-[#ff3040] text-white hover:bg-[#e62a38]"
                             onClick={() => downLoadFile(singleTranscript?.transcript)}
                         >
-                            <Download className="w-4 h-4" /> Download
+                            <Download className="w-4 h-4" /> Download Copy
+                        </Button>
+                        <Button
+                            variant="default"
+                            className="flex items-center gap-2 bg-[#ff3040] text-white hover:bg-[#e62a38]"
+                            onClick={() => downLoadVideo(singleTranscript?.jobId)}
+                        >
+                            <Download className="w-4 h-4" /> Download Video
                         </Button>
                     </div>
                 </div>

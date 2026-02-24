@@ -53,7 +53,7 @@ export function Layout({ children }: LayoutProps) {
                 >
                     {children}
                 </main>
-                <footer className="w-full max-w-full">
+                <footer className="w-full max-w-full mt-4">
                     <Footer />
                 </footer>
             </div>

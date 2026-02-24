@@ -1,6 +1,4 @@
 import { axiosInstance } from "@/lib/utils";
-import { get } from "http";
-
 
 export const TranscribeService = {
     createTranscription: async (videoUrl: string, captchaToken: string) => {
@@ -38,6 +36,12 @@ export const TranscribeService = {
     getTranscriptById: async (id: string) => {
         const response = await axiosInstance.get(`/transcription/${id}`);
         console.log(`Transcript for job ${id} fetched:`, response.data);
+        return response.data;
+    },
+
+    getVideoUrl: async (jobId: string) => {
+        const response = await axiosInstance.get(`/transcription/${jobId}/download`);
+        console.log(`Video URL for job ${jobId} fetched:`, response.data);
         return response.data;
     }
 }

@@ -31,7 +31,7 @@ export default function Footer() {
                     </a>
                 </nav>
                 <div className="text-lg text-blue-100 text-center md:text-right">
-                    &copy; {new Date().getFullYear()} Transcripto. All rights
+                    &copy; {new Date().getFullYear()} Clip Script. All rights
                     reserved.
                 </div>
             </div>

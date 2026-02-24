@@ -44,7 +44,7 @@ export default function TranscribeSection() {
                 <div>
                     <h1 className="text-2xl font-bold text-center">Video Transcript Generator</h1>
                     <p className="text-muted-foreground text-center mt-1">
-                        Paste a TikTok, Instagram Reel, or YouTube Shorts link and get an instant transcript.
+                        Turn TikTok, Reels & Shorts into clean transcripts instantly.
                     </p>
                 </div>
                 <Input

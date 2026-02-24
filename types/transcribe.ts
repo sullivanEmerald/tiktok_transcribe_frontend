@@ -7,5 +7,6 @@ export interface TranscriptData {
 export interface RecentTranscriptData {
     transcript: string;
     createdAt?: string;
+    jobId?: string;
     _id: string;
 }
