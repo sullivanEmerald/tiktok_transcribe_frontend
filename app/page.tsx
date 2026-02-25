@@ -4,6 +4,7 @@ import TranscribeSection from "@/components/main/transcribeForm";
 import TranscriptProcess from "@/components/main/process";
 import Platforms from "@/components/main/platforms";
 import Faqs from "@/components/main/faqs";
+import Download from "@/components/main/download";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
         <TranscribeSection />
         <TranscriptProcess />
         <Platforms />
+        <Download />
         <Faqs />
       </div>
     </Layout>

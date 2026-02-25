@@ -64,3 +64,27 @@ export const downLoadFile = (content: string) => {
   URL.revokeObjectURL(url);
   showToaster('File downloaded!', 'success');
 }
+
+export const downLoadVideo = async (jobId?: string) => {
+  if (!jobId) return;
+  try {
+    const res = await fetch(`${API_URL}/transcription/${jobId}/download`);
+    if (!res.ok) {
+      console.error("Failed to fetch video:", res);
+      showToaster("Failed to download video. Please try again later.");
+      return;
+    }
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `video_${jobId}.mp4`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    showToaster("Failed to download video. Please try again later.");
+    console.error(err);
+  }
+};

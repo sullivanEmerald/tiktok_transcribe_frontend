@@ -21,17 +21,13 @@ export function Layout({ children }: LayoutProps) {
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
-            <div
-                className={`fixed left-0 top-0 h-full z-40 transition-all duration-300
-                    ${sidebarOpen ? 'block' : 'hidden'}
-                    w-64 sm:w-80 max-w-full
-                    bg-white
-                    sm:bg-transparent
-                    sm:block
-                `}
-            >
-                <TranscribedChats open={sidebarOpen} setOpen={setSidebarOpen} />
-            </div>
+            {sidebarOpen && (
+                <div
+                    className="fixed left-0 top-0 h-full z-40 transition-all duration-300 w-64 sm:w-80 max-w-full bg-white sm:bg-transparent sm:block"
+                >
+                    <TranscribedChats open={sidebarOpen} setOpen={setSidebarOpen} />
+                </div>
+            )}
 
             {/* Main content area */}
             <div

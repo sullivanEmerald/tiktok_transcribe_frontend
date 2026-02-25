@@ -18,12 +18,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Clipboard, Download } from "lucide-react";
 import { copyToClipboard, downLoadFile } from "@/lib/utils";
+import { downLoadVideo } from "@/lib/utils";
+import { SpinnerLoader } from "../genreral/common";
+
 
 export default function TranscribeSection() {
     const [videoUrl, setVideoUrl] = useState("");
     const { captchaToken, onCaptchaChange } = useCaptcha();
     const { submitTranscription, loading, error, transcript } = useTranscription();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isDownloading, setIsDownloading] = useState(false);
 
     useEffect(() => {
         setIsDialogOpen(transcript !== null);
@@ -84,17 +88,28 @@ export default function TranscribeSection() {
                                     <div className="flex gap-4 mt-4 justify-end">
                                         <Button
                                             variant="default"
-                                            className="flex items-center gap-2 bg-primary text-white hover:bg-primary/80"
+                                            className="flex items-center gap-2 bg-primary text-white border border-primary hover:bg-transparent hover:text-primary hover:border-primary transition-colors duration-200"
                                             onClick={() => copyToClipboard(transcript.transcript)}
                                         >
                                             <Clipboard className="w-4 h-4" /> Copy
                                         </Button>
                                         <Button
                                             variant="default"
-                                            className="flex items-center gap-2 bg-[#ff3040] text-white hover:bg-[#e62a38]"
+                                            className="flex items-center gap-2 bg-[#ff3040] text-white hover:bg-transparent hover:text-[#ff3040] transition-colors duration-200 hover:border-[#ff3040] border border-[#ff3040]"
                                             onClick={() => downLoadFile(transcript.transcript)}
                                         >
                                             <Download className="w-4 h-4" /> Download
+                                        </Button>
+                                        <Button
+                                            variant="default"
+                                            className="flex items-center gap-2 bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-200"
+                                            onClick={async () => {
+                                                setIsDownloading(true);
+                                                await downLoadVideo(transcript?.jobId);
+                                                setIsDownloading(false);
+                                            }}
+                                        >
+                                            {isDownloading ? <SpinnerLoader /> : <><Download className="w-4 h-4" /> Download Video</>}
                                         </Button>
                                     </div>
                                 </>

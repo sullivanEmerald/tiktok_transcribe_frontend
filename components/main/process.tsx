@@ -30,7 +30,7 @@ export default function TranscriptProcess() {
         <div className="">
             {/* <h1 className="text-2xl font-bold mb-8 bg-blue-100 rounded-lg text-center py-3">Transcript Process</h1> */}
             <div className="flex flex-col md:flex-row gap-8 justify-between">
-                <div className="w-full md:w-[45%] flex-shrink-0">
+                <div className="w-full md:w-[40%] flex-shrink-0">
                     <Image
                         src="/image/process.png"
                         alt="Process Image"

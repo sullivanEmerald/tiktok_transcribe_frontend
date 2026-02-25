@@ -42,7 +42,8 @@ export function useTranscription() {
             // Immediately refetch recent transcripts and wait for it to complete
             await fetchRecentTranscripts();
         } catch (err: any) {
-            showToaster(err.message || 'Failed to generate transcript',);
+            console.log("Transcribing error", err)
+            showToaster('Failed to generate transcript');
         } finally {
             setLoading(false);
         }

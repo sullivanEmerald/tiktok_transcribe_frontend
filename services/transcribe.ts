@@ -40,6 +40,7 @@ export const TranscribeService = {
     },
 
     getVideoUrl: async (jobId: string) => {
+        console.log(`Fetching video URL for job ${jobId}`);
         const response = await axiosInstance.get(`/transcription/${jobId}/download`);
         console.log(`Video URL for job ${jobId} fetched:`, response.data);
         return response.data;
