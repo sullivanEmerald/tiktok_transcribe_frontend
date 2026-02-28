@@ -36,14 +36,17 @@ export function useTranscription() {
             setTranscript({
                 transcript: result.transcript,
                 status: result.status,
-                jobId: result.jobId
+                jobId: result.jobId,
+                utterances: result.utterances,
+                platform: result.platform,
+                videoUrl: result.videoUrl,
             });
 
             // Immediately refetch recent transcripts and wait for it to complete
             await fetchRecentTranscripts();
         } catch (err: any) {
             console.log("Transcribing error", err)
-            showToaster('Failed to generate transcript');
+            showToaster('Failed to generate transcript', "error");
         } finally {
             setLoading(false);
         }

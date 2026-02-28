@@ -2,6 +2,7 @@ import axios from "axios"
 import { clsx, type ClassValue } from "clsx"
 import { toast } from "react-toastify";
 import { twMerge } from "tailwind-merge"
+import { UtteranceType } from "@/types/transcribe";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -57,7 +58,7 @@ export const downLoadFile = (content: string) => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'transcript.txt';
+  a.download = 'clipscript_transcript.txt';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -78,7 +79,7 @@ export const downLoadVideo = async (jobId?: string) => {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `video_${jobId}.mp4`);
+    link.setAttribute('download', `clipscript_${jobId}.mp4`);
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -88,3 +89,18 @@ export const downLoadVideo = async (jobId?: string) => {
     console.error(err);
   }
 };
+
+
+// Helper to format ms to mm:ss
+export function formatMs(ms: number) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+
+export function downloadUtterances(transcript: Array<UtteranceType> | undefined) {
+  const utteranceText = transcript?.map(utt => `${formatMs(utt.start)} - ${utt.text}`).join('\n');
+  return utteranceText;
+}

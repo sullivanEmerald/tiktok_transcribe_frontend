@@ -16,10 +16,10 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
-import { Clipboard, Download } from "lucide-react";
-import { copyToClipboard, downLoadFile } from "@/lib/utils";
-import { downLoadVideo } from "@/lib/utils";
+import { Clipboard, Download, Clock, FileText, Copy } from "lucide-react";
+import { copyToClipboard, downLoadFile, downLoadVideo, downloadUtterances } from "@/lib/utils";
 import { SpinnerLoader } from "../genreral/common";
+import { formatMs } from "@/lib/utils";
 
 
 export default function TranscribeSection() {
@@ -28,6 +28,8 @@ export default function TranscribeSection() {
     const { submitTranscription, loading, error, transcript } = useTranscription();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [viewMode, setViewMode] = useState<'transcript' | 'utterances'>('transcript');
+
 
     useEffect(() => {
         setIsDialogOpen(transcript !== null);
@@ -76,30 +78,107 @@ export default function TranscribeSection() {
                 setIsDialogOpen(open);
                 if (!open) setVideoUrl("");
             }}>
-                <DialogContent>
+                <DialogContent className="">
                     <DialogHeader>
-                        <DialogTitle>Transcript Result</DialogTitle>
+                        <DialogTitle className="font-semibold">Review, Copy or Download</DialogTitle>
+                        {/* Toggle buttons for view mode */}
+                        <div className="flex gap-2 mt-2 mb-2 justify-end">
+                            <button
+                                className={`px-4 py-2 rounded-lg font-semibold border transition-colors duration-200 ${viewMode === 'transcript' ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary hover:bg-primary/10'}`}
+                                onClick={() => setViewMode('transcript')}
+                                type="button"
+                            >
+                                <FileText className="w-5 h-5" />
+                            </button>
+                            <button
+                                className={`px-4 py-2 rounded-lg font-semibold border transition-colors duration-200 ${viewMode === 'utterances' ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary hover:bg-primary/10'}`}
+                                onClick={() => setViewMode('utterances')}
+                                type="button"
+                            >
+                                <Clock className="w-5 h-5" />
+                            </button>
+                        </div>
                         <DialogDescription>
                             {transcript ? (
                                 <>
-                                    <pre className="bg-muted text-primary font-mono p-4 rounded max-h-[70vh] overflow-auto whitespace-pre-wrap">
-                                        {transcript.transcript}
-                                    </pre>
+                                    {viewMode === 'transcript' ? (
+                                        <div>
+                                            <pre className="font-mono p-4 rounded max-h-[70vh] text-black bg-muted overflow-auto whitespace-pre-wrap">
+                                                {transcript.transcript}
+                                            </pre>
+                                        </div>
+                                    ) : (
+                                        <div className="p-2 rounded max-h-[70vh] overflow-auto">
+                                            {Array.isArray(transcript.utterances) && transcript.utterances.length > 0 ? (
+                                                <div className="space-y-2">
+                                                    {transcript.utterances.map((utt, idx) => (
+                                                        <div key={idx} className="flex items-start gap-4 font-mono border-b border-gray-200 pb-1">
+                                                            <div className="flex flex-col gap-2 items-center">
+                                                                <span className=" text-primary/60">
+                                                                    {formatMs(utt.start)}
+                                                                </span>
+                                                                <button onClick={() => copyToClipboard(utt.text)} className="p-1 rounded hover:bg-primary/10 transition-colors duration-200">
+                                                                    <Copy className="w-4 h-4 text-primary/60" />
+                                                                </button>
+                                                            </div>
+                                                            <span className="text-black">{utt.text}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <span className="text-gray-500">No utterances available.</span>
+                                            )}
+                                        </div>
+                                    )}
                                     <div className="flex gap-4 mt-4 justify-end">
-                                        <Button
-                                            variant="default"
-                                            className="flex items-center gap-2 bg-primary text-white border border-primary hover:bg-transparent hover:text-primary hover:border-primary transition-colors duration-200"
-                                            onClick={() => copyToClipboard(transcript.transcript)}
-                                        >
-                                            <Clipboard className="w-4 h-4" /> Copy
-                                        </Button>
-                                        <Button
+                                        {viewMode === "transcript" ? (
+                                            <Button
+                                                variant="default"
+                                                className="flex items-center gap-2 bg-primary text-white border border-primary hover:bg-transparent hover:text-primary hover:border-primary transition-colors duration-200"
+                                                onClick={() => copyToClipboard(transcript.transcript)}
+                                            >
+                                                <Clipboard className="w-4 h-4" /> Copy
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="default"
+                                                className="flex items-center gap-2 bg-primary text-white border border-primary hover:bg-transparent hover:text-primary hover:border-primary transition-colors duration-200"
+                                                onClick={() => {
+                                                    const transcribeTimestampsText = downloadUtterances(transcript?.utterances);
+                                                    copyToClipboard(transcribeTimestampsText!);
+                                                }}
+                                            >
+                                                <Clipboard className="w-4 h-4" /> Copy
+                                            </Button>
+                                        )}
+
+                                        {viewMode === "transcript" ? (
+                                            <Button
+                                                variant="default"
+                                                className="flex items-center gap-2 bg-[#ff3040] text-white hover:bg-transparent hover:text-[#ff3040] transition-colors duration-200 hover:border-[#ff3040] border border-[#ff3040]"
+                                                onClick={() => downLoadFile(transcript.transcript)}
+                                            >
+                                                <Download className="w-4 h-4" /> Download
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="default"
+                                                className="flex items-center gap-2 bg-[#ff3040] text-white hover:bg-transparent hover:text-[#ff3040] transition-colors duration-200 hover:border-[#ff3040] border border-[#ff3040]"
+                                                onClick={() => {
+                                                    const downloadVideoFile = downloadUtterances(transcript?.utterances);
+                                                    downLoadFile(downloadVideoFile!);
+                                                }}
+                                            >
+                                                <Download className="w-4 h-4" /> Download
+                                            </Button>
+                                        )}
+                                        {/* <Button
                                             variant="default"
                                             className="flex items-center gap-2 bg-[#ff3040] text-white hover:bg-transparent hover:text-[#ff3040] transition-colors duration-200 hover:border-[#ff3040] border border-[#ff3040]"
                                             onClick={() => downLoadFile(transcript.transcript)}
                                         >
                                             <Download className="w-4 h-4" /> Download
-                                        </Button>
+                                        </Button> */}
                                         <Button
                                             variant="default"
                                             className="flex items-center gap-2 bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-200"
