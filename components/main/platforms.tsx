@@ -19,9 +19,9 @@ export default function Platforms() {
                     <h2 className="text-[35px] font-bold text-primary">Effortless Video Transcription</h2>
                     <p className="text-gray-700">Paste your video link and instantly transcribe, edit, and copy your content. Save time and boost productivity with seamless transcript generation.</p>
                     <Button
-                        className="bg-primary border-blue-200 py-6 rounded-3xl text-white font-medium hover:bg-blue-100 w-full md:max-w-[150px]"
+                        className="bg-primary border-blue-200 py-6 rounded-3xl text-white font-medium hover:bg-primary/80 w-full md:max-w-[150px]"
                         type="button"
-                        onClick={() => alert("Scroll to top")}
+                        onClick={handleBegin}
                     >
                         Start Transcribing
                     </Button>
