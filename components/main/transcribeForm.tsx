@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useCaptcha } from "@/hooks/useCaptcha";
 import Recaptcha from "@/components/ui/Recaptcha";
 import { useTranscription } from "@/hooks/useTranscribe";
-import { showToaster } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch"
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -16,10 +16,11 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
-import { Clipboard, Download, Clock, FileText, Copy } from "lucide-react";
+import { Clipboard, Download, Copy } from "lucide-react";
 import { copyToClipboard, downLoadFile, downLoadVideo, downloadUtterances } from "@/lib/utils";
 import { SpinnerLoader } from "../genreral/common";
 import { formatMs } from "@/lib/utils";
+
 
 
 export default function TranscribeSection() {
@@ -28,8 +29,7 @@ export default function TranscribeSection() {
     const { submitTranscription, loading, error, transcript } = useTranscription();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
-    const [viewMode, setViewMode] = useState<'transcript' | 'utterances'>('transcript');
-
+    const [viewMode, setViewMode] = useState<boolean>(false);
 
     useEffect(() => {
         setIsDialogOpen(transcript !== null);
@@ -48,7 +48,7 @@ export default function TranscribeSection() {
         <>
             <form className="space-y-4 flex flex-col justify-center items-center" onSubmit={handleSubmit} >
                 <div>
-                    <h1 className="text-2xl font-bold text-center">Video Transcript Generator</h1>
+                    <h1 className="text-2xl font-bold text-center">Clip Script Transcript Generator</h1>
                     <p className="text-muted-foreground text-center mt-1">
                         Turn TikTok, Reels & Shorts into clean transcripts instantly.
                     </p>
@@ -81,27 +81,41 @@ export default function TranscribeSection() {
                 <DialogContent className="">
                     <DialogHeader>
                         <DialogTitle className="font-semibold">Review, Copy or Download</DialogTitle>
-                        {/* Toggle buttons for view mode */}
-                        <div className="flex gap-2 mt-2 mb-2 justify-end">
-                            <button
-                                className={`px-4 py-2 rounded-lg font-semibold border transition-colors duration-200 ${viewMode === 'transcript' ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary hover:bg-primary/10'}`}
-                                onClick={() => setViewMode('transcript')}
-                                type="button"
-                            >
-                                <FileText className="w-5 h-5" />
-                            </button>
-                            <button
-                                className={`px-4 py-2 rounded-lg font-semibold border transition-colors duration-200 ${viewMode === 'utterances' ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary hover:bg-primary/10'}`}
-                                onClick={() => setViewMode('utterances')}
-                                type="button"
-                            >
-                                <Clock className="w-5 h-5" />
-                            </button>
+                        <div className="flex items-center justify-between w-full">
+                            <Switch
+                                id="viewModeToggle"
+                                checked={viewMode}
+                                onCheckedChange={() => setViewMode(!viewMode)}
+                            />
+                            <div className="flex items-center gap-2">
+                                {viewMode ? (
+                                    <Clipboard className="w-5 h-5 text-primary cursor-pointer" onClick={() => copyToClipboard(transcript?.transcript || '')} />
+                                ) : (
+                                    <Clipboard
+                                        className="w-5 h-5 text-primary cursor-pointer"
+                                        onClick={() => {
+                                            const transcribeTimestampsText = downloadUtterances(transcript?.utterances);
+                                            copyToClipboard(transcribeTimestampsText!);
+                                        }}
+                                    />
+                                )}
+                                {viewMode ? (
+                                    <Download
+                                        className="w-5 h-5 text-primary cursor-pointer"
+                                        onClick={() => {
+                                            const downloadVideoFile = downloadUtterances(transcript?.utterances);
+                                            downLoadFile(downloadVideoFile!);
+                                        }}
+                                    />
+                                ) : (
+                                    <Download className="w-5 h-5 text-primary cursor-pointer" onClick={() => downLoadFile(transcript?.transcript || "")} />
+                                )}
+                            </div>
                         </div>
                         <DialogDescription>
                             {transcript ? (
                                 <>
-                                    {viewMode === 'transcript' ? (
+                                    {!viewMode ? (
                                         <div>
                                             <pre className="font-mono p-4 rounded max-h-[70vh] text-black bg-muted overflow-auto whitespace-pre-wrap">
                                                 {transcript.transcript}
@@ -131,54 +145,6 @@ export default function TranscribeSection() {
                                         </div>
                                     )}
                                     <div className="flex gap-4 mt-4 justify-end">
-                                        {viewMode === "transcript" ? (
-                                            <Button
-                                                variant="default"
-                                                className="flex items-center gap-2 bg-primary text-white border border-primary hover:bg-transparent hover:text-primary hover:border-primary transition-colors duration-200"
-                                                onClick={() => copyToClipboard(transcript.transcript)}
-                                            >
-                                                <Clipboard className="w-4 h-4" /> Copy
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                                variant="default"
-                                                className="flex items-center gap-2 bg-primary text-white border border-primary hover:bg-transparent hover:text-primary hover:border-primary transition-colors duration-200"
-                                                onClick={() => {
-                                                    const transcribeTimestampsText = downloadUtterances(transcript?.utterances);
-                                                    copyToClipboard(transcribeTimestampsText!);
-                                                }}
-                                            >
-                                                <Clipboard className="w-4 h-4" /> Copy
-                                            </Button>
-                                        )}
-
-                                        {viewMode === "transcript" ? (
-                                            <Button
-                                                variant="default"
-                                                className="flex items-center gap-2 bg-[#ff3040] text-white hover:bg-transparent hover:text-[#ff3040] transition-colors duration-200 hover:border-[#ff3040] border border-[#ff3040]"
-                                                onClick={() => downLoadFile(transcript.transcript)}
-                                            >
-                                                <Download className="w-4 h-4" /> Download
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                                variant="default"
-                                                className="flex items-center gap-2 bg-[#ff3040] text-white hover:bg-transparent hover:text-[#ff3040] transition-colors duration-200 hover:border-[#ff3040] border border-[#ff3040]"
-                                                onClick={() => {
-                                                    const downloadVideoFile = downloadUtterances(transcript?.utterances);
-                                                    downLoadFile(downloadVideoFile!);
-                                                }}
-                                            >
-                                                <Download className="w-4 h-4" /> Download
-                                            </Button>
-                                        )}
-                                        {/* <Button
-                                            variant="default"
-                                            className="flex items-center gap-2 bg-[#ff3040] text-white hover:bg-transparent hover:text-[#ff3040] transition-colors duration-200 hover:border-[#ff3040] border border-[#ff3040]"
-                                            onClick={() => downLoadFile(transcript.transcript)}
-                                        >
-                                            <Download className="w-4 h-4" /> Download
-                                        </Button> */}
                                         <Button
                                             variant="default"
                                             className="flex items-center gap-2 bg-transparent text-primary border border-primary hover:bg-primary hover:text-white transition-colors duration-200"
