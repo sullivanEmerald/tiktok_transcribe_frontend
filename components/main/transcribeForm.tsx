@@ -179,13 +179,13 @@ export default function TranscribeSection() {
                 {transcript && (
                     <div className="w-full bg-white/80 rounded-xl shadow p-6 border border-gray-200 flex items-start gap-6">
                         <div className="w-full">
-                            {transcript.metadata.media.thumbnailUrl && (
+                            {transcript?.metadata?.media?.thumbnailUrl ? (
                                 <img
                                     src={transcript.metadata.media.thumbnailUrl}
                                     alt="Thumbnail"
                                     className="rounded-lg border border-gray-200 object-cover w-full"
                                 />
-                            )}
+                            ) : null}
                             {/* Video player if direct video URL is available */}
                             {/* {transcript.metadata.media.videoUrl && (
                                 <video
@@ -198,27 +198,27 @@ export default function TranscribeSection() {
                         </div>
                         <section className="flex flex-col gap-4">
                             <div className="flex items-center gap-3 mb-2">
-                                {transcript.metadata.author.avatarUrl && (
+                                {transcript?.metadata?.author?.avatarUrl ? (
                                     <img
                                         src={transcript.metadata.author.avatarUrl}
                                         alt="Avatar"
                                         className="rounded-full border border-gray-300 object-cover w-14 h-14"
                                     />
-                                )}
+                                ) : null}
                                 <div>
-                                    <div className="font-semibold text-base">{transcript.metadata.author.displayName}</div>
-                                    <div className="text-sm text-gray-500">@{transcript.metadata.author.username}</div>
+                                    <div className="font-semibold text-base">{transcript?.metadata?.author?.displayName}</div>
+                                    <div className="text-sm text-gray-500">@{transcript?.metadata?.author?.username}</div>
                                 </div>
                             </div>
-                            <span className="text-lg font-bold mb-2 text-gray-700">{transcript.metadata.description}</span>
+                            <span className="text-lg font-bold mb-2 text-gray-700">{transcript?.metadata?.description}</span>
                             <div className="text-sm text-gray-700">
                                 <div className="mb-2">
-                                    <span className="font-semibold text-red-600">Platform:</span> {transcript.metadata.platform &&
+                                    <span className="font-semibold text-red-600">Platform:</span> {transcript?.metadata?.platform &&
                                         transcript.metadata.platform.charAt(0).toUpperCase() +
                                         transcript.metadata.platform.slice(1).toLowerCase()
                                     }
                                 </div>
-                                {transcript.videoUrl && (
+                                {transcript?.videoUrl && (
                                     <div className="mb-2">
                                         <span className="font-semibold">Video URL:</span> <a href={transcript?.videoUrl} target="_blank" className="text-primary underline break-all">{transcript?.videoUrl}</a>
                                     </div>
@@ -226,19 +226,19 @@ export default function TranscribeSection() {
                                 <div className="flex flex-wrap gap-4 mt-4">
                                     <div className=" flex items-center gap-1">
                                         <Eye className="w-4 h-4 text-gray-500" />
-                                        {formatCount(transcript.metadata.stats.views)} views
+                                        {formatCount(transcript?.metadata?.stats?.views)} views
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <Heart className="w-4 h-4 text-gray-500" />
-                                        {formatCount(transcript.metadata.stats.likes)} likes
+                                        {formatCount(transcript?.metadata?.stats?.likes)} likes
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <MessageCircle className="w-4 h-4 text-gray-500" />
-                                        {formatCount(transcript.metadata.stats.comments)} comments
+                                        {formatCount(transcript?.metadata?.stats?.comments)} comments
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <Share2 className="w-4 h-4 text-gray-500" />
-                                        {formatCount(transcript.metadata.stats.shares)} shares
+                                        {formatCount(transcript?.metadata?.stats?.shares)} shares
                                     </div>
                                 </div>
                             </div>
