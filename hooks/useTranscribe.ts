@@ -36,7 +36,6 @@ export function useTranscription() {
             setLoading(true);
             setError(null);
             reset();
-            setStatus("processing");
 
             try {
                 const response = await TranscribeService.createTranscription(videoUrl, captchaToken);
@@ -55,8 +54,8 @@ export function useTranscription() {
         },
         []);
 
-    const downloadVideo = async (videoUrl: string, captchaToken: string | null) => {
-        if (!videoUrl || !captchaToken) return;
+    const downloadVideo = async (videoUrl: string, captchaToken?: string | null) => {
+        if (!videoUrl) return;
 
         setIsDownloading(true);
 
