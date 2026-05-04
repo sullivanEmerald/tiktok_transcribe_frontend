@@ -39,7 +39,7 @@ import Image from "next/image";
 export default function TranscribeSection() {
     const [videoUrl, setVideoUrl] = useState("");
     const { captchaToken, onCaptchaChange } = useCaptcha();
-    const { submitTranscription, loading, downloadVideo, isDownloading, transcript, showCaptcha } = useTranscription();
+    const { submitTranscription, loading, downloadVideo, isDownloading, transcript, status, showCaptcha } = useTranscription();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [viewMode, setViewMode] = useState<boolean>(false)
     const [downloadJobId, setDownloadJobId] = useState<string | null>(null);
@@ -74,7 +74,7 @@ export default function TranscribeSection() {
                         : "flex justify-center items-center min-h-[60vh]"
                 }
             >
-                <section className={`${transcript ? "w-full" : "w-full md:w-1/2  "}  bg-white/80 rounded-xl shadow p-6 border border-gray-200 flex flex-col gap-4`}>
+                <section className={`${transcript ? "w-full" : "w-full md:w-1/2  "} h-full  bg-white/80 rounded-xl shadow p-6 border border-gray-200 flex flex-col gap-4`}>
                     <div>
                         <h1 className="text-2xl font-bold text-center">Clip Script Transcript Generator</h1>
                         <p className="text-muted-foreground mt-1 text-center">
@@ -125,9 +125,9 @@ export default function TranscribeSection() {
                                         : "Generate Transcript"
                             }
                             className="w-full bg-primary text-white py-4 rounded-3xl font-semibold mt-2 disabled:opacity-50 hover:bg-primary/80 transition-colors duration-200"
-                            disabled={loading || isDownloading || !videoUrl}
+                            disabled={loading || isDownloading || !videoUrl || status === 'processing'}
                         >
-                            {loading ? (
+                            {loading || status === 'processing' ? (
                                 <div className="flex items-center justify-center gap-2">
                                     <LineLoader />
                                     Processing...
@@ -159,7 +159,7 @@ export default function TranscribeSection() {
                                         : "Download Video"
                             }
                             className="w-full bg-destructive text-white py-4 rounded-3xl font-semibold mt-2 disabled:opacity-50 hover:bg-destructive/80 transition-colors duration-200"
-                            disabled={loading || isDownloading || !videoUrl}
+                            disabled={loading || isDownloading || !videoUrl || status === 'processing'}
                         >
                             {isDownloading ? (
                                 <div className="flex items-center justify-center gap-2">
@@ -177,7 +177,7 @@ export default function TranscribeSection() {
                 </section>
                 {/* Metadata and Stats Section */}
                 {transcript && (
-                    <div className="w-full bg-white/80 rounded-xl shadow p-6 border border-gray-200 flex items-start gap-6">
+                    <div className="w-full bg-white/80 rounded-xl shadow p-6 border border-gray-200 flex h-full overflow-y-auto items-start gap-6">
                         <div className="w-full">
                             {transcript?.metadata?.media?.thumbnailUrl ? (
                                 <img

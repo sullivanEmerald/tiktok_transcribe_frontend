@@ -1,22 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSocket } from "./useSocket";
 import { TranscriptData } from "@/types/transcribe";
 import { showToaster } from "@/lib/utils";
 
 
-export function useTranscribeProgress(jobId: string | null) {
+export function useTranscribeProgress() {
     const socketRef = useSocket();
     const [progress, setProgress] = useState(0);
     const [status, setStatus] = useState<"idle" | "processing" | "completed" | "error">("idle");
     const [transcript, setTranscript] = useState<TranscriptData | null>(null);
 
+    const reset = useCallback(() => {
+        setStatus("idle");
+        setProgress(0);
+        // setTranscript(null);
+    }, []);
+
     useEffect(() => {
-        if (!jobId) return;
         const socket = socketRef.current;
         if (!socket) return;
-
-        setStatus("processing");
-        setProgress(0);
 
         const handleProgress = (value: number) => setProgress(value);
 
@@ -30,18 +32,21 @@ export function useTranscribeProgress(jobId: string | null) {
         const handleError = (errorMessage: string) => {
             showToaster(errorMessage, "error");
             setStatus("idle");
+            setProgress(0);
+            setTranscript(null);
         };
 
-        socket.on(`progress-transcribe-${jobId}`, handleProgress);
-        socket.on(`completed-transcribe-${jobId}`, handleCompleted);
-        socket.on(`error-transcribe-${jobId}`, handleError);
+        socket.on(`progress-transcribe`, handleProgress);
+        socket.on(`completed-transcribe`, handleCompleted);
+        socket.on(`error-transcribe`, handleError);
 
         return () => {
-            socket.off(`progress-transcribe-${jobId}`, handleProgress);
-            socket.off(`completed-transcribe-${jobId}`, handleCompleted);
-            socket.off(`error-transcribe-${jobId}`, handleError);
+            socket.off(`progress-transcribe`, handleProgress);
+            socket.off(`completed-transcribe`, handleCompleted);
+            socket.off(`error-transcribe`, handleError);
         };
-    }, [jobId, socketRef.current]);
+    }, [socketRef.current]);
 
-    return { progress, status, transcript };
+
+    return { progress, status, transcript, setStatus, reset };
 }

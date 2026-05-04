@@ -7,15 +7,17 @@ import { useTranscribeProgress } from "./useTranscribeProgress";
 
 export function useTranscription() {
     const [recentTranscripts, setRecentTranscripts] = useState<RecentTranscriptData[]>([]);
-    const [transcript, setTranscript] = useState<TranscriptData | null>(null);
+    const [transcriptOverride, setTranscriptOverride] = useState<TranscriptData | null>(null);
     const [isFetching, setIsFetching] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isDownloading, setIsDownloading] = useState(false);
     const [showCaptcha, setShowCaptcha] = useState(false);
-    // const [transcribeJobId, setTranscribeJobId] = useState<string | null>(null);
+    // const [isTranscribeAvailable, setIsTranscribeAvailable] = useState(false);
 
-    // const { progress, status, transcript } = useTranscribeProgress(transcribeJobId);
+    const { status, transcript, reset, setStatus } = useTranscribeProgress();
+
+    // const transcript = socketTranscript ?? transcriptOverride;
 
     const fetchRecentTranscripts = useCallback(async () => {
         setIsFetching(true);
@@ -33,11 +35,12 @@ export function useTranscription() {
         async (videoUrl: string, captchaToken?: string | null) => {
             setLoading(true);
             setError(null);
+            reset();
+            setStatus("processing");
 
             try {
                 const response = await TranscribeService.createTranscription(videoUrl, captchaToken);
                 console.log('the result ', response)
-                setTranscript(response);
             } catch (err: any) {
                 const errorMessage = err?.response?.data;
                 if (errorMessage?.requireCaptcha) {
@@ -83,6 +86,7 @@ export function useTranscription() {
         fetchRecentTranscripts,
         isDownloading,
         downloadVideo,
-        showCaptcha
+        showCaptcha,
+        status
     }
 }
