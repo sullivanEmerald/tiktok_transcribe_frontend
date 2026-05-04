@@ -8,7 +8,11 @@ export function useSocket() {
 
     useEffect(() => {
         socketRef.current = io(API_URL!, {
-            transports: ['websocket', 'polling'],
+            reconnection: true,
+            reconnectionAttempts: 3,
+            reconnectionDelay: 1000,
+
+            transports: ['websocket'],
         });
 
         return () => {
