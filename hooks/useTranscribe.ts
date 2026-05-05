@@ -3,21 +3,17 @@ import { TranscriptData, RecentTranscriptData } from "@/types/transcribe";
 import { TranscribeService } from "@/services/transcribe";
 import { showToaster } from "@/lib/utils";
 import { downloadService } from "@/services/download";
-import { useTranscribeProgress } from "./useTranscribeProgress";
+
 
 export function useTranscription() {
     const [recentTranscripts, setRecentTranscripts] = useState<RecentTranscriptData[]>([]);
-    const [transcriptOverride, setTranscriptOverride] = useState<TranscriptData | null>(null);
+    const [transcript, setTranscript] = useState<TranscriptData | null>(null);
     const [isFetching, setIsFetching] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isDownloading, setIsDownloading] = useState(false);
     const [showCaptcha, setShowCaptcha] = useState(false);
-    // const [isTranscribeAvailable, setIsTranscribeAvailable] = useState(false);
 
-    const { status, transcript, reset, setStatus } = useTranscribeProgress();
-
-    // const transcript = socketTranscript ?? transcriptOverride;
 
     const fetchRecentTranscripts = useCallback(async () => {
         setIsFetching(true);
@@ -35,11 +31,10 @@ export function useTranscription() {
         async (videoUrl: string, captchaToken?: string | null) => {
             setLoading(true);
             setError(null);
-            reset();
 
             try {
                 const response = await TranscribeService.createTranscription(videoUrl, captchaToken);
-                console.log('the result ', response)
+                setTranscript(response.data);
             } catch (err: any) {
                 const errorMessage = err?.response?.data;
                 if (errorMessage?.requireCaptcha) {
@@ -47,7 +42,7 @@ export function useTranscription() {
                     showToaster("Please complete the CAPTCHA to continue.", "warning");
                     return;
                 }
-                showToaster("Failed to generate transcript", "error");
+                showToaster(err.response?.data?.message || "Failed to generate transcript", "error");
             } finally {
                 setLoading(false);
             }
@@ -86,6 +81,5 @@ export function useTranscription() {
         isDownloading,
         downloadVideo,
         showCaptcha,
-        status
     }
 }

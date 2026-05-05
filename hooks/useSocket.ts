@@ -9,10 +9,10 @@ export function useSocket() {
     useEffect(() => {
         socketRef.current = io(API_URL!, {
             reconnection: true,
-            reconnectionAttempts: 3,
+            reconnectionAttempts: Infinity,
             reconnectionDelay: 1000,
 
-            transports: ['websocket'],
+            transports: ["polling", "websocket"],
         });
 
         return () => {

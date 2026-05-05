@@ -39,7 +39,7 @@ import Image from "next/image";
 export default function TranscribeSection() {
     const [videoUrl, setVideoUrl] = useState("");
     const { captchaToken, onCaptchaChange } = useCaptcha();
-    const { submitTranscription, loading, downloadVideo, isDownloading, transcript, status, showCaptcha } = useTranscription();
+    const { submitTranscription, loading, downloadVideo, isDownloading, transcript, showCaptcha } = useTranscription();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [viewMode, setViewMode] = useState<boolean>(false)
     const [downloadJobId, setDownloadJobId] = useState<string | null>(null);
@@ -125,9 +125,9 @@ export default function TranscribeSection() {
                                         : "Generate Transcript"
                             }
                             className="w-full bg-primary text-white py-4 rounded-3xl font-semibold mt-2 disabled:opacity-50 hover:bg-primary/80 transition-colors duration-200"
-                            disabled={loading || isDownloading || !videoUrl || status === 'processing'}
+                            disabled={loading || isDownloading || !videoUrl}
                         >
-                            {loading || status === 'processing' ? (
+                            {loading ? (
                                 <div className="flex items-center justify-center gap-2">
                                     <LineLoader />
                                     Processing...
