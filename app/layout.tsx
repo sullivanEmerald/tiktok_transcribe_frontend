@@ -64,7 +64,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ToastContainer
-          position="bottom-right"
+          position="top-right"
           autoClose={3000}
           hideProgressBar={false}
           newestOnTop
