@@ -146,10 +146,8 @@ export default function TranscribeSection() {
                                     showToaster("Unsupported platform. Please enter a TikTok, Instagram Reel, or YouTube Shorts URL.", "error");
                                     return;
                                 }
-                                const jobId = await downloadVideo(videoUrl, captchaToken);
-                                if (jobId) {
-                                    setDownloadJobId(jobId);
-                                }
+                                await downloadVideo(videoUrl, captchaToken);
+
                             }}
                             title={
                                 isDownloading
