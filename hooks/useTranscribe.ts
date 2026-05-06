@@ -55,11 +55,10 @@ export function useTranscription() {
         setIsDownloading(true);
 
         try {
-            const { jobId } = await downloadService.downloadVideo(videoUrl, captchaToken);
+            const result = await downloadService.downloadVideo(videoUrl, captchaToken);
 
-            showToaster('Download started!', "success");
 
-            return jobId;
+            console.log(result);
 
         } catch (error) {
             console.error("Error downloading video:", error);
