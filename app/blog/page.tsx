@@ -20,7 +20,7 @@ export default async function BlogPage() {
             <p className="text-gray-500 mb-10">
                 Stay up to date with the latest transcription tips, creator tools & platform guides
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
                 {posts.map((post) => (
                     <Link
                         key={post.sys.id}
