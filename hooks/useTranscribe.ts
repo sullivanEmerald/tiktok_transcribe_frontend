@@ -35,11 +35,14 @@ export function useTranscription() {
             try {
                 const response = await TranscribeService.createTranscription(videoUrl, captchaToken);
                 setTranscript(response.data);
+                if (showCaptcha) {
+                    setShowCaptcha(false)
+                }
             } catch (err: any) {
                 const errorMessage = err?.response?.data;
                 if (errorMessage?.requireCaptcha) {
                     setShowCaptcha(true);
-                    showToaster("Please complete the CAPTCHA to continue.", "warning");
+                    showToaster(errorMessage.message, "error");
                     return;
                 }
                 showToaster(err.response?.data?.message || "Failed to generate transcript", "error");

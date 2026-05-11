@@ -44,6 +44,8 @@ export default function TranscribeSection() {
     const [viewMode, setViewMode] = useState<boolean>(false)
     const [downloadJobId, setDownloadJobId] = useState<string | null>(null);
 
+    console.log('captcha', captchaToken)
+
 
     useEffect(() => {
         setIsDialogOpen(transcript !== null);
@@ -57,7 +59,7 @@ export default function TranscribeSection() {
 
         // Only require captchaToken if CAPTCHA is shown
         if (showCaptcha && !captchaToken) {
-            showToaster("Please complete the CAPTCHA", "warning");
+            showToaster("Please complete the CAPTCHA", "error");
             return;
         }
 
