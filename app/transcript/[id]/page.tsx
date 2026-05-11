@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/popover"
 import { formatCount } from "@/lib/utils";
 import { Copy, Link, FileText, Eye, Heart, MessageCircle, Share2 } from "lucide-react";
+import { formatMs } from "@/lib/utils";
 
 
 
@@ -66,7 +67,7 @@ export default function TranscriptPage() {
                     <p className="text-gray-600">Transcript not found.</p>
                 </div>
             ) : (
-                <div className="flex flex-col gap-2">
+                <main className="flex flex-col gap-2">
                     <button
                         className="flex items-center gap-2 text-gray-600 hover:text-primary w-fit cursor-pointer"
                         onClick={() => router.back()}
@@ -75,12 +76,16 @@ export default function TranscriptPage() {
                         <HiArrowLongLeft size={30} color='text-primary' />
                         <span>Back</span>
                     </button>
-                    <div className="flex items-center justify-between">
-                        <Switch
-                            id="viewModeToggle"
-                            checked={viewMode}
-                            onCheckedChange={() => setViewMode(!viewMode)}
-                        />
+
+                    <div className="flex justify-between w-full lg:w-1/2">
+                        <div className="flex items-center gap-1">
+                            <Switch
+                                id="viewModeToggle"
+                                checked={viewMode}
+                                onCheckedChange={() => setViewMode(!viewMode)}
+                            />
+                            <p>Timestamp</p>
+                        </div>
                         <div className="flex items-center gap-2">
                             <Clipboard
                                 className="w-5 h-5 text-primary cursor-pointer"
@@ -121,66 +126,84 @@ export default function TranscriptPage() {
                             </Popover>
                         </div>
                     </div>
-                    <pre className="bg-muted text-primary font-mono p-4 rounded max-h-[70vh] overflow-auto whitespace-pre-wrap">
-                        {!viewMode ? singleTranscript?.transcript : downloadUtterances(singleTranscript?.utterances)}
-                    </pre>
-                    <div className="w-full md:1/2 bg-white/80 rounded-xl shadow p-6 border border-gray-200 flex items-start gap-6">
-                        <div className="mb-2 w-[40%]">
-                            {singleTranscript?.metadata?.media?.thumbnailUrl && (
-                                <img
-                                    src={singleTranscript?.metadata?.media?.thumbnailUrl}
-                                    alt="Thumbnail"
-                                    className="rounded-lg border border-gray-200 object-contain w-full h-auto mb-4"
-                                />
+                    <section className="space-y-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div className={`${viewMode ? 'bg-white' : 'bg-primary'} text-white p-4 text-justify rounded h-screen overflow-auto whitespace-pre-wrap border border-gray-200 rounded-xl`}>
+                            {!viewMode ? singleTranscript?.transcript : (
+                                <>
+                                    {singleTranscript?.utterances?.map((utt, idx) => (
+                                        <div key={idx} className="flex items-start gap-4 bg-primary border border-gray-200 text-white p-2 rounded-lg">
+                                            <div className="flex flex-col gap-2 items-center">
+                                                <span className=" text-red-100">
+                                                    {formatMs(utt.start)}
+                                                </span>
+                                                <button onClick={() => copyToClipboard(utt.text, formatMs(utt.start))} className="p-1 rounded hover:bg-primary/10 transition-colors duration-200">
+                                                    <Copy className="w-4 h-4 text-red-100" />
+                                                </button>
+                                            </div>
+                                            <span className="">{utt.text}</span>
+                                        </div>
+                                    ))}
+                                </>
                             )}
                         </div>
-                        <section className="flex flex-col gap-4">
-                            <div className="flex items-center gap-3 mb-2">
-                                {singleTranscript?.metadata?.author?.avatarUrl && (
+                        <div className="w-full md:1/2 bg-white/80 rounded-xl shadow p-6 border border-gray-200 flex items-start gap-6 h-screen">
+                            <div className="mb-2">
+                                {singleTranscript?.metadata?.media?.thumbnailUrl && (
                                     <img
-                                        src={singleTranscript?.metadata?.author?.avatarUrl}
-                                        alt="Avatar"
-                                        className="rounded-full border border-gray-300 object-cover w-14 h-14"
+                                        src={singleTranscript?.metadata?.media?.thumbnailUrl}
+                                        alt="Thumbnail"
+                                        className="rounded-lg border border-gray-200 object-contain w-full h-full"
                                     />
                                 )}
-                                <div>
-                                    <div className="font-semibold text-base">{singleTranscript?.metadata?.author?.displayName}</div>
-                                    <div className="text-sm text-gray-500">@{singleTranscript?.metadata?.author?.username}</div>
-                                </div>
                             </div>
-                            <span className="text-lg font-bold mb-2 text-gray-700">{singleTranscript?.metadata?.description}</span>
-                            <div className="text-sm text-gray-700">
-                                <div className="mb-2">
-                                    <span className="font-semibold text-red-600">Platform:</span> {singleTranscript?.metadata?.platform &&
-                                        singleTranscript.metadata.platform.charAt(0).toUpperCase() +
-                                        singleTranscript.metadata.platform.slice(1).toLowerCase()
-                                    }
-                                </div>
-                                <div className="mb-2">
-                                    <span className="font-semibold">Video URL:</span> <a href={singleTranscript?.videoUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline break-all">{singleTranscript?.videoUrl}</a>
-                                </div>
-                                <div className="flex flex-wrap gap-4 mt-4">
-                                    <div className="mb-2 flex items-center gap-1">
-                                        <Eye className="w-4 h-4 text-gray-500" />
-                                        {formatCount(singleTranscript?.metadata?.stats?.views)} views
-                                    </div>
-                                    <div className="mb-2 flex items-center gap-1">
-                                        <Heart className="w-4 h-4 text-gray-500" />
-                                        {formatCount(singleTranscript?.metadata?.stats?.likes)} likes
-                                    </div>
-                                    <div className="mb-2 flex items-center gap-1">
-                                        <MessageCircle className="w-4 h-4 text-gray-500" />
-                                        {formatCount(singleTranscript?.metadata?.stats?.comments)} comments
-                                    </div>
-                                    <div className="mb-2 flex items-center gap-1">
-                                        <Share2 className="w-4 h-4 text-gray-500" />
-                                        {formatCount(singleTranscript?.metadata?.stats?.shares)} shares
+                            <section className="flex flex-col gap-4">
+                                <div className="flex items-center gap-3 mb-2">
+                                    {singleTranscript?.metadata?.author?.avatarUrl && (
+                                        <img
+                                            src={singleTranscript?.metadata?.author?.avatarUrl}
+                                            alt="Avatar"
+                                            className="rounded-full border border-gray-300 object-cover w-14 h-14"
+                                        />
+                                    )}
+                                    <div>
+                                        <div className="font-semibold text-base">{singleTranscript?.metadata?.author?.displayName}</div>
+                                        <div className="text-sm text-gray-500">@{singleTranscript?.metadata?.author?.username}</div>
                                     </div>
                                 </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
+                                <span className="text-lg font-bold mb-2 text-gray-700">{singleTranscript?.metadata?.description}</span>
+                                <div className="text-sm text-gray-700">
+                                    <div className="mb-2">
+                                        <span className="font-semibold text-red-600">Platform:</span> {singleTranscript?.metadata?.platform &&
+                                            singleTranscript.metadata.platform.charAt(0).toUpperCase() +
+                                            singleTranscript.metadata.platform.slice(1).toLowerCase()
+                                        }
+                                    </div>
+                                    <div className="mb-2">
+                                        <span className="font-semibold">Video URL:</span> <a href={singleTranscript?.videoUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline break-all">{singleTranscript?.videoUrl}</a>
+                                    </div>
+                                    <div className="flex flex-wrap gap-4 mt-4">
+                                        <div className="mb-2 flex items-center gap-1">
+                                            <Eye className="w-4 h-4 text-gray-500" />
+                                            {formatCount(singleTranscript?.metadata?.stats?.views)} views
+                                        </div>
+                                        <div className="mb-2 flex items-center gap-1">
+                                            <Heart className="w-4 h-4 text-gray-500" />
+                                            {formatCount(singleTranscript?.metadata?.stats?.likes)} likes
+                                        </div>
+                                        <div className="mb-2 flex items-center gap-1">
+                                            <MessageCircle className="w-4 h-4 text-gray-500" />
+                                            {formatCount(singleTranscript?.metadata?.stats?.comments)} comments
+                                        </div>
+                                        <div className="mb-2 flex items-center gap-1">
+                                            <Share2 className="w-4 h-4 text-gray-500" />
+                                            {formatCount(singleTranscript?.metadata?.stats?.shares)} shares
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </section>
+                </main>
             )}
         </Layout>
     );

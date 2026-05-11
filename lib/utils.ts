@@ -33,9 +33,12 @@ export const showToaster = (message: string, type: "success" | "error" | "info" 
 };
 
 
-export const copyToClipboard = (text: string) => {
+export const copyToClipboard = (text: string, timeStamp?: string) => {
+
+  const textCopy = timeStamp ? `${timeStamp} ${text}` : text
+
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => {
+    navigator.clipboard.writeText(textCopy).then(() => {
       showToaster('Copied to clipboard!', 'success');
     }).catch(err => {
       showToaster('Failed to copy!', 'error');

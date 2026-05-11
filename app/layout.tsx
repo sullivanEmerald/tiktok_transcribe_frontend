@@ -5,9 +5,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleAnalytics } from '@next/third-parties/google'
 
-
-console.log(process.env.NEXT_PUBLIC_ANALYSTIC_ID)
-
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],

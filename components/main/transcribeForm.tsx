@@ -309,7 +309,7 @@ export default function TranscribeSection() {
                             {transcript ? (
                                 <>
                                     <div>
-                                        <pre className={`${!viewMode ? 'bg-primary text-white p-2' : 'bg-transparent'} rounded max-h-[70vh] overflow-auto whitespace-pre-wrap`}>
+                                        <div className={`${!viewMode ? 'bg-primary text-white p-2' : 'bg-transparent'} rounded max-h-[70vh] overflow-auto whitespace-pre-wrap`}>
                                             {!viewMode ? transcript?.transcript : (
                                                 <>
                                                     {Array.isArray(transcript.utterances) && transcript.utterances.length > 0 ? (
@@ -320,7 +320,7 @@ export default function TranscribeSection() {
                                                                         <span className=" text-red-100">
                                                                             {formatMs(utt.start)}
                                                                         </span>
-                                                                        <button onClick={() => copyToClipboard(utt.text)} className="p-1 rounded hover:bg-primary/10 transition-colors duration-200">
+                                                                        <button onClick={() => copyToClipboard(utt.text, formatMs(utt.start))} className="p-1 rounded hover:bg-primary/10 transition-colors duration-200">
                                                                             <Copy className="w-4 h-4 text-red-100" />
                                                                         </button>
                                                                     </div>
@@ -333,7 +333,7 @@ export default function TranscribeSection() {
                                                     )}
                                                 </>
                                             )}
-                                        </pre>
+                                        </div>
                                     </div>
                                 </>
                             ) : "No transcript available."}
