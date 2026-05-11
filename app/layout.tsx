@@ -21,6 +21,34 @@ export const metadata: Metadata = {
 
   metadataBase: new URL("https://www.useclipscript.com"),
 
+  keywords: [
+    "transcript generator",
+    "video to text",
+    "video transcription",
+    "auto transcript",
+    "clip transcript",
+
+
+    "TikTok transcript",
+    "TikTok to text",
+    "Instagram Reels transcript",
+    "Reels to text",
+    "YouTube Shorts transcript",
+    "Shorts to text",
+
+    "content creator tools",
+    "social media transcript",
+    "video captions generator",
+    "transcribe video online",
+    "free transcript tool",
+    "AI transcript generator",
+
+    "how to transcribe TikTok videos",
+    "convert TikTok audio to text",
+    "Instagram reels to text converter",
+    "YouTube shorts transcription tool",
+  ],
+
   openGraph: {
     title: "Clip Script Transcript Generator",
     description:
