@@ -67,7 +67,7 @@ export default function TranscriptPage() {
                     <p className="text-gray-600">Transcript not found.</p>
                 </div>
             ) : (
-                <main className="flex flex-col gap-2">
+                <main className="flex flex-col gap-2 my-8">
                     <button
                         className="flex items-center gap-2 text-gray-600 hover:text-primary w-fit cursor-pointer"
                         onClick={() => router.back()}

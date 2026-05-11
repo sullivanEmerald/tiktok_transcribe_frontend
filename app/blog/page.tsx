@@ -15,7 +15,7 @@ export default async function BlogPage() {
     const posts = await getAllPosts();
 
     return (
-        <main className="mb-6">
+        <main className="my-8">
             <h1 className="text-3xl font-bold mb-2">Clip Script Blogs</h1>
             <p className="text-gray-500 mb-10">
                 Stay up to date with the latest transcription tips, creator tools & platform guides
