@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { mainNavigation } from "@/data/constants";
 import { Menu, EyeClosed, EyeIcon } from "lucide-react";
 import Logo from "../genreral/logo";
+import Link from "next/link";
 
 export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?: boolean }) {
     const router = useRouter();
@@ -13,11 +14,11 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                     <Logo />
                 </div>
 
-                {/* <nav className="hidden md:flex items-center space-x-6">
+                <nav className="hidden md:flex items-center space-x-6">
                     {mainNavigation.map((nav, idx) => (
-                        <Link href={nav.href} key={idx} className="text-sm text-[#81838C] hover:text-[#1e40af] hover:bg-gray-50 transition-colors duration-200">{nav.name}</Link>
+                        <Link href={nav.href} key={idx} className="text-sm text-primary hover:primary/80 hover:underline hover:bg-gray-50 transition-colors duration-200">{nav.name}</Link>
                     ))}
-                </nav> */}
+                </nav>
 
                 <button className="hidden md:flex items-center gap-2 cursor-pointer" onClick={onOpen} aria-label="Open sidebar" >
                     {isOpen ? <EyeClosed className="w-6 h-6 text-primary" /> : <EyeIcon className="w-6 h-6 text-primary" />}

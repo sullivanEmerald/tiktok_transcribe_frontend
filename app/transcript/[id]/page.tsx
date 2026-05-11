@@ -59,7 +59,7 @@ export default function TranscriptPage() {
     }, [id]);
 
     return (
-        <Layout>
+        <>
             {isLoading ? (
                 <Loader />
             ) : singleTranscript === null ? (
@@ -205,6 +205,6 @@ export default function TranscriptPage() {
                     </section>
                 </main>
             )}
-        </Layout>
+        </>
     );
 }

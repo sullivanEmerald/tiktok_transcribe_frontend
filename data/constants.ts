@@ -2,8 +2,8 @@
 
 export const mainNavigation = [
     {
-        name: 'Home',
-        href: '#',
+        name: 'Blogs',
+        href: '/blog',
     },
     {
         name: 'Contact Us',

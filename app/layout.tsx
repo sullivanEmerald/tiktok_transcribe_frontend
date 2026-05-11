@@ -4,6 +4,7 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleAnalytics } from '@next/third-parties/google'
+import { Layout } from "@/components/genreral/layout";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -89,7 +90,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-
+      <head>
+        <meta name="google-site-verification" content="bigTCQtTYsLnoUVcCmEuWhFWvO6Nz6ve5fTtoZBnQqA" />
+      </head>
       <body
         className={`${inter.variable} ${geistMono.variable} antialiased`}
       >
@@ -104,8 +107,9 @@ export default function RootLayout({
           draggable
           pauseOnHover
         />
-        {children}
-        {/* <Footer /> */}
+        <Layout>
+          {children}
+        </Layout>
       </body>
     </html>
   );
