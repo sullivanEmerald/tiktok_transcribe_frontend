@@ -1,16 +1,11 @@
-// app/sitemap.ts
+import { getAllSlugs } from '@/services/blogs';
 import { MetadataRoute } from 'next';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://www.useclipscript.com';
 
     // Add your blog slugs here dynamically later
-    const blogPosts = [
-        'how-to-transcribe-tiktok-videos',
-        'instagram-reels-to-text',
-        'youtube-shorts-transcript',
-        'best-tools-for-content-creators',
-    ];
+    const slugs = await getAllSlugs();
 
     return [
         {
@@ -26,8 +21,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.7,
         },
 
-        // Blog posts
-        ...blogPosts.map((slug) => ({
+
+        ...slugs.map((slug) => ({
             url: `${baseUrl}/blog/${slug}`,
             lastModified: new Date(),
             changeFrequency: 'monthly' as const,
