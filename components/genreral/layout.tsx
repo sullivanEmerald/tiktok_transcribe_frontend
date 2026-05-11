@@ -46,7 +46,7 @@ export function Layout({ children }: LayoutProps) {
                 </header>
                 {/* Main content below NavigationBar */}
                 <main
-                    className="min-h-[calc(100vh-5rem)] pt-30 px-4 sm:px-6 lg:px-8 w-full max-w-full"
+                    className="min-h-[calc(100vh-5rem)] pt-15 px-4 sm:px-6 lg:px-8 w-full max-w-full"
                 >
                     {children}
                 </main>

@@ -43,7 +43,7 @@ export default async function BlogPostPage({
     if (!post) notFound();
 
     return (
-        <div className="min-h-screen rounded-xl max-w-4xl mx-auto border border-gray">
+        <div className="min-h-screen rounded-xl max-w-4xl mx-auto border border-gray mb-6">
 
             {/* Cover Image — Full Width */}
             {post.fields.coverImage?.fields?.file?.url && (

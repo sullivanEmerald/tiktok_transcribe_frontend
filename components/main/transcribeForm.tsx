@@ -16,7 +16,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
-import { Clipboard, Download, Copy, Link, FileText, Eye, Heart, MessageCircle, Share2 } from "lucide-react";
+import { Clipboard, Download, Copy, Link, FileText, Eye, Heart, MessageCircle, Share2, } from "lucide-react";
 import { copyToClipboard, downLoadFile, downLoadVideo, downloadFile, downloadUtterances } from "@/lib/utils";
 import { formatMs } from "@/lib/utils";
 import LineLoader from "../genreral/lineLoader";
@@ -44,7 +44,6 @@ export default function TranscribeSection() {
     const [viewMode, setViewMode] = useState<boolean>(false)
     const [downloadJobId, setDownloadJobId] = useState<string | null>(null);
 
-    console.log('captcha', captchaToken)
 
 
     useEffect(() => {
@@ -92,12 +91,12 @@ export default function TranscribeSection() {
                             required
                             value={videoUrl}
                             onChange={(e) => setVideoUrl(e.target.value)}
-                            className="border-2 border-primary focus:border-primary focus:ring-primary rounded-3xl px-4 py-8 w-full placeholder:text-black bg-transparent pl-12"
+                            className="border-2 border-primary focus:border-primary focus:ring-primary rounded-3xl px-4 py-8 pr-17 w-full placeholder:text-black bg-transparent"
                             placeholder="Paste TikTok, Instagram Reel, or YouTube Shorts URL"
                         />
                         <button
                             type="button"
-                            className="absolute left-4 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-primary/80 p-2 rounded-md "
                             title="Paste from clipboard"
                             onClick={async () => {
                                 try {
@@ -109,7 +108,7 @@ export default function TranscribeSection() {
                             }}
                             tabIndex={-1}
                         >
-                            <Link className="w-6 h-6" />
+                            <Clipboard className="w-6 h-6" />
                         </button>
                     </div>
                     {showCaptcha && !loading && (
