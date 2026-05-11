@@ -4,7 +4,7 @@ import { MetadataRoute } from 'next';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://www.useclipscript.com';
 
-    // Add your blog slugs here dynamically later
+    // Added blogs dynamically
     const slugs = await getAllSlugs();
 
     return [
