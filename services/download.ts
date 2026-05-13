@@ -37,10 +37,9 @@ export const downloadService = {
             URL.revokeObjectURL(url);
 
             showToaster('Video downloaded successfully!', 'success');
-            sendGTMEvent({
-                event: 'transcription_downloaded',
+            window.gtag('event', 'transcription_downloaded', {
                 platform: detectPlatform(videoUrl),
-                videoUrl
+                videoUrl,
             });
         } catch (error) {
             const message =

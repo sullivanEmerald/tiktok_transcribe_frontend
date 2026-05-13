@@ -107,9 +107,9 @@ export default function RootLayout({
           draggable
           pauseOnHover
         />
-        <Layout>
-          {children}
-        </Layout>
+
+        {children}
+
       </body>
     </html>
   );

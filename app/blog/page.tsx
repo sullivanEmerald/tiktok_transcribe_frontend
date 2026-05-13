@@ -2,6 +2,8 @@ import { getAllPosts } from '@/services/blogs';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import moment from "moment"
+import Image from 'next/image';
+
 
 export const metadata: Metadata = {
     title: 'Blog — ClipScript',
@@ -15,12 +17,13 @@ export default async function BlogPage() {
     const posts = await getAllPosts();
 
     return (
-        <main className="my-8">
+
+        <main className="mb-8">
             <h1 className="text-3xl font-bold mb-2">Clip Script Blogs</h1>
             <p className="text-gray-500 mb-10">
                 Stay up to date with the latest transcription tips, creator tools & platform guides
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {posts.map((post) => (
                     <Link
                         key={post.sys.id}
@@ -30,9 +33,11 @@ export default async function BlogPage() {
                         {/* Cover Image */}
                         {post.fields.coverImage?.fields?.file?.url ? (
                             <div className="w-full overflow-hidden bg-gray-50">
-                                <img
+                                <Image
                                     src={`https:${post.fields.coverImage.fields.file.url}`}
                                     alt={post.fields.title}
+                                    width={post.fields.coverImage.fields.file.details.image.width}
+                                    height={post.fields.coverImage.fields.file.details.image.height}
                                     className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
                                 />
                             </div>

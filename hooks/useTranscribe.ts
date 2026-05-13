@@ -37,10 +37,9 @@ export function useTranscription() {
             try {
                 const response = await TranscribeService.createTranscription(videoUrl, captchaToken);
                 setTranscript(response.data);
-                sendGTMEvent({
-                    event: 'transcription_created',
+                window.gtag('event', 'transcription_created', {
                     platform: detectPlatform(videoUrl),
-                    videoUrl
+                    videoUrl,
                 });
             } catch (err: any) {
                 const errorMessage = err?.response?.data;

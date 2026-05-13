@@ -1,12 +1,22 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { mainNavigation } from "@/data/constants";
-import { Menu, EyeClosed, EyeIcon } from "lucide-react";
+import { EyeClosed, EyeIcon, Menu, History } from "lucide-react";
 import Logo from "../genreral/logo";
 import Link from "next/link";
+import {
+    Popover,
+    PopoverContent,
+    PopoverDescription,
+    PopoverHeader,
+    PopoverTitle,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { useState } from "react";
 
 export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?: boolean }) {
     const router = useRouter();
+    const [showPopover, setShowPopover] = useState(false)
     return (
         <header className="border border-opacity-10 border-gray-200 bg-background/80 backdrop-blur-sm z-50 rounded-sm shadow-sm">
             <div className="flex h-16 items-center px-4 justify-between w-full">
@@ -30,9 +40,42 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                         <span className="text-sm text-primary hover:primary/80 hover:underline hover:bg-gray-50 transition-colors duration-200">Previous Transcripts</span>
                     </button>
                 </div>
-                <button className="md:hidden" onClick={onOpen} aria-label="Open sidebar">
-                    <Menu className="w-6 h-6 text-primary" />
-                </button>
+
+                <Popover open={showPopover} onOpenChange={setShowPopover}>
+                    <PopoverTrigger asChild>
+                        <button className="md:hidden" aria-label="Open menu">
+                            <Menu className="w-6 h-6 text-primary" />
+                        </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-56 p-2" align="end">
+                        <div className="flex flex-col gap-1">
+                            {mainNavigation.map((nav, idx) => (
+                                <Link
+                                    key={idx}
+                                    href={nav.href}
+                                    onClick={() => setShowPopover(false)}
+                                    className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors duration-200"
+                                >
+                                    <nav.icon className="w-4 h-4 text-primary" />
+                                    <span>{nav.name}</span>
+                                </Link>
+                            ))}
+
+                            <hr className="my-1 border-gray-100" />
+
+                            <button
+                                onClick={() => {
+                                    onOpen?.();
+                                    setShowPopover(false);
+                                }}
+                                className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors duration-200 w-full text-left">
+                                <History className="w-4 h-4 text-primary" />
+                                <span>Previous Transcripts</span>
+                            </button>
+                        </div>
+                    </PopoverContent>
+                </Popover>
+
             </div>
         </header>
     );
