@@ -3,6 +3,8 @@ import { TranscriptData, RecentTranscriptData } from "@/types/transcribe";
 import { TranscribeService } from "@/services/transcribe";
 import { showToaster } from "@/lib/utils";
 import { downloadService } from "@/services/download";
+import { sendGTMEvent } from '@next/third-parties/google';
+import { detectPlatform } from "@/lib/utils";
 
 
 export function useTranscription() {
@@ -35,9 +37,11 @@ export function useTranscription() {
             try {
                 const response = await TranscribeService.createTranscription(videoUrl, captchaToken);
                 setTranscript(response.data);
-                if (showCaptcha) {
-                    setShowCaptcha(false)
-                }
+                sendGTMEvent({
+                    event: 'transcription_created',
+                    platform: detectPlatform(videoUrl),
+                    videoUrl
+                });
             } catch (err: any) {
                 const errorMessage = err?.response?.data;
                 if (errorMessage?.requireCaptcha) {
@@ -59,10 +63,7 @@ export function useTranscription() {
 
         try {
             const result = await downloadService.downloadVideo(videoUrl, captchaToken);
-
-
             console.log(result);
-
         } catch (error) {
             console.error("Error downloading video:", error);
         } finally {

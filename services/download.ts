@@ -1,8 +1,7 @@
 import { showToaster } from "@/lib/utils";
 const API_URL = process.env.NEXT_PUBLIC_API_URL
-
-// implement showtoaster for download errors and success in the downloadVideo function
-
+import { sendGTMEvent } from '@next/third-parties/google';
+import { detectPlatform } from "@/lib/utils";
 
 export const downloadService = {
     downloadVideo: async (videoUrl: string, captchaToken?: string | null) => {
@@ -38,10 +37,14 @@ export const downloadService = {
             URL.revokeObjectURL(url);
 
             showToaster('Video downloaded successfully!', 'success');
+            sendGTMEvent({
+                event: 'transcription_downloaded',
+                platform: detectPlatform(videoUrl),
+                videoUrl
+            });
         } catch (error) {
             const message =
                 error instanceof Error ? error.message : 'Something went wrong while downloading the video';
-
             showToaster(message, 'error');
         }
     },

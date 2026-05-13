@@ -1,4 +1,5 @@
 import { axiosInstance } from "@/lib/utils";
+import { sendGTMEvent } from '@next/third-parties/google';
 
 export const TranscribeService = {
     createTranscription: async (videoUrl: string, captchaToken?: string | null) => {
