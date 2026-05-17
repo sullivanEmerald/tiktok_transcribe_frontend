@@ -32,10 +32,10 @@ export default function TranscribedChats({ open, setOpen }: TranscribedChatsProp
     }
 
     return (
-        <aside className="w-80 h-screen border border-slate-200 bg-white flex flex-col rounded-lg shadow-sm fixed left-0 top-0 z-30 overflow-auto transition-all duration-300">
+        <aside className="w-80 h-screen border border-border/30 bg-background flex flex-col rounded-lg shadow-sm fixed left-0 top-0 z-30 overflow-auto transition-all duration-300">
             {/* Header */}
-            <div className="px-5 py-4 border-b border-slate-200 flex items-center gap-2">
-                <History className="w-4 h-4 text-[#0209b2]" />
+            <div className="px-5 py-4 border-b border-border/30 flex items-center gap-2">
+                <History className="w-4 h-4 text-primary" />
                 <h2 className="text-lg font-bold text-primary">
                     Recent Transcripts
                 </h2>
@@ -55,6 +55,13 @@ export default function TranscribedChats({ open, setOpen }: TranscribedChatsProp
                         <Skeleton className="w-full h-16 mb-4" />
                         <Skeleton className="w-full h-16 mb-4" />
                         <Skeleton className="w-full h-16 mb-4" />
+                        <Skeleton className="w-full h-16 mb-4" />
+                        <Skeleton className="w-full h-16 mb-4" />
+                        <Skeleton className="w-full h-16 mb-4" />
+                        <Skeleton className="w-full h-16 mb-4" />
+                        <Skeleton className="w-full h-16 mb-4" />
+                        <Skeleton className="w-full h-16 mb-4" />
+                        <Skeleton className="w-full h-16 mb-4" />
                     </div>
                 ) : recentTranscripts.length === 0 ? (
                     <div className="px-5 py-4 text-slate-400">You have no recent transcripts.</div>
@@ -63,14 +70,14 @@ export default function TranscribedChats({ open, setOpen }: TranscribedChatsProp
                         <Link
                             href={`/transcript/${chat._id}`}
                             key={index}
-                            className="w-full flex flex-col px-5 py-4 border-b border-slate-100 hover:bg-[#0209b2]/5 transition group cursor-pointer"
+                            className="w-full flex flex-col px-5 py-4 border-b border-border/30 hover:bg-[#0209b2]/5 transition group cursor-pointer"
                             onClick={() => {
                                 // Only close sidebar on mobile
                                 if (window.innerWidth < 640) setOpen(false);
                             }}
                         >
                             <div className="flex items-center justify-between">
-                                <h3 className="text-md font-medium text-slate-900 truncate">
+                                <h3 className="text-md font-medium text-foreground truncate">
                                     {chat.transcript || chat.transcript?.slice(0, 5)}
                                 </h3>
                             </div>

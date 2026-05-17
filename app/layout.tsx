@@ -4,7 +4,7 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleAnalytics } from '@next/third-parties/google'
-import { Layout } from "@/components/genreral/layout";
+import { ThemeProvider } from 'next-themes'
 
 const inter = Inter({
   variable: "--font-inter",
@@ -107,9 +107,9 @@ export default function RootLayout({
           draggable
           pauseOnHover
         />
-
-        {children}
-
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

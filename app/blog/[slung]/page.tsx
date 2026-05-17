@@ -45,7 +45,7 @@ export default async function BlogPostPage({
 
     return (
         <div className='min-h-screen max-w-4xl mx-auto'>
-            <h1 className='mb-4 font-bold text-primary truncate border-l-4 border-red-700 pl-2'>{post.fields.title}</h1>
+            {/* <h1 className='mb-4 font-bold text-primary truncate border-l-4 border-red-700 pl-2'>{post.fields.title}</h1> */}
             <div className="border rounded-xl border-gray mb-8">
                 {post.fields.coverImage?.fields?.file?.url && (
                     <div className="w-full overflow-hidden">
@@ -62,7 +62,7 @@ export default async function BlogPostPage({
                 <div className="max-w-3xl px-4 py-12">
                     <Link
                         href="/blog"
-                        className="text-sm text-gray-400 hover:text-red-500 transition-colors mb-8 inline-flex items-center gap-1"
+                        className="text-sm text-gray-400 hover:text-red-500 transition-colors mb-4 inline-flex items-center gap-1"
                     >
                         ← Back to Blog
                     </Link>
@@ -71,18 +71,18 @@ export default async function BlogPostPage({
                             {post.fields.author?.charAt(0)}
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-800">{post.fields.author}</p>
+                            <p className="text-sm font-medium text-text-primary">{post.fields.author}</p>
                             <p className="text-xs text-gray-400">{moment(post.fields.date).fromNow()}</p>
                         </div>
                     </div>
 
                     {/* Title */}
-                    <h1 className="text-3xl font-bold text-gray-900 mt-6 mb-4 leading-tight">
+                    <h1 className="text-3xl font-bold text-foreground mt-6 mb-4 leading-tight">
                         {post.fields.title}
                     </h1>
 
                     {/* Description */}
-                    <p className="text-lg text-gray-500 mb-8 leading-relaxed border-l-4 border-red-500 pl-4">
+                    <p className="text-lg text-foreground mb-8 leading-relaxed">
                         {post.fields.description}
                     </p>
 

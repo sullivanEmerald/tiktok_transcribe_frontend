@@ -1,5 +1,8 @@
+"use client"
 import Image from "next/image";
 import { UploadCloud, Loader2, FileText, Download } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const TranscriptSteps = [
     {
@@ -26,13 +29,22 @@ const TranscriptSteps = [
 ];
 
 export default function TranscriptProcess() {
+    const { resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => setMounted(true), []);
+
+    const imageSrc = mounted && resolvedTheme === "dark"
+        ? "/image/processDark.png"
+        : "/image/process.png";
+
     return (
         <div className="">
             {/* <h1 className="text-2xl font-bold mb-8 bg-blue-100 rounded-lg text-center py-3">Transcript Process</h1> */}
             <div className="flex flex-col md:flex-row gap-8 justify-between">
                 <div className="w-full md:w-[40%] flex-shrink-0">
                     <Image
-                        src="/image/process.png"
+                        src={imageSrc}
                         alt="Process Image"
                         width={400}
                         height={400}
@@ -45,7 +57,7 @@ export default function TranscriptProcess() {
                     {TranscriptSteps.map((step, idx) => (
                         <li key={step.title} className="flex items-start gap-4 bg-background rounded-xl shadow p-4 transition hover:shadow-lg">
                             <div className="flex flex-col items-center mr-2">
-                                <span className="bg-blue-100 text-blue-700 rounded-full w-10 h-10 flex items-center justify-center mb-2">
+                                <span className="bg-primary text-white rounded-full w-10 h-10 flex items-center justify-center mb-2">
                                     <step.icon className="w-6 h-6" />
                                 </span>
                                 {idx < TranscriptSteps.length - 1 && (
@@ -54,7 +66,7 @@ export default function TranscriptProcess() {
                             </div>
                             <div className="flex-1">
                                 <h2 className="font-semibold text-lg mb-1">{step.title}</h2>
-                                <p className="text-gray-600 mb-2">{step.description}</p>
+                                <p className="text-primary/40 mb-2">{step.description}</p>
                             </div>
                         </li>
                     ))}

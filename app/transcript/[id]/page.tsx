@@ -127,11 +127,11 @@ export default function TranscriptPage() {
                         </div>
                     </div>
                     <section className="space-y-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div className={`${viewMode ? 'bg-white' : 'bg-primary'} text-white p-4 text-justify rounded h-screen overflow-auto whitespace-pre-wrap border border-gray-200 rounded-xl`}>
+                        <div className={`${viewMode ? 'bg-background' : 'bg-primary/80'} text-white p-4 text-justify rounded h-screen overflow-auto whitespace-pre-wrap border border-border/30 rounded-xl`}>
                             {!viewMode ? singleTranscript?.transcript : (
-                                <>
+                                <div className="space-y-2">
                                     {singleTranscript?.utterances?.map((utt, idx) => (
-                                        <div key={idx} className="flex items-start gap-4 bg-primary border border-gray-200 text-white p-2 rounded-lg">
+                                        <div key={idx} className="flex items-start gap-4 bg-primary/80 border border-gray-200 text-white p-2 rounded-lg">
                                             <div className="flex flex-col gap-2 items-center">
                                                 <span className=" text-red-100">
                                                     {formatMs(utt.start)}
@@ -143,10 +143,10 @@ export default function TranscriptPage() {
                                             <span className="">{utt.text}</span>
                                         </div>
                                     ))}
-                                </>
+                                </div>
                             )}
                         </div>
-                        <div className="w-full md:1/2 bg-white/80 rounded-xl shadow p-6 border border-gray-200 flex items-start gap-6 h-screen">
+                        <div className="w-full md:1/2 bg-background rounded-xl shadow p-6 border border-border/30 flex items-start gap-6 h-screen">
                             <div className="mb-2">
                                 {singleTranscript?.metadata?.media?.thumbnailUrl && (
                                     <img
@@ -170,7 +170,7 @@ export default function TranscriptPage() {
                                         <div className="text-sm text-gray-500">@{singleTranscript?.metadata?.author?.username}</div>
                                     </div>
                                 </div>
-                                <span className="text-lg font-bold mb-2 text-gray-700">{singleTranscript?.metadata?.description}</span>
+                                <span className="text-lg font-bold mb-2 text-foreground">{singleTranscript?.metadata?.description}</span>
                                 <div className="text-sm text-gray-700">
                                     <div className="mb-2">
                                         <span className="font-semibold text-red-600">Platform:</span> {singleTranscript?.metadata?.platform &&

@@ -75,7 +75,7 @@ export default function TranscribeSection() {
                         : "flex justify-center items-center min-h-[60vh]"
                 }
             >
-                <section className={`${transcript ? "w-full" : "w-full md:w-1/2  "} h-full  bg-white/80 rounded-xl shadow p-6 border border-gray-200 flex flex-col gap-4`}>
+                <section className={`${transcript ? "w-full" : "w-full md:w-1/2  "} h-full bg-background rounded-xl shadow p-6 border border-border/30 flex flex-col gap-4`}>
                     <div>
                         <h1 className="text-2xl font-bold text-center">Clip Script Transcript Generator</h1>
                         <p className="text-muted-foreground mt-1 text-center">
@@ -91,7 +91,7 @@ export default function TranscribeSection() {
                             required
                             value={videoUrl}
                             onChange={(e) => setVideoUrl(e.target.value)}
-                            className="border-2 border-primary focus:border-primary focus:ring-primary rounded-3xl px-4 py-8 pr-17 w-full placeholder:text-black bg-transparent"
+                            className="border-2 border-primary/15 focus:border-primary focus:ring-primary rounded-3xl px-4 py-8 pr-17 w-full placeholder:primary-foreground bg-transparent"
                             placeholder="Paste TikTok, Instagram Reel, or YouTube Shorts URL"
                         />
                         <button
@@ -157,7 +157,7 @@ export default function TranscribeSection() {
                                         ? "Please enter a video URL"
                                         : "Download Video"
                             }
-                            className="w-full bg-destructive text-white py-4 rounded-3xl font-semibold mt-2 disabled:opacity-50 hover:bg-destructive/80 transition-colors duration-200"
+                            className="w-full bg-muted text-white py-4 rounded-3xl font-semibold mt-2 disabled:opacity-50 hover:bg-destructive/80 transition-colors duration-200"
                             disabled={loading || isDownloading || !videoUrl || status === 'processing'}
                         >
                             {isDownloading ? (
@@ -176,13 +176,13 @@ export default function TranscribeSection() {
                 </section>
                 {/* Metadata and Stats Section */}
                 {transcript && (
-                    <div className="w-full bg-white/80 rounded-xl shadow p-6 border border-gray-200 flex h-full overflow-y-auto items-start gap-6">
+                    <div className="w-full bg-background rounded-xl shadow p-6 border border-border/30 flex h-full overflow-y-auto items-start gap-6">
                         <div className="w-full">
                             {transcript?.metadata?.media?.thumbnailUrl ? (
                                 <img
                                     src={transcript.metadata.media.thumbnailUrl}
                                     alt="Thumbnail"
-                                    className="rounded-lg border border-gray-200 object-cover w-full"
+                                    className="rounded-lg border border-border/30 object-cover w-full"
                                 />
                             ) : null}
                             {/* Video player if direct video URL is available */}
@@ -209,7 +209,7 @@ export default function TranscribeSection() {
                                     <div className="text-sm text-gray-500">@{transcript?.metadata?.author?.username}</div>
                                 </div>
                             </div>
-                            <span className="text-lg font-bold mb-2 text-gray-700">{transcript?.metadata?.description}</span>
+                            <span className="text-lg font-bold mb-2 text-foreground">{transcript?.metadata?.description}</span>
                             <div className="text-sm text-gray-700">
                                 <div className="mb-2">
                                     <span className="font-semibold text-red-600">Platform:</span> {transcript?.metadata?.platform &&
@@ -249,7 +249,7 @@ export default function TranscribeSection() {
                 setIsDialogOpen(open);
 
             }}>
-                <DialogContent className="">
+                <DialogContent className="border border-border/30">
                     <DialogHeader>
                         <DialogTitle className="font-semibold">Review, Copy or Download</DialogTitle>
                         <div className="flex items-center justify-between w-full mt-2">
@@ -262,7 +262,7 @@ export default function TranscribeSection() {
                                 <p>Timestamp</p>
                             </div>
                             <div className="flex items-center gap-2">
-                                {viewMode ? (
+                                {!viewMode ? (
                                     <Clipboard className="w-5 h-5 text-primary cursor-pointer" onClick={() => copyToClipboard(transcript?.transcript || '')} />
                                 ) : (
                                     <Clipboard
@@ -308,13 +308,13 @@ export default function TranscribeSection() {
                             {transcript ? (
                                 <>
                                     <div>
-                                        <div className={`${!viewMode ? 'bg-primary text-white p-2' : 'bg-transparent'} rounded max-h-[70vh] overflow-auto whitespace-pre-wrap`}>
+                                        <div className={`${!viewMode ? 'bg-primary/80 text-white p-2' : 'bg-transparent'} rounded max-h-[70vh] overflow-auto whitespace-pre-wrap`}>
                                             {!viewMode ? transcript?.transcript : (
                                                 <>
                                                     {Array.isArray(transcript.utterances) && transcript.utterances.length > 0 ? (
-                                                        <div className="space-y-1 w-full">
+                                                        <div className="space-y-2 w-full">
                                                             {transcript.utterances.map((utt, idx) => (
-                                                                <div key={idx} className="flex items-start gap-4 bg-primary border border-gray-200 text-white p-2 rounded-lg">
+                                                                <div key={idx} className="flex items-start gap-4 bg-primary/80 border border-gray-200 text-white p-2 rounded-lg">
                                                                     <div className="flex flex-col gap-2 items-center">
                                                                         <span className=" text-red-100">
                                                                             {formatMs(utt.start)}

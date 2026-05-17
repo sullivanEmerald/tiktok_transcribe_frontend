@@ -16,7 +16,7 @@ export default function Platforms() {
             </div>
             <div className="flex flex-col md:flex-row gap-8 mt-8">
                 {/* Write-up container */}
-                <div className="bg-background rounded-2xl shadow-md hover:shadow-lg p-6 w-full md:w-1/2 flex flex-col items-start gap-8">
+                <div className="bg-background rounded-2xl border border-border/30 shadow-md hover:shadow-lg p-6 w-full md:w-1/2 flex flex-col items-start gap-8">
                     <h2 className="text-[35px] font-bold text-primary">Effortless Video Transcription</h2>
                     <p className="text-gray-700">Paste your video link and instantly transcribe, edit, and copy your content. Save time and boost productivity with seamless transcript generation.</p>
                     <Button
@@ -28,8 +28,8 @@ export default function Platforms() {
                     </Button>
                 </div>
                 {/* Platform logos container */}
-                <div className="bg-background rounded-2xl shadow-md hover:shadow-lg p-6 w-full md:w-1/2 flex flex-col items-center gap-8 ">
-                    <h3 className="text-[40px] font-semibold text-primary">Platforms</h3>
+                <div className="bg-background border border-border/30 rounded-2xl shadow-md hover:shadow-lg p-6 w-full md:w-1/2 flex flex-col items-center gap-8 ">
+                    <h3 className="text-[35px] font-bold text-primary">Platforms</h3>
                     <div className="flex gap-8 items-center justify-center">
                         <span className="flex flex-col items-center">
                             <img src="/tiktok.svg" alt="TikTok" className="w-14 h-14" />

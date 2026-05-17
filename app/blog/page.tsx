@@ -19,8 +19,8 @@ export default async function BlogPage() {
     return (
 
         <main className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Clip Script Blogs</h1>
-            <p className="text-gray-500 mb-10">
+            <h1 className="text-3xl text-foreground font-bold mb-2">Clip Script Blogs</h1>
+            <p className="text-text-primary/70 mb-10">
                 Stay up to date with the latest transcription tips, creator tools & platform guides
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -28,7 +28,7 @@ export default async function BlogPage() {
                     <Link
                         key={post.sys.id}
                         href={`/blog/${post.fields.slug}`}
-                        className="group rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-shadow duration-300 bg-white flex flex-col"
+                        className="group rounded-2xl overflow-hidden border border-border/30 shadow-sm hover:shadow-lg transition-shadow duration-300 bg-background flex flex-col"
                     >
                         {/* Cover Image */}
                         {post.fields.coverImage?.fields?.file?.url ? (
@@ -52,13 +52,13 @@ export default async function BlogPage() {
                                     {post.fields.author?.charAt(0)}
                                 </div>
                                 <div>
-                                    <p className="text-sm font-medium text-gray-800">{post.fields.author}</p>
+                                    <p className="text-sm font-medium text-text-primary/70">{post.fields.author}</p>
                                     <p className="text-xs text-gray-400">{moment(post.fields.date).fromNow()}</p>
                                 </div>
                             </div>
 
 
-                            <h2 className="text-lg font-bold text-gray-900 mt-6 mb-4 leading-tight truncate">
+                            <h2 className="text-lg font-bold text-foreground mt-6 mb-4 leading-tight truncate">
                                 {post.fields.title}
                             </h2>
 

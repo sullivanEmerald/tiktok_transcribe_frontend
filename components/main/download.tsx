@@ -1,6 +1,18 @@
+"use client"
 import Image from 'next/image';
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export default function Download() {
+
+    const { resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => setMounted(true), []);
+
+    const imageSrc = mounted && resolvedTheme === "dark"
+        ? "/image/downloadDark.png"
+        : "/image/download.png";
     return (
         <>
             <div className="flex flex-col items-center">
@@ -31,7 +43,7 @@ export default function Download() {
                 </div>
                 <div className="w-full md:w-[40%] flex-shrink-0">
                     <Image
-                        src="/image/download.png"
+                        src={imageSrc}
                         alt="Download Image"
                         width={400}
                         height={400}
