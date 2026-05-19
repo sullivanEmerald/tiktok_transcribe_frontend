@@ -19,7 +19,7 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
     const router = useRouter();
     const [showPopover, setShowPopover] = useState(false)
     return (
-        <header className="bg-card backdrop-blur-sm z-50 rounded-sm shadow-sm shadow-card">
+        <header className="bg-card/50 backdrop-blur-sm z-50 rounded-sm shadow-sm shadow-card">
             <div className="flex h-16 items-center px-4 justify-between w-full">
                 <div className="flex items-center">
                     <Logo />
