@@ -249,9 +249,9 @@ export default function TranscribeSection() {
                 setIsDialogOpen(open);
 
             }}>
-                <DialogContent className="border border-border/30">
+                <DialogContent className="shadow-md shadow-shadow-background border-none bg-card">
                     <DialogHeader>
-                        <DialogTitle className="font-semibold">Review, Copy or Download</DialogTitle>
+                        <DialogTitle className="font-semibold text-muted-foreground">Review, Copy or Download</DialogTitle>
                         <div className="flex items-center justify-between w-full mt-2">
                             <div className="flex items-center gap-1">
                                 <Switch
@@ -277,7 +277,7 @@ export default function TranscribeSection() {
                                     <PopoverTrigger asChild>
                                         <Download className="w-5 h-5 text-primary cursor-pointer" />
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-50 bg-primary text-white">
+                                    <PopoverContent className="w-50 bg-background text-foreground shadow-md shadow-shadow-background hover:shadow-lg border-none">
                                         <div className="flex flex-col gap-1">
                                             <p className="">Download as:</p>
                                             <hr className="border-t border-gray-200 my-1" />
@@ -293,9 +293,9 @@ export default function TranscribeSection() {
 
                                                         onClick(content);
                                                     }}
-                                                    className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-muted cursor-pointer hover:text-primary transition group"
+                                                    className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-card cursor-pointer hover:text-primary transition group"
                                                 >
-                                                    <Icon size={16} className="text-red-100 group-hover:text-red-400" />
+                                                    <Icon size={16} className="text-red-300 group-hover:text-red-400" />
                                                     <span className="text-sm">{label}</span>
                                                 </button>
                                             ))}
@@ -308,15 +308,15 @@ export default function TranscribeSection() {
                             {transcript ? (
                                 <>
                                     <div>
-                                        <div className={`${!viewMode ? 'bg-primary/80 text-white p-2' : 'bg-transparent'} rounded max-h-[70vh] overflow-auto whitespace-pre-wrap`}>
+                                        <div className={`text-foreground p-2 rounded max-h-[70vh] overflow-auto whitespace-pre-wrap leading-8`}>
                                             {!viewMode ? transcript?.transcript : (
                                                 <>
                                                     {Array.isArray(transcript.utterances) && transcript.utterances.length > 0 ? (
                                                         <div className="space-y-2 w-full">
                                                             {transcript.utterances.map((utt, idx) => (
-                                                                <div key={idx} className="flex items-start gap-4 bg-primary/80 border border-gray-200 text-white p-2 rounded-lg">
+                                                                <div key={idx} className="flex items-start gap-4 bg-background text-white p-2 rounded-lg">
                                                                     <div className="flex flex-col gap-2 items-center">
-                                                                        <span className=" text-red-100">
+                                                                        <span className=" text-red-300">
                                                                             {formatMs(utt.start)}
                                                                         </span>
                                                                         <button onClick={() => copyToClipboard(utt.text, formatMs(utt.start))} className="p-1 rounded hover:bg-primary/10 transition-colors duration-200">

@@ -99,7 +99,7 @@ export default function TranscriptPage() {
                                 <PopoverTrigger asChild>
                                     <Download className="w-5 h-5 text-primary cursor-pointer" />
                                 </PopoverTrigger>
-                                <PopoverContent className="w-50 bg-primary text-white">
+                                <PopoverContent className="w-50 bg-background text-foreground shadow-md shadow-shadow-background hover:shadow-lg border-none">
                                     <div className="flex flex-col gap-1">
                                         <p className="">Download as:</p>
                                         <hr className="border-t border-gray-200 my-1" />
@@ -115,9 +115,9 @@ export default function TranscriptPage() {
 
                                                     onClick(content);
                                                 }}
-                                                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-muted cursor-pointer hover:text-primary transition group"
+                                                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-card cursor-pointer hover:text-primary transition group"
                                             >
-                                                <Icon size={16} className="text-red-100 group-hover:text-red-400" />
+                                                <Icon size={16} className="text-red-300 group-hover:text-red-400" />
                                                 <span className="text-sm">{label}</span>
                                             </button>
                                         ))}
