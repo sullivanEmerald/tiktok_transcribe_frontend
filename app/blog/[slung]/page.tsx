@@ -44,9 +44,9 @@ export default async function BlogPostPage({
     if (!post) notFound();
 
     return (
-        <div className='min-h-screen max-w-4xl mx-auto'>
+        <div className='min-h-screen max-w-4xl mx-auto bg-card rounded-md'>
             {/* <h1 className='mb-4 font-bold text-primary truncate border-l-4 border-red-700 pl-2'>{post.fields.title}</h1> */}
-            <div className="border rounded-xl border-gray mb-8">
+            <div className="mb-8">
                 {post.fields.coverImage?.fields?.file?.url && (
                     <div className="w-full overflow-hidden">
                         <Image
@@ -59,7 +59,7 @@ export default async function BlogPostPage({
                     </div>
                 )}
 
-                <div className="max-w-3xl px-4 py-12">
+                <div className="w-full px-4 py-6">
                     <Link
                         href="/blog"
                         className="text-sm text-gray-400 hover:text-red-500 transition-colors mb-4 inline-flex items-center gap-1"
@@ -82,7 +82,7 @@ export default async function BlogPostPage({
                     </h1>
 
                     {/* Description */}
-                    <p className="text-lg text-foreground mb-8 leading-relaxed">
+                    <p className="text-lg text-foreground/80 mb-8 leading-relaxed">
                         {post.fields.description}
                     </p>
 

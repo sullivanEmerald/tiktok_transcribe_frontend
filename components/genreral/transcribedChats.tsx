@@ -32,7 +32,7 @@ export default function TranscribedChats({ open, setOpen }: TranscribedChatsProp
     }
 
     return (
-        <aside className="w-80 h-screen bg-card/50 flex flex-col rounded-lg shadow-sm fixed left-0 top-0 z-30 overflow-auto transition-all duration-300">
+        <aside className="w-80 h-screen bg-card/50 flex flex-col rounded-lg shadow-md shadow-card fixed left-0 top-0 z-30 overflow-auto transition-all duration-300">
             {/* Header */}
             <div className="px-5 py-4 border-b border-border/30 flex items-center gap-2">
                 <History className="w-4 h-4 text-primary" />
