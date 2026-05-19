@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { NavigationBar } from "../ui/NavigationIndex"
 import TranscribedChats from "./transcribedChats"
 import { Menu } from "lucide-react"
@@ -10,7 +10,12 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
-    const [sidebarOpen, setSidebarOpen] = useState(true)
+    const [sidebarOpen, setSidebarOpen] = useState(false)
+
+    useEffect(() => {
+        if (window.innerWidth > 640) setSidebarOpen(true)
+    }, [])
+
 
     return (
         <div className="min-h-screen flex">

@@ -19,7 +19,7 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
     const router = useRouter();
     const [showPopover, setShowPopover] = useState(false)
     return (
-        <header className="border border-opacity-10 border-border/30 bg-background/80 backdrop-blur-sm z-50 rounded-sm shadow-sm">
+        <header className="bg-card backdrop-blur-sm z-50 rounded-sm shadow-md">
             <div className="flex h-16 items-center px-4 justify-between w-full">
                 <div className="flex items-center">
                     <Logo />
@@ -49,16 +49,16 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                             <Menu className="w-6 h-6 text-primary" />
                         </button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-56 p-2" align="end">
+                    <PopoverContent className="w-56 p-2 border-none" align="end">
                         <div className="flex flex-col gap-1">
                             {mainNavigation.map((nav, idx) => (
                                 <Link
                                     key={idx}
                                     href={nav.href}
                                     onClick={() => setShowPopover(false)}
-                                    className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors duration-200"
+                                    className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary transition-colors duration-200"
                                 >
-                                    <nav.icon className="w-4 h-4 text-primary" />
+                                    <nav.icon className="text-primary w-4 h-4" />
                                     <span>{nav.name}</span>
                                 </Link>
                             ))}
@@ -70,7 +70,7 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                                     onOpen?.();
                                     setShowPopover(false);
                                 }}
-                                className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors duration-200 w-full text-left">
+                                className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary transition-colors duration-200 w-full text-left">
                                 <History className="w-4 h-4 text-primary" />
                                 <span>Previous Transcripts</span>
                             </button>
