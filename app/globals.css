@@ -40,6 +40,7 @@
   --color-container: var(--container);
   --color-text: var(--text);
   --color-shadow-background: var(--shadow-background);
+  --color-timestamp: var(--timestamp);
   --color-text-primary: var(--text-primary);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -88,6 +89,7 @@
   --text: #ffffff;
   --text-primary: oklch(0.704 0.04 256.788);
   --shadow-background: oklch(0.704 0.04 256.788);
+  --timestamp: #0209b2;
 }
 
 .dark {
@@ -126,6 +128,7 @@
   --text: #ffffff;
   --text-primary: #f40000;
   --shadow-background: oklch(0.208 0.042 265.755);
+  --timestamp: oklch(0.129 0.042 264.695);
 }
 
 @layer base {

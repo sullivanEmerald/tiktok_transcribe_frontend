@@ -176,13 +176,13 @@ export default function TranscribeSection() {
                 </section>
                 {/* Metadata and Stats Section */}
                 {transcript && (
-                    <div className="w-full bg-background rounded-xl shadow p-6 border border-border/30 flex h-full overflow-y-auto items-start gap-6">
+                    <div className="w-full bg-background rounded-xl shadow-md p-6 shadow-shadow-background hover:shadow-lg flex h-full overflow-y-auto items-start gap-6">
                         <div className="w-full">
                             {transcript?.metadata?.media?.thumbnailUrl ? (
                                 <img
                                     src={transcript.metadata.media.thumbnailUrl}
                                     alt="Thumbnail"
-                                    className="rounded-lg border border-border/30 object-cover w-full"
+                                    className="rounded-lg object-cover w-full"
                                 />
                             ) : null}
                             {/* Video player if direct video URL is available */}

@@ -67,7 +67,7 @@ export default function TranscriptPage() {
                     <p className="text-gray-600">Transcript not found.</p>
                 </div>
             ) : (
-                <main className="flex flex-col gap-2 my-8">
+                <main className="flex flex-col gap-2">
                     <button
                         className="flex items-center gap-2 text-gray-600 hover:text-primary w-fit cursor-pointer"
                         onClick={() => router.back()}
@@ -77,7 +77,7 @@ export default function TranscriptPage() {
                         <span>Back</span>
                     </button>
 
-                    <div className="flex justify-between w-full lg:w-1/2">
+                    <div className="flex justify-between w-full lg:w-1/2 mb-2">
                         <div className="flex items-center gap-1">
                             <Switch
                                 id="viewModeToggle"
@@ -127,11 +127,11 @@ export default function TranscriptPage() {
                         </div>
                     </div>
                     <section className="space-y-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div className={`${viewMode ? 'bg-background' : 'bg-primary/80'} text-white p-4 text-justify rounded h-screen overflow-auto whitespace-pre-wrap border border-border/30 rounded-xl`}>
+                        <div className={`${viewMode ? 'bg-card' : 'bg-card'} text-muted-foreground p-4 text-justify rounded h-screen overflow-y-auto scrollbar-hide whitespace-pre-wrap shadow-md rounded-xl`}>
                             {!viewMode ? singleTranscript?.transcript : (
                                 <div className="space-y-2">
                                     {singleTranscript?.utterances?.map((utt, idx) => (
-                                        <div key={idx} className="flex items-start gap-4 bg-primary/80 border border-gray-200 text-white p-2 rounded-lg">
+                                        <div key={idx} className="flex items-start gap-4 bg-timestamp border border-background text-muted-foreground p-2 rounded-lg">
                                             <div className="flex flex-col gap-2 items-center">
                                                 <span className=" text-red-100">
                                                     {formatMs(utt.start)}
@@ -146,17 +146,17 @@ export default function TranscriptPage() {
                                 </div>
                             )}
                         </div>
-                        <div className="w-full md:1/2 bg-background rounded-xl shadow p-6 border border-border/30 flex items-start gap-6 h-screen">
+                        <div className="w-full md:1/2 bg-card rounded-xl shadow p-6 shadow-md flex items-start gap-6 h-screen">
                             <div className="mb-2">
                                 {singleTranscript?.metadata?.media?.thumbnailUrl && (
                                     <img
                                         src={singleTranscript?.metadata?.media?.thumbnailUrl}
                                         alt="Thumbnail"
-                                        className="rounded-lg border border-gray-200 object-contain w-full h-full"
+                                        className="rounded-lg object-contain w-full h-full"
                                     />
                                 )}
                             </div>
-                            <section className="flex flex-col gap-4">
+                            <section className="flex flex-col gap-4 mb-4">
                                 <div className="flex items-center gap-3 mb-2">
                                     {singleTranscript?.metadata?.author?.avatarUrl && (
                                         <img
@@ -179,9 +179,9 @@ export default function TranscriptPage() {
                                         }
                                     </div>
                                     <div className="mb-2">
-                                        <span className="font-semibold">Video URL:</span> <a href={singleTranscript?.videoUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline break-all">{singleTranscript?.videoUrl}</a>
+                                        <span className="font-semibold">Video URL:</span> <a href={singleTranscript?.videoUrl} target="_blank" rel="noopener noreferrer" className="text-foreground underline break-all">{singleTranscript?.videoUrl}</a>
                                     </div>
-                                    <div className="flex flex-wrap gap-4 mt-4">
+                                    <div className="flex flex-wrap gap-4 my-4">
                                         <div className="mb-2 flex items-center gap-1">
                                             <Eye className="w-4 h-4 text-gray-500" />
                                             {formatCount(singleTranscript?.metadata?.stats?.views)} views
