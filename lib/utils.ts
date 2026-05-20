@@ -27,6 +27,26 @@ export const axiosInstance = axios.create({
   }
 });
 
+export function getDeviceId() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  let deviceId = localStorage.getItem('deviceId');
+
+  if (!deviceId) {
+    deviceId = crypto.randomUUID();
+    localStorage.setItem('deviceId', deviceId);
+  }
+
+  return deviceId;
+}
+
+axiosInstance.interceptors.request.use((config) => {
+  config.headers['x-device-id'] = getDeviceId();
+
+  return config;
+});
 
 export const showToaster = (message: string, type: "success" | "error" | "info" | "warning" = "success") => {
   toast(message, { type });
@@ -208,4 +228,6 @@ export function formatCount(num?: number | null) {
   if (num >= 1e3) return (num / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
   return num.toString();
 }
+
+
 
