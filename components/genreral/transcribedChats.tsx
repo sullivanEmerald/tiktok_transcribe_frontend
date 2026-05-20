@@ -32,7 +32,7 @@ export default function TranscribedChats({ open, setOpen }: TranscribedChatsProp
     }
 
     return (
-        <aside className="w-80 h-screen bg-card/50 flex flex-col rounded-lg shadow-md shadow-card fixed left-0 top-0 z-30 overflow-auto transition-all duration-300">
+        <aside className="w-80 h-screen bg-card md:bg-card/50 flex flex-col rounded-lg shadow-md shadow-card fixed left-0 top-0 z-30 overflow-auto transition-all duration-300">
             {/* Header */}
             <div className="px-5 py-4 border-b border-border/30 flex items-center gap-2">
                 <History className="w-4 h-4 text-primary" />
@@ -40,11 +40,11 @@ export default function TranscribedChats({ open, setOpen }: TranscribedChatsProp
                     Recent Transcripts
                 </h2>
                 <Button
-                    className="bg-white ml-auto hover:bg-transparent cursor-pointer"
+                    className="bg-white ml-auto group cursor-pointer"
                     onClick={() => setOpen(false)}
                     aria-label="Close sidebar"
                 >
-                    <X className="w-4 h-4 text-primary" />
+                    <X className="w-4 h-4 text-primary group-hover:text-white" />
                 </Button>
             </div>
 
