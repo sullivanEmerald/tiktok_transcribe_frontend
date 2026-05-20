@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import moment from 'moment';
 import Image from 'next/image';
+import { BLOCKS } from '@contentful/rich-text-types';
 
 export const revalidate = 3600;
 
@@ -42,6 +43,26 @@ export default async function BlogPostPage({
     const post = await getPostBySlug(params.slug);
 
     if (!post) notFound();
+
+    const options = {
+        renderNode: {
+            [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
+                <p className="text-muted-foreground leading-8 mb-4">
+                    {children}
+                </p>
+            ),
+
+            [BLOCKS.HEADING_2]: (_node: any, children: any) => (
+                <h2 className="text-2xl font-bold text-foreground mt-8 mb-4">
+                    {children}
+                </h2>
+            ),
+
+            [BLOCKS.HR]: () => (
+                <hr className="border-gray-500 my-4" />
+            ),
+        },
+    };
 
     return (
         <div className='min-h-screen max-w-4xl mx-auto bg-card rounded-md'>
@@ -89,8 +110,8 @@ export default async function BlogPostPage({
                     <hr className="mb-8 border-gray-100" />
 
                     {/* Body */}
-                    <div className="prose prose-neutral prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-red-600 prose-strong:text-gray-900 max-w-none">
-                        {documentToReactComponents(post.fields.body)}
+                    <div>
+                        {documentToReactComponents(post.fields.body, options)}
                     </div>
 
                     <hr className="my-12 border-gray-100" />

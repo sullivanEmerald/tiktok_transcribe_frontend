@@ -14,10 +14,23 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function BlogPage() {
-    const posts = await getAllPosts();
+    let posts = await getAllPosts();
+
+    if (!posts?.length) {
+        return (
+            <div className='rounded-md bg-card p-4 text-foreground max-w-md mx-auto'>
+                <p className="text-2xl font-bold text-foreground">
+                    No blog posts found
+                </p>
+                <span className="text-muted-foreground max-w-md">
+                    There are currently no published blog posts available.
+                    Please check back later.
+                </span>
+            </div>
+        )
+    }
 
     return (
-
         <main className="mb-8 ">
             <div className='bg-card rounded-md p-2 text-center mb-3'>
                 <h1 className="text-3xl text-foreground font-bold">Clip Script Blogs</h1>

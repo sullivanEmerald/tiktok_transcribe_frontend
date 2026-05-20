@@ -33,7 +33,7 @@ import { useDownloadProgress } from "@/hooks/useDownloadProgress";
 import { showToaster, detectPlatform } from "@/lib/utils";
 import { User } from "lucide-react";
 import { formatCount } from "@/lib/utils";
-import Image from "next/image";
+
 
 
 export default function TranscribeSection() {
