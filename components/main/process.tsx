@@ -66,7 +66,7 @@ export default function TranscriptProcess() {
                             </div>
                             <div className="flex-1">
                                 <h2 className="font-semibold text-lg mb-1">{step.title}</h2>
-                                <p className="text-primary/40 mb-2">{step.description}</p>
+                                <p className="text-gray-500 mb-2">{step.description}</p>
                             </div>
                         </li>
                     ))}
