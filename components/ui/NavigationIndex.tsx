@@ -28,7 +28,7 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                     <ThemeToggle />
                     <nav className="hidden md:flex items-center space-x-2">
                         {mainNavigation.map((nav, idx) => (
-                            <Link href={nav.href} key={idx} className="text-sm text-text p-2 rounded-sm bg-primary hover:bg-primary/80 hover:underline transition-colors duration-200">
+                            <Link href={nav.href} key={idx} className="text-sm text-text p-2 rounded-2xl bg-primary hover:bg-primary/80 hover:underline transition-colors duration-200">
                                 <div className="flex item-center gap-1">
                                     <nav.icon className="w-4 h-4" />
                                     <span>{nav.name}</span>
@@ -37,7 +37,7 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                         ))}
                     </nav>
 
-                    <button className="hidden md:flex items-center text-text p-2 rounded-sm bg-primary hover:bg-primary/80 hover:underline gap-1 cursor-pointer" onClick={onOpen} aria-label="Open sidebar" >
+                    <button className="hidden md:flex items-center text-text p-2 rounded-2xl bg-primary hover:bg-primary/80 hover:underline gap-1 cursor-pointer" onClick={onOpen} aria-label="Open sidebar" >
                         {isOpen ? <EyeClosed className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
                         <span className="text-sm transition-colors duration-200">My Transcripts</span>
                     </button>
