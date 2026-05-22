@@ -19,8 +19,6 @@ export async function getAllPosts(): Promise<BlogPostEntry[]> {
         ],
     });
 
-    console.log(entries)
-
     return entries.items as unknown as BlogPostEntry[];
 }
 

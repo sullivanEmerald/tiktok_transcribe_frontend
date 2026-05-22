@@ -43,8 +43,6 @@ export default async function BlogPostPage({
 }) {
     const post = await getPostBySlug(params.slug);
 
-    console.log(post)
-
     if (!post) notFound();
 
     const options = {
