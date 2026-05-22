@@ -5,9 +5,11 @@ import { BlogPostEntry } from '@/types/blogs';
 export async function getAllPosts(): Promise<BlogPostEntry[]> {
     const entries = await client.getEntries<any>({
         content_type: 'blogPost',
-        order: ['-fields.date'],
+        order: ['-sys.createdAt'],
+        include: 2,
         select: [
             'sys.id',
+            'sys.createdAt',
             'fields.title',
             'fields.slug',
             'fields.description',
@@ -16,6 +18,8 @@ export async function getAllPosts(): Promise<BlogPostEntry[]> {
             'fields.coverImage',
         ],
     });
+
+    console.log(entries)
 
     return entries.items as unknown as BlogPostEntry[];
 }
@@ -26,6 +30,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPostEntry | null>
         content_type: 'blogPost',
         'fields.slug': slug,
         limit: 1,
+        include: 2,
     });
 
     if (!entries.items.length) return null;

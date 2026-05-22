@@ -22,6 +22,6 @@ export type BlogPost = {
 };
 
 export type BlogPostEntry = {
-    sys: { id: string };
+    sys: { id: string, createdAt: string };
     fields: BlogPost;
 };

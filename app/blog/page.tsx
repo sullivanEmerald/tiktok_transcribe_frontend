@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import moment from "moment"
 import Image from 'next/image';
+import { User, Timer } from 'lucide-react';
 
 
 export const metadata: Metadata = {
@@ -11,11 +12,10 @@ export const metadata: Metadata = {
 };
 
 
-export const revalidate = 60;
+export const revalidate = 30;
 
 export default async function BlogPage() {
     let posts = await getAllPosts();
-
     if (!posts?.length) {
         return (
             <div className='rounded-md bg-card p-4 text-foreground max-w-md mx-auto'>
@@ -31,10 +31,10 @@ export default async function BlogPage() {
     }
 
     return (
-        <main className="mb-8 ">
-            <div className='bg-card rounded-md p-2 text-center mb-3'>
+        <main className="mb-8 flex flex-col gap-8">
+            <div className='bg-blog rounded-md p-4 text-center'>
                 <h1 className="text-3xl text-foreground font-bold">Clip Script Blogs</h1>
-                <p className="text-text-primary/70">
+                <p className="text-gray-500">
                     Stay up to date with the latest transcription tips, creator tools & platform guides
                 </p>
             </div>
@@ -47,28 +47,44 @@ export default async function BlogPage() {
                     >
                         {/* Cover Image */}
                         {post.fields.coverImage?.fields?.file?.url ? (
-                            <div className="w-full overflow-hidden bg-gray-50">
+                            <div className="w-full relative h-56 overflow-hidden bg-gray-50">
                                 <Image
                                     src={`https:${post.fields.coverImage.fields.file.url}`}
                                     alt={post.fields.title}
-                                    width={post.fields.coverImage.fields.file.details.image.width}
-                                    height={post.fields.coverImage.fields.file.details.image.height}
-                                    className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
+                                    fill
+                                    // width={post.fields.coverImage.fields.file.details.image.width}
+                                    // height={post.fields.coverImage.fields.file.details.image.height}
+                                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                                 />
                             </div>
                         ) : (
-                            <div className="w-full h-48 bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center">
-                                <span className="text-white text-2xl font-bold">ClipScript</span>
+                            <div className="w-full relative h-56 overflow-hidden bg-gray-50">
+                                <Image
+                                    src={`/image/fallback.jpeg`}
+                                    alt={`blog thumbnail`}
+                                    fill
+                                    // width={200}
+                                    // height={200}
+                                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div className="absolute inset-0 bg-black/40" />
+                                <h2 className="text-2xl font-bold absolute top-20 text-black text-center">
+                                    {post?.fields?.title}
+                                </h2>
                             </div>
                         )}
                         <div className="p-5 flex flex-col flex-1 space-y-2 bg-card">
-                            <div className="mt-6 flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white text-xs font-bold">
-                                    {post.fields.author?.charAt(0)}
-                                </div>
-                                <div>
-                                    <p className="text-sm font-medium text-text-primary/70">{post.fields.author}</p>
-                                    <p className="text-xs text-gray-400">{moment(post.fields.date).fromNow()}</p>
+                            <div className="mt-2 flex items-center gap-3">
+                                <div className='flex items-center justify-between w-full'>
+                                    <div className='flex items-center gap-1'>
+                                        <User className='h-4 w-4' />
+                                        <p className="text-sm font-medium text-foreground/60">{post.fields.author || 'Clip Script Teams'}</p>
+                                    </div>
+                                    <div className='flex items-center gap-1'>
+                                        <Timer className='h-4 w-4' />
+                                        <p className="text-xs text-gray-400">{post.fields.date ? moment(post.fields.date).fromNow() : moment(post.fields.date).fromNow()}</p>
+                                    </div>
+
                                 </div>
                             </div>
 
