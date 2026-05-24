@@ -1,20 +1,22 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useLayoutEffect } from "react"
 import { NavigationBar } from "../ui/NavigationIndex"
 import TranscribedChats from "./transcribedChats"
 import { Menu } from "lucide-react"
 import Footer from "./footer"
+import { usePathname } from "next/navigation"
 
 interface LayoutProps {
     children: React.ReactNode
 }
 
 export function Layout({ children }: LayoutProps) {
+    const pathname = usePathname()
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
-    useEffect(() => {
-        if (window.innerWidth > 640) setSidebarOpen(true)
-    }, [])
+    useLayoutEffect(() => {
+        if (window.innerWidth > 640 && pathname === "/") setSidebarOpen(true)
+    }, [pathname])
 
 
     return (

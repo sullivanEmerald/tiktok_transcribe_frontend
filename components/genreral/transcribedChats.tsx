@@ -5,7 +5,6 @@ import { Skeleton } from "../ui/skeleton";
 import moment from "moment";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-
 interface TranscribedChatsProps {
     open: boolean;
     setOpen: (open: boolean) => void;
@@ -16,7 +15,7 @@ export default function TranscribedChats({ open, setOpen }: TranscribedChatsProp
 
     useEffect(() => {
         if (open) fetchRecentTranscripts();
-    }, [fetchRecentTranscripts, open]);
+    }, [open]);
 
     if (!open) {
         return (
