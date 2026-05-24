@@ -34,6 +34,7 @@ export type UtteranceType = {
 
 export interface RecentTranscriptData {
     transcript: string;
+    title: string;
     createdAt?: string;
     jobId?: string;
     _id: string;

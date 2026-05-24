@@ -127,7 +127,7 @@ export default function TranscriptPage() {
                         </div>
                     </div>
                     <section className="space-y-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div className={`${viewMode ? 'bg-card' : 'bg-card'} text-muted-foreground p-4 text-justify rounded h-screen overflow-y-auto scrollbar-hide whitespace-pre-wrap shadow-md rounded-xl leading-8`}>
+                        <div className={`${viewMode ? 'bg-card' : 'bg-card'} text-foreground p-4 text-justify rounded h-screen overflow-y-auto scrollbar-hide whitespace-pre-wrap shadow-md rounded-xl leading-8`}>
                             {!viewMode ? singleTranscript?.transcript : (
                                 <div className="space-y-2">
                                     {singleTranscript?.utterances?.map((utt, idx) => (

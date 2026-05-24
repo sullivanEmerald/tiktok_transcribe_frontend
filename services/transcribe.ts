@@ -48,5 +48,12 @@ export const TranscribeService = {
         const response = await axiosInstance.get(`/transcription/${jobId}/download`);
         console.log(`Video URL for job ${jobId} fetched:`, response.data);
         return response.data;
+    },
+
+    updateTranscriptName: async (id: string, newName: string) => {
+        const response = await axiosInstance.put(`/transcription/${id}/rename`, { newName });
+        console.log(`Transcript ${id} renamed to ${newName}:`, response.data);
+        return response.data;
     }
+
 }

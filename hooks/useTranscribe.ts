@@ -83,5 +83,6 @@ export function useTranscription() {
         isDownloading,
         downloadVideo,
         showCaptcha,
+        setRecentTranscripts
     }
 }
