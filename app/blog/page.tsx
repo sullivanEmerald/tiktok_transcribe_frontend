@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import moment from "moment"
 import Image from 'next/image';
-import { User, Timer } from 'lucide-react';
+import { User, Timer, Users } from 'lucide-react';
 
 
 export const metadata: Metadata = {
@@ -77,8 +77,8 @@ export default async function BlogPage() {
                             <div className="mt-2 flex items-center gap-3">
                                 <div className='flex items-center justify-between w-full'>
                                     <div className='flex items-center gap-1'>
-                                        <User className='h-4 w-4' />
-                                        <p className="text-sm font-medium text-foreground/60">{post.fields.author || 'Clip Script Teams'}</p>
+                                        {post.fields.author ? <User className='h-4 w-4' /> : <Users className='h-4 w-4' />}
+                                        <p className="text-sm font-medium text-foreground/60">{post.fields.author || 'Clip Script Team'}</p>
                                     </div>
                                     <div className='flex items-center gap-1'>
                                         <Timer className='h-4 w-4' />

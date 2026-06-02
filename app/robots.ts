@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
                 userAgent: '*',
                 allow: '/',
                 disallow: [
-                    '/dashboard',        // private user pages
+                    '/dashboard/',        // private user pages
                     '/api/',             // API routes
                     '/admin/',           // admin pages if any
                     '/_next/',           // Next.js internals

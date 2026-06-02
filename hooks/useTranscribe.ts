@@ -48,7 +48,10 @@ export function useTranscription() {
                     showToaster(errorMessage.message, "error");
                     return;
                 }
-                showToaster(err.response?.data?.message || "Failed to generate transcript", "error");
+                showToaster(err.response?.data?.details ||
+                    err.response?.data?.message ||
+                    "Failed to generate transcript",
+                    "error");
             } finally {
                 setLoading(false);
             }

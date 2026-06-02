@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/popover"
 import { formatCount } from "@/lib/utils";
 import { Copy, Link, FileText, Eye, Heart, MessageCircle, Share2 } from "lucide-react";
-import { formatMs } from "@/lib/utils";
+import { formatMs, handleDownloadThumbnail } from "@/lib/utils";
 
 
 
@@ -67,7 +67,7 @@ export default function TranscriptPage() {
                     <p className="text-gray-600">Transcript not found.</p>
                 </div>
             ) : (
-                <main className="flex flex-col gap-2">
+                <main className="flex flex-col gap-2 mb-6">
                     <button
                         className="flex items-center gap-2 text-gray-600 hover:text-primary w-fit cursor-pointer"
                         onClick={() => router.back()}
@@ -126,8 +126,8 @@ export default function TranscriptPage() {
                             </Popover>
                         </div>
                     </div>
-                    <section className="space-y-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div className={`${viewMode ? 'bg-card' : 'bg-card'} text-foreground p-4 text-justify rounded h-screen overflow-y-auto scrollbar-hide whitespace-pre-wrap shadow-md rounded-xl leading-8`}>
+                    <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-full">
+                        <div className={`${viewMode ? 'bg-card' : 'bg-card'} text-foreground p-4 text-justify rounded h-auto overflow-y-auto scrollbar-hide whitespace-pre-wrap shadow-md rounded-xl leading-8`}>
                             {!viewMode ? singleTranscript?.transcript : (
                                 <div className="space-y-2">
                                     {singleTranscript?.utterances?.map((utt, idx) => (
@@ -146,17 +146,28 @@ export default function TranscriptPage() {
                                 </div>
                             )}
                         </div>
-                        <div className="w-full md:1/2 bg-card rounded-xl shadow p-6 shadow-md flex items-start gap-6 h-screen">
-                            <div className="mb-2">
+                        <div className="w-full md:1/2 bg-card rounded-xl shadow p-4 shadow-md flex flex-col md:flex-row items-start gap-6 h-full">
+                            <div className="w-full md:w-1/2 h-full relative">
                                 {singleTranscript?.metadata?.media?.thumbnailUrl && (
-                                    <img
-                                        src={singleTranscript?.metadata?.media?.thumbnailUrl}
-                                        alt="Thumbnail"
-                                        className="rounded-lg object-contain w-full h-full"
-                                    />
+                                    <div className="w-full h-full">
+                                        <img
+                                            src={singleTranscript?.metadata?.media?.thumbnailUrl}
+                                            alt="Thumbnail"
+                                            className="rounded-lg object-cover w-full h-full"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDownloadThumbnail(singleTranscript.metadata.media.thumbnailUrl)}
+                                            title="Download thumbnail"
+                                            className="absolute bottom-3 right-3 bg-white/80 p-2 rounded-full shadow hover:bg-white/90 transition cursor-pointer"
+                                        >
+                                            <Download className="w-4 h-4 text-primary" />
+                                        </button>
+                                    </div>
+
                                 )}
                             </div>
-                            <section className="flex flex-col gap-4 mb-4">
+                            <section className="flex flex-col gap-4 mb-4 w-full md:w-1/2 h-full">
                                 <div className="flex items-center gap-3 mb-2">
                                     {singleTranscript?.metadata?.author?.avatarUrl && (
                                         <img

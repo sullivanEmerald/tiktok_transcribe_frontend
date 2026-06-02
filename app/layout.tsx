@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     title: "Clip Script Transcript Generator",
     description:
       "Turn TikTok, Reels & Shorts into clean transcripts instantly.",
-    images: ["/social-preview.png"],
+    images: ["https://www.useclipscript.com/social-preview.png"],
   },
 
   robots: {

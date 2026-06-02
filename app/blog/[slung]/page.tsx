@@ -6,7 +6,7 @@ import Link from 'next/link';
 import moment from 'moment';
 import Image from 'next/image';
 import { BLOCKS } from '@contentful/rich-text-types';
-import { User, Timer } from 'lucide-react';
+import { User, Timer, Users } from 'lucide-react';
 
 export const revalidate = 3600;
 
@@ -77,8 +77,8 @@ export default async function BlogPostPage({
                 <h1 className='font-bold text-foreground text-2xl'>{post.fields.title}</h1>
                 <div className='flex items-center justify-between w-full'>
                     <div className='flex items-center gap-1'>
-                        <User className='h-4 w-4' />
-                        <p className="text-sm font-medium text-foreground/60">{post.fields.author || 'Clip Script Teams'}</p>
+                        {post.fields.author ? <User className='h-4 w-4' /> : <Users className='h-4 w-4' />}
+                        <p className="text-sm font-medium text-foreground/60">{post.fields.author || 'Clip Script Team'}</p>
                     </div>
                     <div className='flex items-center gap-1'>
                         <Timer className='h-4 w-4' />

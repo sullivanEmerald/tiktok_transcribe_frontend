@@ -33,8 +33,7 @@ import { useDownloadProgress } from "@/hooks/useDownloadProgress";
 import { showToaster, detectPlatform } from "@/lib/utils";
 import { User } from "lucide-react";
 import { formatCount } from "@/lib/utils";
-
-
+import { handleDownloadThumbnail } from "@/lib/utils";
 
 export default function TranscribeSection() {
     const [videoUrl, setVideoUrl] = useState("");
@@ -177,25 +176,26 @@ export default function TranscribeSection() {
                 {/* Metadata and Stats Section */}
                 {transcript && (
                     <div className="w-full bg-background rounded-xl shadow-md p-6 shadow-shadow-background hover:shadow-lg flex h-full overflow-y-auto items-start gap-6">
-                        <div className="w-full">
+                        <div className=" w-full md:w-1/2 relative h-full">
                             {transcript?.metadata?.media?.thumbnailUrl ? (
-                                <img
-                                    src={transcript.metadata.media.thumbnailUrl}
-                                    alt="Thumbnail"
-                                    className="rounded-lg object-cover w-full"
-                                />
+                                <div className="relative w-full h-full">
+                                    <img
+                                        src={transcript.metadata.media.thumbnailUrl}
+                                        alt="Thumbnail"
+                                        className="rounded-lg object-cover w-full h-full"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDownloadThumbnail(transcript.metadata.media.thumbnailUrl)}
+                                        title="Download thumbnail"
+                                        className="absolute bottom-3 right-3 bg-white/80 p-2 rounded-full shadow hover:bg-white/90 transition cursor-pointer"
+                                    >
+                                        <Download className="w-4 h-4 text-primary" />
+                                    </button>
+                                </div>
                             ) : null}
-                            {/* Video player if direct video URL is available */}
-                            {/* {transcript.metadata.media.videoUrl && (
-                                <video
-                                    src={transcript.metadata.media.videoUrl}
-                                    controls
-                                    className="w-full rounded-lg mt-4 max-h-80"
-                                    poster={transcript.metadata.media.thumbnailUrl}
-                                />
-                            )} */}
                         </div>
-                        <section className="flex flex-col gap-4">
+                        <section className="flex flex-col gap-4 w-full md:w-1/2">
                             <div className="flex items-center gap-3 mb-2">
                                 {transcript?.metadata?.author?.avatarUrl ? (
                                     <img

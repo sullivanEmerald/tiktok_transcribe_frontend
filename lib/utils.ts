@@ -21,32 +21,33 @@ export function cn(...inputs: ClassValue[]) {
 export const axiosInstance = axios.create({
   baseURL: API_URL,
   // timeout: 30000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   }
 });
 
-export function getDeviceId() {
-  if (typeof window === 'undefined') {
-    return null;
-  }
+// export function getDeviceId() {
+//   if (typeof window === 'undefined') {
+//     return null;
+//   }
 
-  let deviceId = localStorage.getItem('deviceId');
+//   let deviceId = localStorage.getItem('deviceId');
 
-  if (!deviceId) {
-    deviceId = crypto.randomUUID();
-    localStorage.setItem('deviceId', deviceId);
-  }
+//   if (!deviceId) {
+//     deviceId = crypto.randomUUID();
+//     localStorage.setItem('deviceId', deviceId);
+//   }
 
-  return deviceId;
-}
+//   return deviceId;
+// }
 
-axiosInstance.interceptors.request.use((config) => {
-  config.headers['x-device-id'] = getDeviceId();
+// axiosInstance.interceptors.request.use((config) => {
+//   config.headers['x-device-id'] = getDeviceId();
 
-  return config;
-});
+//   return config;
+// });
 
 export const showToaster = (message: string, type: "success" | "error" | "info" | "warning" = "success") => {
   toast(message, { type });
@@ -228,6 +229,29 @@ export function formatCount(num?: number | null) {
   if (num >= 1e3) return (num / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
   return num.toString();
 }
+
+
+// Add download handler for thumbnail images
+export const handleDownloadThumbnail = async (url?: string | null) => {
+  if (!url) return;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Network response was not ok');
+    const blob = await res.blob();
+    const ext = blob.type.split('/')[1] || 'jpg';
+    const filename = `thumbnail.${ext}`;
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = objectUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(objectUrl);
+  } catch (err) {
+    showToaster('Failed to download thumbnail', 'error');
+  }
+};
 
 
 
