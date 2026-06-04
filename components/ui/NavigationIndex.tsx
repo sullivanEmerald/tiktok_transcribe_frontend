@@ -39,13 +39,13 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
 
                     <button className="hidden md:flex items-center text-text p-2 rounded-2xl bg-primary hover:bg-primary/80 hover:underline gap-1 cursor-pointer" onClick={onOpen} aria-label="Open sidebar" >
                         {isOpen ? <EyeClosed className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
-                        <span className="text-sm transition-colors duration-200">My Transcripts</span>
+                        <span className="text-sm transition-colors duration-200">History</span>
                     </button>
                 </div>
 
                 <Popover open={showPopover} onOpenChange={setShowPopover}>
                     <PopoverTrigger asChild>
-                        <button className="md:hidden" aria-label="Open menu">
+                        <button className="md:hidden" aria-label="Open menu" id="mobile-menu-trigger" suppressHydrationWarning>
                             <Menu className="w-6 h-6 text-primary" />
                         </button>
                     </PopoverTrigger>

@@ -23,7 +23,8 @@ export interface TranscriptData {
         start: number;
         end: number;
     }>;
-    videoUrl?: string
+    videoUrl?: string,
+    _id?: string
 }
 
 export type UtteranceType = {

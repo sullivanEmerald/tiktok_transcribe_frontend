@@ -10,6 +10,8 @@ import {
   FileType,
   FileDown
 } from 'lucide-react';
+import { Download, Activity, CheckCircle } from 'lucide-react';
+import type { ComponentType } from 'react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -252,6 +254,36 @@ export const handleDownloadThumbnail = async (url?: string | null) => {
     showToaster('Failed to download thumbnail', 'error');
   }
 };
+
+export const overviewContents = {
+  totalTranscriptions: {
+    label: 'Total Transcriptions',
+    icon: FileText,
+  },
+  totalDownloads: {
+    label: 'Downloaded Videos',
+    icon: Download
+  },
+  totalEngagements: {
+    label: 'Total Engagements',
+    icon: Activity,
+    percentage: false
+  },
+  successfulTranscriptionRate: {
+    label: 'Transcription Success Rate',
+    icon: CheckCircle,
+    percentage: true
+  }
+}
+
+// Typed overview map to allow optional fields like `percentage`
+export type OverviewContent = {
+  label: string;
+  icon: ComponentType<any>;
+  percentage?: boolean;
+};
+
+export const overviewContentsTyped: Record<string, OverviewContent> = overviewContents as Record<string, OverviewContent>;
 
 
 
