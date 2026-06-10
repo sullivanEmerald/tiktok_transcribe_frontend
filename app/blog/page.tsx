@@ -16,6 +16,7 @@ export const revalidate = 30;
 
 export default async function BlogPage() {
     let posts = await getAllPosts();
+
     if (!posts?.length) {
         return (
             <div className='rounded-md bg-card p-4 text-foreground max-w-md mx-auto'>

@@ -44,7 +44,6 @@ export default async function BlogPostPage({
     const post = await getPostBySlug(params.slug);
 
     if (!post) notFound();
-
     const options = {
         renderNode: {
             [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
