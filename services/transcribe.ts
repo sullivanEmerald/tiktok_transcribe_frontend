@@ -1,6 +1,12 @@
 import { axiosInstance } from "@/lib/utils";
 import { sendGTMEvent } from '@next/third-parties/google';
 
+type Utterance = {
+    text: string;
+    start: number;
+    end: number;
+}
+
 export const TranscribeService = {
     createTranscription: async (videoUrl: string, captchaToken?: string | null) => {
         try {
@@ -54,6 +60,18 @@ export const TranscribeService = {
         const response = await axiosInstance.put(`/transcription/${id}/rename`, { newName });
         console.log(`Transcript ${id} renamed to ${newName}:`, response.data);
         return response.data;
+    },
+
+    improveTranscript: async (utterances: Utterance[] | undefined) => {
+        if (!utterances?.length) return;
+        try {
+            const response = await axiosInstance.post('/transcription/improve', { utterances });
+            console.log(`AI improvement for video ${utterances} fetched:`, response.data);
+            return response.data;
+        } catch (error) {
+            console.log(`Error fetching AI improvement for video ${utterances}:`, error);
+            throw error;
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCaptcha } from "@/hooks/useCaptcha";
 import Recaptcha from "@/components/ui/Recaptcha";
 import { useTranscription } from "@/hooks/useTranscribe";
@@ -16,7 +16,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
-import { Clipboard, Download, Copy, Link, FileText, Eye, Heart, MessageCircle, Share2, } from "lucide-react";
+import { Clipboard, Download, Copy, Sparkles, FileText, Eye, Heart, MessageCircle, Share2, Save } from "lucide-react";
 import { copyToClipboard, downLoadFile, downLoadVideo, downloadFile, downloadUtterances } from "@/lib/utils";
 import { formatMs } from "@/lib/utils";
 import LineLoader from "../genreral/lineLoader";
@@ -30,10 +30,13 @@ import {
 } from "@/components/ui/popover"
 import { downloadFileActions } from "@/lib/utils";
 import { useDownloadProgress } from "@/hooks/useDownloadProgress";
-import { showToaster, detectPlatform } from "@/lib/utils";
+import { showToaster, detectPlatform, validatePlatformUrl } from "@/lib/utils";
 import { User } from "lucide-react";
 import { formatCount } from "@/lib/utils";
 import { handleDownloadThumbnail } from "@/lib/utils";
+import { TranscribeService } from "@/services/transcribe";
+import { useTextSelection } from "@/hooks/useTextSelection";
+import { createClip } from "@/services/clip";
 
 export default function TranscribeSection() {
     const [videoUrl, setVideoUrl] = useState("");
@@ -41,17 +44,24 @@ export default function TranscribeSection() {
     const { submitTranscription, loading, downloadVideo, isDownloading, transcript, showCaptcha } = useTranscription();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [viewMode, setViewMode] = useState<boolean>(false)
-    const [downloadJobId, setDownloadJobId] = useState<string | null>(null);
+    const [isGettingSummary, setIsGettingSummary] = useState(false);
+    const [isSaving, setIsSaving] = useState(false)
 
-
+    // const transcriptContainerRef = useRef<HTMLDivElement>(null);
+    const { clipData, coords, containerRefCallback, setClipData } = useTextSelection();
 
     useEffect(() => {
         setIsDialogOpen(transcript !== null);
     }, [transcript]);
 
     const handleSubmit = async () => {
-        if (!detectPlatform(videoUrl)) {
+        const platform = detectPlatform(videoUrl);
+        if (!platform) {
             showToaster("Unsupported platform. Please enter a TikTok, Instagram Reel, or YouTube Shorts URL.", "error");
+            return;
+        }
+        if (!validatePlatformUrl(videoUrl)) {
+            showToaster("Invalid or unsupported URL. Please paste a full TikTok, Instagram Reel, or YouTube Shorts URL.", "error");
             return;
         }
 
@@ -61,9 +71,10 @@ export default function TranscribeSection() {
             return;
         }
 
+        // You may pass platform to the backend if desired: submitTranscription(videoUrl, captchaToken, platform)
         await submitTranscription(videoUrl, captchaToken);
-
     };
+
 
     return (
         <>
@@ -142,10 +153,12 @@ export default function TranscribeSection() {
                         <button
                             type="button"
                             onClick={async () => {
-                                if (!detectPlatform(videoUrl)) {
-                                    showToaster("Unsupported platform. Please enter a TikTok, Instagram Reel, or YouTube Shorts URL.", "error");
+                                const platform = detectPlatform(videoUrl);
+                                if (!platform || !validatePlatformUrl(videoUrl)) {
+                                    showToaster("Unsupported or invalid platform URL. Please enter a TikTok, Instagram Reel, or YouTube Shorts URL.", "error");
                                     return;
                                 }
+
                                 await downloadVideo(videoUrl, captchaToken);
 
                             }}
@@ -249,17 +262,44 @@ export default function TranscribeSection() {
                 setIsDialogOpen(open);
 
             }}>
-                <DialogContent className="shadow-md shadow-shadow-background border-none bg-card">
+                <DialogContent
+                    className="shadow-md shadow-shadow-background border-none bg-card"
+                    onInteractOutside={(e) => {
+                        const target = e.target as HTMLElement;
+                        if (target.closest('[data-radix-popper-content-wrapper]') || target.closest('.pointer-events-auto')) {
+                            e.preventDefault();
+                        }
+                    }}
+                >
                     <DialogHeader>
-                        <DialogTitle className="font-semibold text-muted-foreground">Review, Copy or Download</DialogTitle>
+                        <DialogTitle className="font-semibold text-muted-foreground">Review, Copy, Download or Improve</DialogTitle>
                         <div className="flex items-center justify-between w-full mt-2">
-                            <div className="flex items-center gap-1">
-                                <Switch
-                                    id="viewModeToggle"
-                                    checked={viewMode}
-                                    onCheckedChange={() => setViewMode(!viewMode)}
-                                />
-                                <p>Timestamp</p>
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-1">
+                                    <Switch
+                                        id="viewModeToggle"
+                                        checked={viewMode}
+                                        onCheckedChange={() => setViewMode(!viewMode)}
+                                    />
+                                    <p>Timestamp</p>
+                                </div>
+                                <button
+                                    className="flex items-center gap-1 bg-background hover:bg-background/80 border border-transparent hover:border-yellow-500 py-1 px-4 rounded-2xl cursor-pointer hover:text-yellow-500 transition group"
+                                    disabled={isGettingSummary}
+                                    onClick={async () => {
+                                        try {
+                                            setIsGettingSummary(true);
+                                            await TranscribeService.improveTranscript(transcript?.utterances);
+                                        } catch (error) {
+                                            console.log(`Error fetching AI improvement for video ${transcript?.videoUrl}:`, error);
+                                        } finally {
+                                            setIsGettingSummary(false);
+                                        }
+                                    }}
+                                >
+                                    <Sparkles className={`w-5 h-5 text-yellow-500 ${isGettingSummary ? 'animate-pulse' : ''}`} />
+                                    <span>Extract Summary</span>
+                                </button>
                             </div>
                             <div className="flex items-center gap-2">
                                 {!viewMode ? (
@@ -304,42 +344,145 @@ export default function TranscribeSection() {
                                 </Popover>
                             </div>
                         </div>
-                        <DialogDescription>
+                        <DialogDescription asChild>
                             {transcript ? (
-                                <>
-                                    <div>
-                                        <div className={`text-foreground p-2 rounded max-h-[70vh] overflow-auto whitespace-pre-wrap leading-8`}>
-                                            {!viewMode ? transcript?.transcript : (
-                                                <>
-                                                    {Array.isArray(transcript.utterances) && transcript.utterances.length > 0 ? (
-                                                        <div className="space-y-2 w-full">
-                                                            {transcript.utterances.map((utt, idx) => (
-                                                                <div key={idx} className="flex items-start gap-4 bg-background text-foreground p-2 rounded-lg">
-                                                                    <div className="flex flex-col gap-2 items-center">
-                                                                        <span className=" text-primary/60">
-                                                                            {formatMs(utt.start)}
-                                                                        </span>
-                                                                        <button onClick={() => copyToClipboard(utt.text, formatMs(utt.start))} className="p-1 rounded hover:bg-primary/10 transition-colors duration-200">
-                                                                            <Copy className="w-4 h-4 text-primary/60" />
-                                                                        </button>
-                                                                    </div>
-                                                                    <span className="">{utt.text}</span>
+                                <div>
+                                    <div
+                                        className={`text-foreground p-2 rounded max-h-[70vh] overflow-auto whitespace-pre-wrap leading-8`}
+                                        ref={containerRefCallback}
+                                    >
+                                        {!viewMode ? (
+                                            <>
+                                                {Array.isArray(transcript.utterances) && transcript.utterances.length > 0 ? (
+                                                    transcript.utterances.map((utt, idx) => (
+                                                        <span
+                                                            key={idx}
+                                                            data-start={utt.start}
+                                                            data-end={utt.end}
+                                                            className="selection:bg-primary/30 cursor-text inline"
+                                                        >
+                                                            {utt.text}{" "}
+                                                        </span>
+                                                    ))
+                                                ) : (
+                                                    <>
+                                                        <span data-start="0" data-end="0" className="selection:bg-primary/30">
+                                                            {transcript?.transcript}
+                                                        </span>
+                                                    </>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <>
+                                                {Array.isArray(transcript.utterances) && transcript.utterances.length > 0 ? (
+                                                    <div className="space-y-2 w-full">
+                                                        {transcript.utterances.map((utt, idx) => (
+                                                            <div key={idx} className="flex items-start gap-4 bg-background text-foreground p-2 rounded-lg">
+                                                                <div className="flex flex-col gap-2 items-center">
+                                                                    <span className=" text-primary/60">
+                                                                        {formatMs(utt.start)}
+                                                                    </span>
+                                                                    <button onClick={() => copyToClipboard(utt.text, formatMs(utt.start))} className="p-1 rounded hover:bg-primary/10 transition-colors duration-200">
+                                                                        <Copy className="w-4 h-4 text-primary/60" />
+                                                                    </button>
                                                                 </div>
-                                                            ))}
-                                                        </div>
-                                                    ) : (
-                                                        <span className="text-gray-500">No utterances available.</span>
-                                                    )}
-                                                </>
-                                            )}
-                                        </div>
+                                                                <span className="">{utt.text}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-gray-500">No utterances available.</span>
+                                                )}
+                                            </>
+                                        )}
                                     </div>
-                                </>
+                                </div>
+
                             ) : "No transcript available."}
                         </DialogDescription>
                     </DialogHeader>
                 </DialogContent>
             </Dialog>
+            {coords && clipData && (
+                <div
+                    style={{
+                        position: "absolute",
+                        top: coords.top,
+                        left: coords.left,
+                        width: coords.width,
+                        height: coords.height,
+                        pointerEvents: "none",
+                    }}
+                >
+                    <Popover open={true}>
+                        {/* Radix Popover Content will center itself over this invisible boundary anchor box */}
+                        <PopoverTrigger asChild>
+                            <div className="w-full h-full" />
+                        </PopoverTrigger>
+                        <PopoverContent
+                            side="top"
+                            align="center"
+                            sideOffset={8}
+                            className="w-auto p-2 flex items-center gap-2 pointer-events-auto bg-background shadow-xl border-none rounded-lg"
+                            onPointerDownOutside={(e) => e.preventDefault()}
+                            onFocusOutside={(e) => e.preventDefault()}
+                        >
+                            <div className="flex items-center gap-2 bg-background px-2 py-1 rounded">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        copyToClipboard(clipData.text, `${formatMs(clipData.startTime)} - ${formatMs(clipData.endTime)}`);
+                                        setClipData(null)
+                                        // showToaster(`Copied clip (${formatMs(clipData.startTime)} - ${formatMs(clipData.endTime)})`, "success");
+                                    }}
+                                    className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-primary text-white font-medium shadow-sm transition-transform duration-200 ease-out hover:scale-105 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                                >
+                                    <Copy className="w-3.5 h-3.5" />
+                                    <span>Copy Clip</span>
+                                </button>
+                                <button
+                                    onClick={async (e) => {
+                                        e.stopPropagation();
+                                        setIsSaving(true);
+                                        const payload = {
+                                            text: clipData.text,
+                                            startTime: formatMs(clipData.startTime),
+                                            endTime: formatMs(clipData.endTime),
+                                            videoUrl: transcript?.videoUrl,
+                                            platform: transcript?.metadata?.platform,
+                                        }
+                                        await createClip(payload)
+
+                                        showToaster(`Saved Clip Successfully`, "success");
+                                        setIsSaving(false);
+                                    }}
+                                    className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-primary text-white font-medium shadow-sm transition-transform duration-200 ease-out hover:scale-105 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                                    disabled={isSaving}
+                                >
+                                    {
+                                        isSaving ? (
+                                            <div className="flex items-center gap-1">
+                                                <LineLoader />
+                                                <span>Saving Clip</span>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-1">
+                                                <Save className="w-4 h-4" />
+                                                <span>Save Clip</span>
+                                            </div>
+                                        )
+
+                                    }
+
+                                </button>
+                            </div>
+                            <div className="text-[10px] text-muted-foreground border-l pl-2">
+                                {formatMs(clipData.startTime)} - {formatMs(clipData.endTime)}
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+                </div>
+            )}
         </>
     );
 }

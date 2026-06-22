@@ -18,7 +18,8 @@ export interface CustomTableProps<T = any> {
     onPageChange: (page: number) => void;
     className?: string;
     onRowClick?: (row: T) => void;
-    // ...other props as needed
+    onRowHover?: (row: T, anchorEl: HTMLTableRowElement) => void; // 👈 new
+    onRowHoverEnd?: () => void;
 }
 
 const CustomTable = <T extends Record<string, any>>({
@@ -29,6 +30,8 @@ const CustomTable = <T extends Record<string, any>>({
     onPageChange,
     className = "",
     onRowClick,
+    onRowHover,
+    onRowHoverEnd,
     ...props
 }: CustomTableProps<T>) => {
     return (
@@ -60,6 +63,8 @@ const CustomTable = <T extends Record<string, any>>({
                                     key={row.id || rowIndex}
                                     className={`hover:bg-background/70 transition ${onRowClick ? "cursor-pointer" : ""}`}
                                     onClick={onRowClick ? () => onRowClick(row) : undefined}
+                                    onMouseEnter={onRowHover ? (e) => onRowHover(row, e.currentTarget) : undefined}
+                                    onMouseLeave={onRowHoverEnd ? () => onRowHoverEnd() : undefined}
                                 >
                                     {columns.map((col, colIndex) => {
                                         const value = col.accessorFn

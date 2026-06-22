@@ -11,12 +11,13 @@ import { useRouter } from 'next/navigation';
 import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { DownloadOverview } from '@/types/overview';
 import Link from 'next/link';
+import PlatformIcons from '@/lib/icons';
 
-const PlatformIcons = {
-    instagram: <FaInstagram className="w-5 h-5 text-pink-500" />,
-    tiktok: <FaTiktok className="w-5 h-5 text-black dark:text-white" />,
-    youtube: <FaYoutube className="w-5 h-5 text-red-500" />,
-};
+// const PlatformIcons = {
+//     instagram: <FaInstagram className="w-5 h-5 text-pink-500" />,
+//     tiktok: <FaTiktok className="w-5 h-5 text-black dark:text-white" />,
+//     youtube: <FaYoutube className="w-5 h-5 text-red-500" />,
+// };
 
 
 export default function DownloadedOverview({ downloads }: { downloads: DownloadOverview[] }) {

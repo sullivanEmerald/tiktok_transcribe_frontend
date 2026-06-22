@@ -211,17 +211,59 @@ export const downloadFileActions = [
   },
 ];
 
-export const detectPlatform = (url: string) => {
-  if (url.includes("youtube.com/shorts") || url.includes("youtu.be")) {
-    return "YouTube";
-  } else if (url.includes("tiktok.com")) {
-    return "TikTok";
-  } else if (url.includes("instagram.com")) {
-    return "Instagram";
-  } else {
-    return null;
+
+const PLATFORM_REGEX: Record<string, RegExp> = {
+  YouTube: /(?:youtube\.com\/(?:shorts|watch)|youtu\.be)\/?.*/i,
+  TikTok: /(?:tiktok\.com\/(?:@[^\/]+\/video\/\d+|t\/|v\/)|vm\.tiktok\.com|m\.tiktok\.com)\/?.*/i,
+  Instagram: /(?:instagram\.com\/(?:p|reel|tv)\/|instagr\.am\/)\/?.*/i,
+  Facebook: /(?:web\.facebook\.com\/|facebook\.com\/(?:.*\/videos\/|watch\/)|fb\.watch\/|m\.facebook\.com\/|facebook\.com\/watch)\/?.*/i,
+};
+
+function normalizeMaybeUrl(input: string): string | null {
+  if (!input) return null;
+  try {
+    const u = new URL(input);
+    return u.toString();
+  } catch (err) {
+    // Try to prepend protocol and parse again
+    try {
+      const u = new URL(`https://${input}`);
+      return u.toString();
+    } catch (err) {
+      return null;
+    }
   }
 }
+
+/**
+ * Detects which platform the provided URL belongs to (YouTube, TikTok, Instagram, Facebook)
+ * Returns the platform name as a string or null when unknown/invalid.
+ */
+export const detectPlatform = (rawUrl: string): string | null => {
+  const url = normalizeMaybeUrl(rawUrl);
+  if (!url) return null;
+
+  for (const [platform, rx] of Object.entries(PLATFORM_REGEX)) {
+    if (rx.test(url)) return platform;
+  }
+
+  return null;
+};
+
+/**
+ * Validates that the provided URL is a supported platform URL.
+ * If expectedPlatform is provided, it also enforces that the URL matches that platform.
+ */
+export const validatePlatformUrl = (rawUrl: string, expectedPlatform?: string): boolean => {
+  const url = normalizeMaybeUrl(rawUrl);
+  if (!url) return false;
+
+  const detected = detectPlatform(url);
+  if (!detected) return false;
+  if (!expectedPlatform) return true;
+
+  return detected.toLowerCase() === expectedPlatform.toLowerCase();
+};
 
 
 export function formatCount(num?: number | null) {

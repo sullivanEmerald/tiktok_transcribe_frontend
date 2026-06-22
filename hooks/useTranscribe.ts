@@ -36,6 +36,7 @@ export function useTranscription() {
 
             try {
                 const response = await TranscribeService.createTranscription(videoUrl, captchaToken);
+                console.log(response)
                 setTranscript(response.data);
                 window.gtag('event', 'transcription_created', {
                     platform: detectPlatform(videoUrl),
