@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { useStore } from "@/stores/store";
 import { useShallow } from "zustand/react/shallow";
 import LineLoader from "../genreral/lineLoader";
+import { Textarea } from "@/components/ui/textarea"
 
 export default function ClipViewDialog({
     open,
@@ -46,7 +47,7 @@ export default function ClipViewDialog({
                 </DialogHeader>
 
                 <div className="mt-4">
-                    <textarea
+                    <Textarea
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
                         className="w-full h-48 p-3 rounded-md border border-input bg-transparent text-base resize-vertical"

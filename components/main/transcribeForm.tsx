@@ -37,6 +37,7 @@ import { handleDownloadThumbnail } from "@/lib/utils";
 import { TranscribeService } from "@/services/transcribe";
 import { useTextSelection } from "@/hooks/useTextSelection";
 import { createClip } from "@/services/clip";
+import { AddClip } from "../clips/AddClip";
 
 export default function TranscribeSection() {
     const [videoUrl, setVideoUrl] = useState("");
@@ -260,6 +261,9 @@ export default function TranscribeSection() {
             </main>
             <Dialog open={isDialogOpen} onOpenChange={(open) => {
                 setIsDialogOpen(open);
+                if (!open) {
+                    setClipData(null);
+                }
 
             }}>
                 <DialogContent
@@ -284,8 +288,9 @@ export default function TranscribeSection() {
                                     <p>Timestamp</p>
                                 </div>
                                 <button
-                                    className="flex items-center gap-1 bg-background hover:bg-background/80 border border-transparent hover:border-yellow-500 py-1 px-4 rounded-2xl cursor-pointer hover:text-yellow-500 transition group"
-                                    disabled={isGettingSummary}
+                                    className="flex items-center gap-1 bg-background hover:bg-background/80 border border-transparent hover:border-yellow-500 py-1 px-4 rounded-2xl cursor-pointer hover:text-yellow-500 transition group cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none"
+                                    aria-disabled="true"
+                                    disabled
                                     onClick={async () => {
                                         try {
                                             setIsGettingSummary(true);
@@ -297,7 +302,7 @@ export default function TranscribeSection() {
                                         }
                                     }}
                                 >
-                                    <Sparkles className={`w-5 h-5 text-yellow-500 ${isGettingSummary ? 'animate-pulse' : ''}`} />
+                                    <Sparkles className={`w-5 h-5 text-yellow-500  ${isGettingSummary ? 'animate-pulse' : ''}`} />
                                     <span>Extract Summary</span>
                                 </button>
                             </div>

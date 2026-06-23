@@ -27,6 +27,8 @@ import {
 import { formatCount } from "@/lib/utils";
 import { Copy, Link, FileText, Eye, Heart, MessageCircle, Share2 } from "lucide-react";
 import { formatMs, handleDownloadThumbnail } from "@/lib/utils";
+import { useTextSelection } from "@/hooks/useTextSelection";
+import { AddClip } from "@/components/clips/AddClip";
 
 
 
@@ -38,6 +40,9 @@ export default function TranscriptPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [isDownloading, setIsDownloading] = useState(false);
     const [viewMode, setViewMode] = useState<boolean>(false);
+
+    // Add text selection hook
+    const { clipData, coords, containerRefCallback, setClipData } = useTextSelection();
 
 
     useEffect(() => {
@@ -127,11 +132,32 @@ export default function TranscriptPage() {
                         </div>
                     </div>
                     <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-full">
-                        <div className={`${viewMode ? 'bg-card' : 'bg-card'} text-foreground p-4 text-justify rounded h-auto overflow-y-auto scrollbar-hide whitespace-pre-wrap shadow-md rounded-xl leading-8`}>
-                            {!viewMode ? singleTranscript?.transcript : (
+                        <div ref={containerRefCallback} className={`${viewMode ? 'bg-card' : 'bg-card'} text-foreground p-4 text-justify rounded h-auto overflow-y-auto scrollbar-hide whitespace-pre-wrap shadow-md rounded-xl leading-8`}>
+                            {!viewMode ? (
+                                <>
+                                    {Array.isArray(singleTranscript?.utterances) && singleTranscript.utterances.length > 0 ? (
+                                        singleTranscript.utterances.map((utt, idx) => (
+                                            <span
+                                                key={idx}
+                                                data-start={utt.start}
+                                                data-end={utt.end}
+                                                className="selection:bg-primary/30 cursor-text inline"
+                                            >
+                                                {utt.text}{" "}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <>
+                                            <span data-start="0" data-end="0" className="selection:bg-primary/30">
+                                                {singleTranscript?.transcript}
+                                            </span>
+                                        </>
+                                    )}
+                                </>
+                            ) : (
                                 <div className="space-y-2">
                                     {singleTranscript?.utterances?.map((utt, idx) => (
-                                        <div key={idx} className="flex items-start gap-4 bg-timestamp border border-background text-muted-foreground p-2 rounded-lg">
+                                        <div key={idx} data-start={utt.start} data-end={utt.end} className="flex items-start gap-4 bg-timestamp border border-background text-muted-foreground p-2 rounded-lg">
                                             <div className="flex flex-col gap-2 items-center">
                                                 <span className=" text-red-100">
                                                     {formatMs(utt.start)}
@@ -214,6 +240,10 @@ export default function TranscriptPage() {
                             </section>
                         </div>
                     </section>
+                    {/* Render AddClip popover when selection exists */}
+                    {clipData && coords && (
+                        <AddClip clipData={clipData} coords={coords} setClipData={setClipData} videoUrl={singleTranscript?.videoUrl} platform={singleTranscript?.metadata?.platform} />
+                    )}
                 </main>
             )}
         </>

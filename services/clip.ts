@@ -1,4 +1,5 @@
 import { axiosInstance } from "@/lib/utils";
+import { showToaster } from "@/lib/utils";
 
 type ClipInterface = {
     videoUrl: string | undefined,
@@ -9,7 +10,10 @@ type ClipInterface = {
 }
 
 export const createClip = async (data: ClipInterface) => {
-    console.log(data)
+    if (!data.videoUrl || !data.text || !data.startTime || !data.endTime || !data.platform) {
+        showToaster("missing required fields for creating a clip.", "error");
+        return;
+    }
     try {
         const response = await axiosInstance.post(`/clips/create`, data);
         return response.data;
