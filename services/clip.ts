@@ -11,8 +11,7 @@ type ClipInterface = {
 
 export const createClip = async (data: ClipInterface) => {
     if (!data.videoUrl || !data.text || !data.startTime || !data.endTime || !data.platform) {
-        showToaster("missing required fields for creating a clip.", "error");
-        return;
+        throw new Error("Missing required clip data, Try again or contact support");
     }
     try {
         const response = await axiosInstance.post(`/clips/create`, data);

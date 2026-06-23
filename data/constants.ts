@@ -1,5 +1,5 @@
 
-import { Newspaper, User } from "lucide-react";
+import { Newspaper, User, Library } from "lucide-react";
 export const mainNavigation = [
     {
         name: 'Blogs',
@@ -7,8 +7,14 @@ export const mainNavigation = [
         icon: Newspaper
     },
     {
-        name: 'Guest Profile',
+        name: 'My Activities',
         href: '/profile',
         icon: User
     },
+    {
+        name: 'Clip Library',
+        href: '/clips',
+        icon: Library
+    },
+
 ]
