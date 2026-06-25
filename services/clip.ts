@@ -23,10 +23,8 @@ export const createClip = async (data: ClipInterface) => {
 };
 
 export const fetchClips = async (filters: any) => {
-    console.log("Fetching clips with filters:", filters);
     try {
         const response = await axiosInstance.get(`/clips`, { params: filters });
-        console.log("Fetched clips:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching clips:", error);

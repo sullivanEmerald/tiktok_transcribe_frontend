@@ -212,58 +212,48 @@ export const downloadFileActions = [
 ];
 
 
-const PLATFORM_REGEX: Record<string, RegExp> = {
-  YouTube: /(?:youtube\.com\/(?:shorts|watch)|youtu\.be)\/?.*/i,
-  TikTok: /(?:tiktok\.com\/(?:@[^\/]+\/video\/\d+|t\/|v\/)|vm\.tiktok\.com|m\.tiktok\.com)\/?.*/i,
-  Instagram: /(?:instagram\.com\/(?:p|reel|tv)\/|instagr\.am\/)\/?.*/i,
-  Facebook: /(?:web\.facebook\.com\/|facebook\.com\/(?:.*\/videos\/|watch\/)|fb\.watch\/|m\.facebook\.com\/|facebook\.com\/watch)\/?.*/i,
+const PLATFORM_CONFIG: Record<string, string[]> = {
+  YouTube: ["youtube.com", "youtu.be"],
+  TikTok: ["tiktok.com", "vm.tiktok.com", "m.tiktok.com"],
+  Instagram: ["instagram.com", "instagr.am"],
+  Facebook: ["facebook.com", "web.facebook.com", "m.facebook.com", "fb.watch"],
 };
 
-function normalizeMaybeUrl(input: string): string | null {
-  if (!input) return null;
+
+function matchesDomain(hostname: string, rootDomain: string): boolean {
+  const h = hostname.toLowerCase();
+  const r = rootDomain.toLowerCase();
+  return h === r || h.endsWith(`.${r}`);
+}
+
+function normalizeMaybeUrl(input: string): URL | null {
+  if (!input?.trim()) return null;
   try {
-    const u = new URL(input);
-    return u.toString();
-  } catch (err) {
-    // Try to prepend protocol and parse again
+    return new URL(input);
+  } catch {
     try {
-      const u = new URL(`https://${input}`);
-      return u.toString();
-    } catch (err) {
+      return new URL(`https://${input}`);
+    } catch {
       return null;
     }
   }
 }
 
-/**
- * Detects which platform the provided URL belongs to (YouTube, TikTok, Instagram, Facebook)
- * Returns the platform name as a string or null when unknown/invalid.
- */
 export const detectPlatform = (rawUrl: string): string | null => {
-  const url = normalizeMaybeUrl(rawUrl);
-  if (!url) return null;
+  const parsed = normalizeMaybeUrl(rawUrl);
+  if (!parsed) return null;
 
-  for (const [platform, rx] of Object.entries(PLATFORM_REGEX)) {
-    if (rx.test(url)) return platform;
+  const { hostname } = parsed;
+
+  for (const [platform, rootDomains] of Object.entries(PLATFORM_CONFIG)) {
+    if (rootDomains.some((root) => matchesDomain(hostname, root))) {
+      return platform;
+    }
   }
 
   return null;
 };
 
-/**
- * Validates that the provided URL is a supported platform URL.
- * If expectedPlatform is provided, it also enforces that the URL matches that platform.
- */
-export const validatePlatformUrl = (rawUrl: string, expectedPlatform?: string): boolean => {
-  const url = normalizeMaybeUrl(rawUrl);
-  if (!url) return false;
-
-  const detected = detectPlatform(url);
-  if (!detected) return false;
-  if (!expectedPlatform) return true;
-
-  return detected.toLowerCase() === expectedPlatform.toLowerCase();
-};
 
 
 export function formatCount(num?: number | null) {

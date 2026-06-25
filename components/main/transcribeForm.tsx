@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/popover"
 import { downloadFileActions } from "@/lib/utils";
 import { useDownloadProgress } from "@/hooks/useDownloadProgress";
-import { showToaster, detectPlatform, validatePlatformUrl } from "@/lib/utils";
+import { showToaster, detectPlatform } from "@/lib/utils";
 import { User } from "lucide-react";
 import { formatCount } from "@/lib/utils";
 import { handleDownloadThumbnail } from "@/lib/utils";
@@ -59,10 +59,6 @@ export default function TranscribeSection() {
         const platform = detectPlatform(videoUrl);
         if (!platform) {
             showToaster("Unsupported platform. Please enter a TikTok, Instagram Reel, or YouTube Shorts URL.", "error");
-            return;
-        }
-        if (!validatePlatformUrl(videoUrl)) {
-            showToaster("Invalid or unsupported URL. Please paste a full TikTok, Instagram Reel, or YouTube Shorts URL.", "error");
             return;
         }
 
@@ -155,7 +151,7 @@ export default function TranscribeSection() {
                             type="button"
                             onClick={async () => {
                                 const platform = detectPlatform(videoUrl);
-                                if (!platform || !validatePlatformUrl(videoUrl)) {
+                                if (!platform) {
                                     showToaster("Unsupported or invalid platform URL. Please enter a TikTok, Instagram Reel, or YouTube Shorts URL.", "error");
                                     return;
                                 }
