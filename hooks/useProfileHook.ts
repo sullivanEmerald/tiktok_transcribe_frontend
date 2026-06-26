@@ -13,7 +13,6 @@ export const useProfile = () => {
         setIsLoading(true);
         try {
             const profile = await getUserOverview();
-            console.log('User Overview:', profile);
             setStatistics(profile.statistics);
             setTranscribeHistory(profile.transcriptions);
             setDownloads(profile.downloads);

@@ -42,7 +42,7 @@ export default function HistoryOverview({ transcribeHistory }: { transcribeHisto
                         <div className='max-w-xs overflow-hidden'>
                             <span className="block truncate font-normal text-foreground">{title || transcript}</span>
                             <div className='flex items-center gap-2'>
-                                <span className='text-sm text-muted-foreground'>@{username}</span>
+                                <span className='text-sm text-muted-foreground'>@{username || 'Unknown'}</span>
                                 <span className="text-sm text-muted-foreground">{formatCount(views || 0)} views</span>
                             </div>
                         </div>
@@ -56,8 +56,6 @@ export default function HistoryOverview({ transcribeHistory }: { transcribeHisto
             header: (): React.ReactNode => "Description",
             cell: (info: any) => {
                 const description = (info.value as string) || "";
-                // const words = description.split(" ");
-                // const fewWords = words.slice(0, 5).join(" ");
                 return (
                     <div className='max-w-xs overflow-hidden'>
                         <span className='block truncate text-muted-foreground'>
