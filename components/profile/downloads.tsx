@@ -70,7 +70,7 @@ export default function DownloadedOverview({ downloads }: { downloads: DownloadO
             accessorKey: "source",
             header: () => "Platform",
             cell: (info: any) => {
-                const source = (info.value.split(".")[0] as string) || "";
+                const source = ((info.value ?? "").split(".")[0] as string) || "";
                 const icon = PlatformIcons[source.toLowerCase() as keyof typeof PlatformIcons]
                 return (
                     <div className="flex items-center gap-2 text-muted-foreground">
