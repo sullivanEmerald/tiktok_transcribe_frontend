@@ -79,7 +79,7 @@ export default function TranscribeSection() {
                 className={
                     transcript
                         ? "space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4"
-                        : "flex justify-center items-center min-h-[60vh]"
+                        : "flex items-center md:items-start justify-start md:justify-center w-full min-h-[60vh]"
                 }
             >
                 <section className={`${transcript ? "w-full" : "w-full md:w-1/2  "} h-full bg-background rounded-xl shadow-md hover:shadow-lg shadow-shadow-background p-6 transition-shadow flex flex-col gap-4`}>
@@ -185,7 +185,7 @@ export default function TranscribeSection() {
                 </section>
                 {/* Metadata and Stats Section */}
                 {transcript && (
-                    <div className="w-full bg-background rounded-xl shadow-md p-6 shadow-shadow-background hover:shadow-lg flex h-full overflow-y-auto items-start gap-6">
+                    <div className="w-full bg-background rounded-xl shadow-md p-6 shadow-shadow-background hover:shadow-lg h-full overflow-y-auto flex flex-col sm:flex-row items-start gap-6">
                         <div className=" w-full md:w-1/2 relative h-full">
                             {transcript?.metadata?.media?.thumbnailUrl ? (
                                 <div className="relative w-full h-full">
@@ -299,7 +299,7 @@ export default function TranscribeSection() {
                                     }}
                                 >
                                     <Sparkles className={`w-5 h-5 text-yellow-500  ${isGettingSummary ? 'animate-pulse' : ''}`} />
-                                    <span>Extract Summary</span>
+                                    <span>Rewrite Hook</span>
                                 </button>
                             </div>
                             <div className="flex items-center gap-2">
@@ -349,7 +349,7 @@ export default function TranscribeSection() {
                             {transcript ? (
                                 <div>
                                     <div
-                                        className={`text-foreground p-2 rounded max-h-[70vh] overflow-auto whitespace-pre-wrap leading-8`}
+                                        className={`text-foreground py-2 rounded max-h-[70vh] overflow-auto whitespace-pre-wrap leading-8`}
                                         ref={containerRefCallback}
                                     >
                                         {!viewMode ? (

@@ -258,7 +258,7 @@ export default function ClipRowActions({
                             ))}
                             <button
                                 type="button"
-                                className="w-full flex items-center justify-center gap-2 cursor-pointer border-t border-t-border py-2 mt-2"
+                                className="w-full flex items-center justify-center gap-2 cursor-pointer border-t border-t-muted-foreground py-2 mt-2"
                                 onClick={(e) => {
                                     // e.preventDefault();
                                     e.stopPropagation();

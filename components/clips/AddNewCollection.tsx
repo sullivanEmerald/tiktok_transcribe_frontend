@@ -65,7 +65,7 @@ export default function AddNewCollection({ show, onHide }: { show: boolean, onHi
                                     }
                                 }}
                                 disabled={!newFolderName || isCreating}
-                                className='flex items-center gap-2'
+                                className='flex items-center gap-2 text-foreground rounded-2xl'
 
                             >
                                 {

@@ -123,7 +123,7 @@ export default function ClipsFilterSelection() {
                 setOpen(val);
                 if (!val) setNewFolderName("");
             }}>
-                <DialogContent>
+                <DialogContent className='border-none shadow-lg shadow-shadow-background'>
                     <DialogHeader>
                         <DialogTitle>Create new folder</DialogTitle>
                         <DialogDescription>Enter a name for the new folder.</DialogDescription>
@@ -158,7 +158,7 @@ export default function ClipsFilterSelection() {
                                     }
                                 }}
                                 disabled={!newFolderName || isCreating}
-                                className='flex items-center gap-2'
+                                className='flex items-center gap-2 text-foreground rounded-2xl'
 
                             >
                                 {
