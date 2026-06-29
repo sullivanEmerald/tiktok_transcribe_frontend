@@ -49,7 +49,7 @@ export default function TranscribeSection() {
     const [isSaving, setIsSaving] = useState(false)
 
     // const transcriptContainerRef = useRef<HTMLDivElement>(null);
-    const { clipData, coords, containerRefCallback, setClipData } = useTextSelection();
+    const { clipData, coords, containerRefCallback, transcriptContainerStyle, setClipData } = useTextSelection();
 
     useEffect(() => {
         setIsDialogOpen(transcript !== null);
@@ -351,6 +351,7 @@ export default function TranscribeSection() {
                                     <div
                                         className={`text-foreground py-2 rounded max-h-[70vh] overflow-auto whitespace-pre-wrap leading-8`}
                                         ref={containerRefCallback}
+                                        style={transcriptContainerStyle}
                                     >
                                         {!viewMode ? (
                                             <>

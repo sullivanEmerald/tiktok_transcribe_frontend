@@ -42,7 +42,7 @@ export default function TranscriptPage() {
     const [viewMode, setViewMode] = useState<boolean>(false);
 
     // Add text selection hook
-    const { clipData, coords, containerRefCallback, setClipData } = useTextSelection();
+    const { clipData, coords, containerRefCallback, transcriptContainerStyle, setClipData } = useTextSelection();
 
 
     useEffect(() => {
@@ -132,7 +132,7 @@ export default function TranscriptPage() {
                         </div>
                     </div>
                     <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-full">
-                        <div ref={containerRefCallback} className={`${viewMode ? 'bg-card' : 'bg-card'} text-foreground p-4 text-justify rounded h-auto overflow-y-auto scrollbar-hide whitespace-pre-wrap shadow-md rounded-xl leading-8`}>
+                        <div ref={containerRefCallback} style={transcriptContainerStyle} className={`${viewMode ? 'bg-card' : 'bg-card'} text-foreground p-4 text-justify rounded h-auto overflow-y-auto scrollbar-hide whitespace-pre-wrap shadow-md rounded-xl leading-8`}>
                             {!viewMode ? (
                                 <>
                                     {Array.isArray(singleTranscript?.utterances) && singleTranscript.utterances.length > 0 ? (
