@@ -69,9 +69,9 @@ export default function ClipsFilterSelection() {
     }, []);
 
     return (
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
             <Select value={clipFilters.platform} onValueChange={onPlatformChange}>
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-full md:w-60 !h-12">
                     <SelectValue placeholder="All Platforms" />
                 </SelectTrigger>
                 <SelectContent className='border-none'>
@@ -83,38 +83,38 @@ export default function ClipsFilterSelection() {
                 </SelectContent>
             </Select>
 
-            <div className="flex items-center gap-2">
-                <Select value={clipFilters.collectionId} onValueChange={onFolderChange}>
-                    <SelectTrigger className="w-48">
-                        <SelectValue placeholder="General" />
-                    </SelectTrigger>
-                    <SelectContent className='border-none'>
-                        <SelectItem value="">General</SelectItem>
-                        {collections.map((folder) => (
-                            <SelectItem key={folder._id} value={folder._id}>
-                                {folder.name.charAt(0).toUpperCase() + folder.name.slice(1)}
-                            </SelectItem>
-                        ))}
 
-                        <button
-                            type="button"
-                            className="w-full flex items-center justify-center gap-2 border-t border-t-muted-foreground py-2 mt-2"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setOpen(true);
-                            }}
-                        >
-                            <Plus className="h-4 w-4" />
-                            <span className='text-sm text-foreground'>New</span>
-                        </button>
-                    </SelectContent>
-                </Select>
-            </div>
+            <Select value={clipFilters.collectionId} onValueChange={onFolderChange}>
+                <SelectTrigger className="w-full md:w-60 !h-12">
+                    <SelectValue placeholder="General" />
+                </SelectTrigger>
+                <SelectContent className='border-none'>
+                    <SelectItem value="">General</SelectItem>
+                    {collections.map((folder) => (
+                        <SelectItem key={folder._id} value={folder._id}>
+                            {folder.name.charAt(0).toUpperCase() + folder.name.slice(1)}
+                        </SelectItem>
+                    ))}
+
+                    <button
+                        type="button"
+                        className="w-full flex items-center justify-center gap-2 border-t border-t-muted-foreground py-2 mt-2"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setOpen(true);
+                        }}
+                    >
+                        <Plus className="h-4 w-4" />
+                        <span className='text-sm text-foreground'>New</span>
+                    </button>
+                </SelectContent>
+            </Select>
+
 
             <Input
                 placeholder="Search clips..."
-                className="w-72"
+                className="w-full md:w-60 h-12"
                 value={clipFilters.search || search}
                 onChange={(e) => setSearch(e.target.value)}
             />
