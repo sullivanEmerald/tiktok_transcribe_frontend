@@ -318,4 +318,15 @@ export type OverviewContent = {
 export const overviewContentsTyped: Record<string, OverviewContent> = overviewContents as Record<string, OverviewContent>;
 
 
+export const CopyCurrentUrl = () => {
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+  copyToClipboard(currentUrl);
+}
+
+
+export const getShareData = () => {
+  if (typeof window === "undefined") return { url: "", title: "" };
+  return { url: window.location.href, title: document.title };
+};
+
 

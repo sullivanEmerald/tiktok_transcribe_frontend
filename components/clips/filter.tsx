@@ -22,6 +22,7 @@ const platforms = [
     { value: 'youtube', label: 'YouTube' },
     { value: 'tiktok', label: 'TikTok' },
     { value: 'instagram', label: 'Instagram' },
+    { value: 'facebook', label: 'Facebook' },
 ];
 
 const folders = [

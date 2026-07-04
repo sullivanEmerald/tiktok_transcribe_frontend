@@ -6,7 +6,8 @@ import Link from 'next/link';
 import moment from 'moment';
 import Image from 'next/image';
 import { BLOCKS } from '@contentful/rich-text-types';
-import { User, Timer, Users } from 'lucide-react';
+import { User, Timer, Users, Share, Copy } from 'lucide-react';
+import EngagementButtons from '@/components/blog/EngagementButtons.';
 
 export const revalidate = 3600;
 
@@ -75,15 +76,17 @@ export default async function BlogPostPage({
             <div className='flex flex-col items-start gap-1 mb-4'>
                 <h1 className='font-bold text-foreground text-2xl'>{post.fields.title}</h1>
                 <div className='flex items-center justify-between w-full'>
-                    <div className='flex items-center gap-1'>
-                        {post.fields.author ? <User className='h-4 w-4' /> : <Users className='h-4 w-4' />}
-                        <p className="text-sm font-medium text-foreground/60">{post.fields.author || 'Clip Script Team'}</p>
+                    <div className='flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4'>
+                        <div className='flex items-center gap-1'>
+                            {post.fields.author ? <User className='h-4 w-4' /> : <Users className='h-4 w-4' />}
+                            <p className="text-sm font-medium text-foreground/60">{post.fields.author || 'Clip Script Team'}</p>
+                        </div>
+                        <div className='flex items-center gap-1'>
+                            <Timer className='h-4 w-4' />
+                            <p className="text-xs text-gray-400">{post.fields.date ? moment(post.fields.date).fromNow() : moment(post.fields.date).fromNow()}</p>
+                        </div>
                     </div>
-                    <div className='flex items-center gap-1'>
-                        <Timer className='h-4 w-4' />
-                        <p className="text-xs text-gray-400">{post.fields.date ? moment(post.fields.date).fromNow() : moment(post.fields.date).fromNow()}</p>
-                    </div>
-
+                    <EngagementButtons />
                 </div>
             </div>
             <div className='w-full bg-card rounded-md'>
