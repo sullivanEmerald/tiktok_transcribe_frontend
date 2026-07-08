@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
 import Input from "@/components/genreral/Input";
 import Button from "@/components/genreral/Button";
 import { Eye, EyeOff, Check, X } from "lucide-react";
@@ -15,7 +14,8 @@ const rules = [
     { label: "One number", test: (pw: string) => /[0-9]/.test(pw) },
 ];
 
-export default function ResetPassword() {
+// 1. Move your original component logic here
+function ResetPasswordForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const ticket = searchParams.get("ticket") ?? "";
@@ -140,8 +140,7 @@ export default function ResetPassword() {
                             return (
                                 <li
                                     key={rule.label}
-                                    className={`flex items-center gap-2 text-xs ${pass ? "text-green-600" : "text-muted-foreground"
-                                        }`}
+                                    className={`flex items-center gap-2 text-xs ${pass ? "text-green-600" : "text-muted-foreground"}`}
                                 >
                                     {pass ? <Check size={12} /> : <X size={12} />}
                                     {rule.label}
@@ -162,5 +161,18 @@ export default function ResetPassword() {
                 </form>
             </div>
         </div>
+    );
+}
+
+
+export default function ResetPassword() {
+    return (
+        <Suspense fallback={
+            <div className="flex min-h-screen items-center justify-center">
+                <p className="text-sm text-muted-foreground">Loading reset panel...</p>
+            </div>
+        }>
+            <ResetPasswordForm />
+        </Suspense>
     );
 }
