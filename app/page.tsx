@@ -4,8 +4,10 @@ import GuestTranscribeSection from "@/components/guest/TranscriptionComponent";
 export default function Home() {
   return (
     <HomeLayout>
-      <GuestTranscribeSection />
-      <CommonComponents />
+      <div className="space-y-10">
+        <GuestTranscribeSection />
+        <CommonComponents />
+      </div>
     </HomeLayout>
   );
 }

@@ -5,29 +5,25 @@ import { useRouter } from "next/navigation";
 import Logo from "@/components/genreral/logo";
 import { useStore } from "@/stores/store";
 import { useShallow } from "zustand/react/shallow";
+import AuthLoader from "@/components/auth/loader";
 
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
-    const { user, isloading } = useStore(useShallow((state) => ({
+    const { user, isloading, initialized } = useStore(useShallow((state) => ({
         user: state.user,
-        isloading: state.isRefreshingUser
+        isloading: state.isRefreshingUser,
+        initialized: state.initialized
     })))
 
     const router = useRouter();
 
     useEffect(() => {
-        if (!isloading && !user) {
+        if (initialized && !isloading && !user) {
             router.replace('/auth/login')
         }
-    }, [isloading, user, router])
+    }, [isloading, user, router, initialized])
 
-    if (isloading) {
-        return (
-            <div className="h-screen w-screen bg-black flex items-center justify-center">
-                <Logo />
-            </div>
-        )
-    }
+    if (isloading) return <AuthLoader />
 
     return <>{children}</>
 }

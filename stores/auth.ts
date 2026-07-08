@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { axiosInstance } from '@/lib/utils';
 import { Store } from "@/types/store";
 import { CurrentUser } from "@/services/auth";
+import { Logout } from "@/services/auth";
 
 interface User {
     id: string;
@@ -28,7 +29,7 @@ export type AuthSlice = {
 
 export const createAuthSlice: StateCreator<Store, [['zustand/immer', never]], [], AuthSlice> = (set, get) => ({
     user: null,
-    isRefreshingUser: false,
+    isRefreshingUser: true,
     error: null,
     initialized: false,
 
@@ -46,13 +47,17 @@ export const createAuthSlice: StateCreator<Store, [['zustand/immer', never]], []
                 user: null,
             });
         } finally {
-            set({ isRefreshingUser: false })
+            set({ isRefreshingUser: false, initialized: false })
         }
     },
 
-    logout: () => {
-        // Optional: call logout API
-        // await axiosInstance.post('/auth/logout');
-        // You can also clear tokens here if needed
+    logout: async () => {
+        try {
+            await Logout();
+        } catch (err) {
+            console.log(err)
+        } finally {
+            set({ user: null, initialized: true, isRefreshingUser: false });
+        }
     },
 });

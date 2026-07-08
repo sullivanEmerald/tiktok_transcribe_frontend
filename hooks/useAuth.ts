@@ -4,9 +4,10 @@ import { useShallow } from "zustand/react/shallow";
 import { useMemo } from "react";
 
 export function useAuth() {
-    const { user, isLoading } = useStore(useShallow((state) => ({
+    const { user, isLoading, logout } = useStore(useShallow((state) => ({
         user: state.user,
         isLoading: state.isRefreshingUser,
+        logout: state.logout,
     })))
 
 
@@ -16,6 +17,7 @@ export function useAuth() {
 
     return {
         isAuthenticated,
-        user
+        user,
+        logout
     }
 }

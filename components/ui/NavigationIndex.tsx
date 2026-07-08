@@ -44,7 +44,7 @@ const menuItems: MenuItem[] = [
 
 export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?: boolean }) {
     const router = useRouter();
-    const { isAuthenticated, user } = useAuth();
+    const { isAuthenticated, user, logout } = useAuth();
     const [showPopover, setShowPopover] = useState(false)
     return (
         <header className="bg-card/50 backdrop-blur-sm z-50 rounded-sm shadow-sm shadow-card">
@@ -99,7 +99,7 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                                                     <hr className="border-gray-200 mx-4" />
                                                 </>
                                             ) : (
-                                                <button className="flex items-center gap-3 py-3 w-full cursor-pointer hover:bg-gray-100 transition border-none outline-none bg-transparent focus:outline-none" onClick={() => { }}>
+                                                <button className="flex items-center gap-3 py-3 w-full cursor-pointer hover:bg-gray-100 transition border-none outline-none bg-transparent focus:outline-none" onClick={logout}>
                                                     <Icon size={18} className="text-muted-foreground" />
                                                     <span className="text-sm font-medium text-gray-700">
                                                         {label}
