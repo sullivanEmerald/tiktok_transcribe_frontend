@@ -1,23 +1,22 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Button from "@/components/genreral/Button";
 import { MailCheck } from 'lucide-react'
 import { verifyEmailToken, resendVerificationEmail } from "@/services/auth";
 import LineLoader from "@/components/genreral/lineLoader";
-import { useRouter } from "next/navigation";
 import { showToaster } from "@/lib/utils";
 import Input from "@/components/genreral/Input";
 import { emailPattern } from "@/data/constants";
 import { AxiosError } from "axios";
 
-
-
 type Status = 'loading' | 'success' | 'error' | 'idle';
 
 const RESEND_COOLDOWN_SECONDS = 60;
 
-export default function VerifyEmailToken() {
+// 1. Core verification form logic isolated here
+function VerifyEmailContent() {
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
     const [status, setStatus] = useState<Status>('idle');
@@ -44,10 +43,11 @@ export default function VerifyEmailToken() {
                 }
             };
             verifyToken();
+        } else {
+            // FIXED: Only redirect if there's no token to verify
+            router.push('/auth/login');
         }
-        router.push('/auth/login');
-    }, [token]);
-
+    }, [token, router]);
 
     useEffect(() => {
         if (cooldown <= 0) return;
@@ -56,7 +56,6 @@ export default function VerifyEmailToken() {
         }, 1000);
         return () => clearInterval(interval);
     }, [cooldown]);
-
 
     const handleResend = async () => {
         setEmailError('');
@@ -74,7 +73,7 @@ export default function VerifyEmailToken() {
             setEmailError('');
             setShowInput(false);
         } catch (error) {
-            console.log("verify error", error)
+            console.log("verify error", error);
             if (error instanceof AxiosError && error.response?.status === 409) {
                 setTimeout(() => {
                     router.push('/auth/login');
@@ -96,7 +95,7 @@ export default function VerifyEmailToken() {
             </div>
             <h1 className="text-2xl text-foreground font-bold mb-4 text-center">Email Verification</h1>
             {status === 'loading' ? (
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-2 mb-4 justify-center">
                     <LineLoader text="primary" />
                     <p className="text-muted-foreground">Verifying your email... Please Wait</p>
                 </div>
@@ -107,10 +106,12 @@ export default function VerifyEmailToken() {
             ) : (
                 <div>
                     {message && <p className="text-green-600 mb-4 text-center">{message}</p>}
-                    {message === "" && <div className="text-center mb-4">
-                        <p className="text-muted-foreground mb-4">A verification email has been sent to your email address.</p>
-                        <p className="text-muted-foreground">If you haven't received the email, please check your spam folder or request a new verification email.</p>
-                    </div>}
+                    {message === "" && (
+                        <div className="text-center mb-4">
+                            <p className="text-muted-foreground mb-4">A verification email has been sent to your email address.</p>
+                            <p className="text-muted-foreground">If you haven't received the email, please check your spam folder or request a new verification email.</p>
+                        </div>
+                    )}
                 </div>
             )}
             {showInput && (
@@ -121,7 +122,7 @@ export default function VerifyEmailToken() {
                         className=""
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    {emailError && <p className="text-red-600">{emailError}</p>}
+                    {emailError && <p className="text-red-600 text-xs mt-1">{emailError}</p>}
                 </div>
             )}
 
@@ -136,7 +137,19 @@ export default function VerifyEmailToken() {
                         : 'Resend Verification Email'}
                 </Button>
             )}
-
         </div>
+    );
+}
+
+
+export default function VerifyEmailToken() {
+    return (
+        <Suspense fallback={
+            <div className="flex flex-col items-center justify-center p-12 mt-10 w-full max-w-lg mx-auto">
+                <p className="text-muted-foreground text-sm">Preparing verification environment...</p>
+            </div>
+        }>
+            <VerifyEmailContent />
+        </Suspense>
     );
 }
