@@ -22,6 +22,20 @@ export const TranscribeService = {
         }
     },
 
+    createTranscriptionAsGuest: async (videoUrl: string, captchaToken?: string | null) => {
+        try {
+            const response = await axiosInstance.post('/guest/transcription', {
+                videoUrl,
+                captchaToken
+            });
+            console.log(response.data)
+            return response.data;
+        } catch (error: any) {
+            console.log(error?.response?.data);
+            throw error;
+        }
+    },
+
     getJobStatus: async (id: string) => {
         const response = await axiosInstance.get(`/transcription/${id}/status`);
         console.log(`Status for job ${id}:`, response.data);
@@ -72,6 +86,8 @@ export const TranscribeService = {
             console.log(`Error fetching AI improvement for video ${utterances}:`, error);
             throw error;
         }
-    }
+    },
+
+
 
 }

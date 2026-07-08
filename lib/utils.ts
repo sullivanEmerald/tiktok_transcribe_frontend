@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Download, Activity, CheckCircle } from 'lucide-react';
 import type { ComponentType } from 'react';
+import { useStore } from "@/stores/store";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -76,6 +77,8 @@ axiosInstance.interceptors.response.use(
       } catch (err) {
 
         processQueue(err);
+
+        useStore.getState().setUser(null);
 
         window.location.href = "/auth/login";
 

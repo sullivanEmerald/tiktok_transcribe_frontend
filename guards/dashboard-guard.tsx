@@ -1,4 +1,5 @@
-import useAuth from "@/context/AuthProvider"
+"use client"
+import useAuth from "@/components/auth/intitailizeAuth"
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/genreral/logo";
@@ -16,13 +17,13 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         if (!isloading && !user) {
-            router.push('/auth/login')
+            router.replace('/auth/login')
         }
-    }, [isloading, user])
+    }, [isloading, user, router])
 
     if (isloading) {
         return (
-            <div className="h-screen w-screen bg-background flex items-center justify-center">
+            <div className="h-screen w-screen bg-black flex items-center justify-center">
                 <Logo />
             </div>
         )

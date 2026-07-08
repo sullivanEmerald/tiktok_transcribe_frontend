@@ -1,15 +1,21 @@
-import { createContext } from "react";
-type User = {
-    id: string;
-    email: string;
-};
+"use client";
+import { useStore } from "@/stores/store";
+import { useShallow } from "zustand/react/shallow";
+import { useMemo } from "react";
 
-type AuthContextType = {
-    user: User | null;
-    loading: boolean;
-    login: () => Promise<void>;
-    logout: () => Promise<void>;
-    refreshUser: () => Promise<void>;
-};
+export function useAuth() {
+    const { user, isLoading } = useStore(useShallow((state) => ({
+        user: state.user,
+        isLoading: state.isRefreshingUser,
+    })))
 
-const AuthContext = createContext<AuthContextType>(null!);
+
+    const isAuthenticated = useMemo(() => {
+        return !!user && !isLoading
+    }, [user, isLoading])
+
+    return {
+        isAuthenticated,
+        user
+    }
+}

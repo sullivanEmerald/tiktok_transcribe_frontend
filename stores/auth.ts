@@ -1,4 +1,3 @@
-"use client";
 import { StateCreator } from "zustand";
 import { create } from 'zustand';
 import { axiosInstance } from '@/lib/utils';
@@ -8,7 +7,7 @@ import { CurrentUser } from "@/services/auth";
 interface User {
     id: string;
     email: string;
-    fistName: string,
+    firstName: string,
 }
 
 type AuthActions = {
@@ -22,14 +21,16 @@ type AuthActions = {
 export type AuthSlice = {
     user: User | null,
     isRefreshingUser: boolean,
+    initialized: boolean,
 } & AuthActions;
 
 
 
 export const createAuthSlice: StateCreator<Store, [['zustand/immer', never]], [], AuthSlice> = (set, get) => ({
     user: null,
-    isRefreshingUser: true,
+    isRefreshingUser: false,
     error: null,
+    initialized: false,
 
     setUser: (user) => set({ user }),
 
@@ -38,12 +39,11 @@ export const createAuthSlice: StateCreator<Store, [['zustand/immer', never]], []
     refreshUser: async () => {
         try {
             set({ isRefreshingUser: true });
-            const { data } = await CurrentUser();
-            set({ user: data });
+            const response = await CurrentUser();
+            set({ user: response });
         } catch (err: any) {
             set({
                 user: null,
-                isRefreshingUser: false,
             });
         } finally {
             set({ isRefreshingUser: false })

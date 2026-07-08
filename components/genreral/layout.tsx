@@ -6,6 +6,7 @@ import { Menu } from "lucide-react"
 import Footer from "./footer"
 import { usePathname } from "next/navigation"
 
+
 interface LayoutProps {
     children: React.ReactNode
 }
@@ -15,7 +16,7 @@ export function Layout({ children }: LayoutProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     useLayoutEffect(() => {
-        if (window.innerWidth > 640 && pathname === "/") setSidebarOpen(true)
+        if (window.innerWidth > 640 && pathname === "/" || pathname === "/dashboard") setSidebarOpen(true)
     }, [pathname])
 
 

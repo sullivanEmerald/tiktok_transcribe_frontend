@@ -7,7 +7,7 @@ import { useShallow } from "zustand/react/shallow";
 
 export default function AuthInitializer() {
     const { refreshUser } = useStore(useShallow((state) => ({
-        refreshUser: state.refreshUser
+        refreshUser: state.refreshUser,
     })))
 
     useEffect(() => {
@@ -15,5 +15,5 @@ export default function AuthInitializer() {
     }, []);
 
     return null;
-    ;
+
 }

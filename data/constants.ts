@@ -1,21 +1,22 @@
 
-import { Newspaper, User, Library } from "lucide-react";
+import { Newspaper, User, Library, Home } from "lucide-react";
 export const mainNavigation = [
     {
-        name: 'Blogs',
-        href: '/blog',
-        icon: Newspaper
+        name: 'Home',
+        href: '/dashboard',
+        icon: Home
     },
     {
-        name: 'My Activities',
-        href: '/profile',
+        name: 'My Profile',
+        href: '/dashboard/profile',
         icon: User
     },
     {
         name: 'Clip Library',
-        href: '/clips',
+        href: '/dashboard/clips',
         icon: Library
     },
+
 
 
 ]

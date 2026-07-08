@@ -9,6 +9,7 @@ import { showToaster } from "@/lib/utils";
 import LineLoader from "@/components/genreral/lineLoader";
 import { Eye, EyeOff } from "lucide-react";
 import { login } from "@/services/auth";
+import { useStore } from "@/stores/store";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -17,6 +18,9 @@ export default function LoginPage() {
         email: "",
         password: "",
     });
+    const refreshUser = useStore(
+        (state) => state.refreshUser
+    );
 
     const [errors, setErrors] = useState({
         email: "",
@@ -66,6 +70,7 @@ export default function LoginPage() {
         try {
             if (validateAll()) {
                 await login({ ...formData })
+                await refreshUser();
                 showToaster("Login successful", "success");
                 router.push('/dashboard')
 

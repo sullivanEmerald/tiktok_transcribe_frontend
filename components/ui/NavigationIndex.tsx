@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { mainNavigation } from "@/data/constants";
-import { EyeClosed, EyeIcon, Menu, History, LogIn } from "lucide-react";
+import { EyeClosed, EyeIcon, Menu, History, LogIn, User, Settings, LogOut } from "lucide-react";
 import Logo from "../genreral/logo";
 import Link from "next/link";
 import {
@@ -14,9 +14,37 @@ import {
 } from "@/components/ui/popover"
 import { useState } from "react";
 import { ThemeToggle } from "../genreral/useToggle";
+import { useAuth } from "@/hooks/useAuth";
+import DisplayAvatar from "../genreral/avatar";
+
+
+type MenuItem = {
+    label: string;
+    icon: React.ComponentType<{ size?: number; className?: string }>;
+    to?: string;
+};
+
+
+const menuItems: MenuItem[] = [
+    {
+        label: "Profile",
+        icon: User,
+        to: "/dashboard/profile",
+    },
+    {
+        label: "Settings",
+        icon: Settings,
+        to: "/dashbaord/account",
+    },
+    {
+        label: "Logout",
+        icon: LogOut,
+    },
+];
 
 export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?: boolean }) {
     const router = useRouter();
+    const { isAuthenticated, user } = useAuth();
     const [showPopover, setShowPopover] = useState(false)
     return (
         <header className="bg-card/50 backdrop-blur-sm z-50 rounded-sm shadow-sm shadow-card">
@@ -36,18 +64,61 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                         ))}
                     </nav>
 
-                    <button className="hidden md:flex items-center text-muted-foreground p-2 rounded-2xl hover:text-primary gap-1 cursor-pointer" onClick={onOpen} aria-label="Open sidebar" >
-                        {isOpen ? <EyeClosed className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
-                        <span className="text-sm transition-colors duration-200">History</span>
-                    </button>
+                    {isAuthenticated && (
+                        <button className="hidden md:flex items-center text-muted-foreground p-2 rounded-2xl hover:text-primary gap-1 cursor-pointer" onClick={onOpen} aria-label="Open sidebar" >
+                            {isOpen ? <EyeClosed className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+                            <span className="text-sm transition-colors duration-200">History</span>
+                        </button>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-2">
                     <ThemeToggle />
-                    <Link href="/auth/login" className="text-sm text-white flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#668f09] hover:underline transition-colors duration-200">
-                        <LogIn className="w-4 h-4" />
-                        <span>Login</span>
-                    </Link>
+                    {isAuthenticated ? (
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <div className="flex items-center gap-2 cursor-pointer">
+                                    <DisplayAvatar name={user?.firstName} />
+                                </div>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <PopoverHeader>
+                                    <PopoverTitle>Account menu</PopoverTitle>
+                                </PopoverHeader>
+                                <div>
+                                    {menuItems.map(({ label, icon: Icon, to }, index) => (
+                                        <div key={label}>
+                                            {to ? (
+                                                <>
+                                                    <Link href={to} className="flex items-center gap-3 py-3 cursor-pointer hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-primary">
+                                                        <Icon size={18} className="text-muted-foreground" />
+                                                        <span className="text-sm font-medium text-gray-700">
+                                                            {label}
+                                                        </span>
+                                                    </Link>
+                                                    <hr className="border-gray-200 mx-4" />
+                                                </>
+                                            ) : (
+                                                <button className="flex items-center gap-3 py-3 w-full cursor-pointer hover:bg-gray-100 transition border-none outline-none bg-transparent focus:outline-none" onClick={() => { }}>
+                                                    <Icon size={18} className="text-muted-foreground" />
+                                                    <span className="text-sm font-medium text-gray-700">
+                                                        {label}
+                                                    </span>
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </PopoverContent>
+                        </Popover>
+                    ) : (
+                        <div className="">
+                            <Link href="/auth/login" className="text-sm text-white flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#668f09] hover:underline transition-colors duration-200">
+                                <LogIn className="w-4 h-4" />
+                                <span>Login</span>
+                            </Link>
+                        </div>
+                    )}
                 </div>
 
                 <Popover open={showPopover} onOpenChange={setShowPopover}>

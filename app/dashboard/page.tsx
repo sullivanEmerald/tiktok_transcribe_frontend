@@ -1,8 +1,11 @@
-
+"use client"
+import CommonComponents from "@/components/main/CommonStaticPages"
+import TranscribeSection from "@/components/main/transcribeForm"
 export default function Dashboard() {
     return (
-        <div>
-            <h1>This is the overview</h1>
+        <div className="space-y-4">
+            <TranscribeSection />
+            <CommonComponents />
         </div>
     )
 }
