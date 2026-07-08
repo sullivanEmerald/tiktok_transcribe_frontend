@@ -21,6 +21,7 @@
     "file-saver": "^2.0.5",
     "framer-motion": "^12.39.0",
     "immer": "^11.1.8",
+    "input-otp": "^1.4.2",
     "jspdf": "^4.2.1",
     "lucide-react": "^0.563.0",
     "moment": "^2.30.1",

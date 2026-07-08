@@ -60,6 +60,21 @@ export const resendVerificationEmail = async (email: string) => {
     }
 };
 
+export const resetPassword = async (email: string) => {
+    try {
+        const response = await axiosInstance.post("/auth/forgot-password", { email });
+        return response.data;
+    } catch (error: any) {
+        if (error.status === 500) {
+            showToaster("An error occurred while resending verification email. Please try again later.", "error");
+        } else {
+            showToaster(error?.response?.data?.message || "An error occurred while resending verification email. Please try again.");
+            throw error;
+        }
+
+    }
+};
+
 export const CurrentUser = async () => {
     try {
         const response = await axiosInstance.get("/auth/me");

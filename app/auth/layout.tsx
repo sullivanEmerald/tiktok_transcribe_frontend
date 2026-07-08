@@ -21,8 +21,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         }
     }, [isAuthenticated])
 
-    if (isloading) return <AuthLoader />
-
     return (
         <div className="w-full min-h-screen">
             <Navigation />

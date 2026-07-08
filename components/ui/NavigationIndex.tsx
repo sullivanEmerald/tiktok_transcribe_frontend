@@ -42,6 +42,19 @@ const menuItems: MenuItem[] = [
     },
 ];
 
+const AuthMenu = [
+    {
+        label: "Register",
+        icon: User,
+        to: "/register",
+    },
+    {
+        label: "Login",
+        icon: LogIn,
+        to: "/login",
+    },
+];
+
 export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?: boolean }) {
     const router = useRouter();
     const { isAuthenticated, user, logout } = useAuth();
@@ -52,32 +65,35 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                 <div className="flex items-center">
                     <Logo />
                 </div>
-                <div className="flex items-center gap-3">
-                    <nav className="hidden md:flex items-center space-x-2">
-                        {mainNavigation.map((nav, idx) => (
-                            <Link href={nav.href} key={idx} className="text-md text-muted-foreground p-2 hover:text-primary transition duration-200">
-                                <div className="flex items-center gap-1">
-                                    <nav.icon className="w-4 h-4" />
-                                    <span>{nav.name}</span>
-                                </div>
-                            </Link>
-                        ))}
-                    </nav>
 
-                    {isAuthenticated && (
-                        <button className="hidden md:flex items-center text-muted-foreground p-2 rounded-2xl hover:text-primary gap-1 cursor-pointer" onClick={onOpen} aria-label="Open sidebar" >
-                            {isOpen ? <EyeClosed className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
-                            <span className="text-sm transition-colors duration-200">History</span>
-                        </button>
-                    )}
-                </div>
+                {isAuthenticated && (
+                    <div className="flex items-center gap-3">
+                        <nav className="hidden md:flex items-center space-x-2">
+                            {mainNavigation.map((nav, idx) => (
+                                <Link href={nav.href} key={idx} className="text-md text-muted-foreground p-2 hover:text-primary transition duration-200">
+                                    <div className="flex items-center gap-1">
+                                        <nav.icon className="w-4 h-4" />
+                                        <span>{nav.name}</span>
+                                    </div>
+                                </Link>
+                            ))}
+                        </nav>
+
+                        {isAuthenticated && (
+                            <button className="hidden md:flex items-center text-muted-foreground p-2 rounded-2xl hover:text-primary gap-1 cursor-pointer" onClick={onOpen} aria-label="Open sidebar" >
+                                {isOpen ? <EyeClosed className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+                                <span className="text-sm transition-colors duration-200">History</span>
+                            </button>
+                        )}
+                    </div>
+                )}
 
                 <div className="flex items-center gap-2">
                     <ThemeToggle />
                     {isAuthenticated ? (
                         <Popover>
                             <PopoverTrigger asChild>
-                                <div className="flex items-center gap-2 cursor-pointer">
+                                <div className="hidden sm:block flex items-center gap-2 cursor-pointer">
                                     <DisplayAvatar name={user?.firstName} />
                                 </div>
                             </PopoverTrigger>
@@ -112,10 +128,14 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                             </PopoverContent>
                         </Popover>
                     ) : (
-                        <div className="">
-                            <Link href="/auth/login" className="text-sm text-white flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#668f09] hover:underline transition-colors duration-200">
+                        <div className="hidden md:flex items-center gap-2 w-full">
+                            <Link href="/auth/login" className="text-md font-bold text-primary flex items-center gap-1 bg-tranparent hover:underline transition-colors duration-200">
                                 <LogIn className="w-4 h-4" />
                                 <span>Login</span>
+                            </Link>
+                            <Link href="/auth/login" className="text-sm text-white flex items-center gap-1 px-4 py-2 rounded-2xl bg-primary hover:underline transition-colors duration-200">
+                                <LogIn className="w-4 h-4" />
+                                <span>Get Started</span>
                             </Link>
                         </div>
                     )}
@@ -129,17 +149,33 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                     </PopoverTrigger>
                     <PopoverContent className="w-56 p-2 border-none" align="end">
                         <div className="flex flex-col gap-1">
-                            {mainNavigation.map((nav, idx) => (
-                                <Link
-                                    key={idx}
-                                    href={nav.href}
-                                    onClick={() => setShowPopover(false)}
-                                    className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary transition-colors duration-200"
-                                >
-                                    <nav.icon className="text-primary w-4 h-4" />
-                                    <span>{nav.name}</span>
-                                </Link>
-                            ))}
+                            {isAuthenticated ? (
+                                mainNavigation.map((nav, idx) => (
+                                    <Link
+                                        key={idx}
+                                        href={nav.href}
+                                        onClick={() => setShowPopover(false)}
+                                        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary transition-colors duration-200"
+                                    >
+                                        <nav.icon className="text-muted-foreground w-4 h-4" />
+                                        <span>{nav.name}</span>
+                                    </Link>
+
+                                ))) : (
+                                AuthMenu.map((nav, idx) => (
+                                    <Link
+                                        key={idx}
+                                        href={nav.to}
+                                        onClick={() => setShowPopover(false)}
+                                        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary transition-colors duration-200"
+                                    >
+                                        <nav.icon className="text-muted-foreground w-4 h-4" />
+                                        <span>{nav.label}</span>
+                                    </Link>
+
+                                ))
+
+                            )}
 
                             <hr className="my-1 border-gray-100" />
 
@@ -149,8 +185,14 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                                     setShowPopover(false);
                                 }}
                                 className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary transition-colors duration-200 w-full text-left">
-                                <History className="w-4 h-4 text-primary" />
+                                <History className="w-4 h-4 text-muted-foreground" />
                                 <span>Previous Transcripts</span>
+                            </button>
+                            <button
+                                onClick={logout}
+                                className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary border-t transition-colors duration-200 w-full text-left">
+                                <LogOut className="w-4 h-4 text-muted-foreground" />
+                                <span>logout</span>
                             </button>
                         </div>
                     </PopoverContent>

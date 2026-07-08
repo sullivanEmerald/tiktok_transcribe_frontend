@@ -38,6 +38,7 @@ import { TranscribeService } from "@/services/transcribe";
 import { useTextSelection } from "@/hooks/useTextSelection";
 import { createClip } from "@/services/clip";
 import { useGuestTranscription } from "@/hooks/useGuest";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function GuestTranscribeSection() {
     const [videoUrl, setVideoUrl] = useState("");
@@ -47,6 +48,7 @@ export default function GuestTranscribeSection() {
     const [viewMode, setViewMode] = useState<boolean>(false)
     const [isGettingSummary, setIsGettingSummary] = useState(false);
     const [isSaving, setIsSaving] = useState(false)
+    const { isAuthenticated } = useAuth();
 
     // const transcriptContainerRef = useRef<HTMLDivElement>(null);
     const { clipData, coords, containerRefCallback, transcriptContainerStyle, setClipData } = useTextSelection();
@@ -150,6 +152,10 @@ export default function GuestTranscribeSection() {
                         <button
                             type="button"
                             onClick={async () => {
+                                if (!isAuthenticated) {
+                                    showToaster('Please login to your account to use this feature and our advanced features.', "error")
+                                    return;
+                                }
                                 const platform = detectPlatform(videoUrl);
                                 if (!platform) {
                                     showToaster("Unsupported or invalid platform URL. Please enter a TikTok, Instagram Reel, or YouTube Shorts URL.", "error");

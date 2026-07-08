@@ -1,5 +1,5 @@
 
-import { Newspaper, User, Library, Home } from "lucide-react";
+import { Newspaper, User, Library, Home, Settings } from "lucide-react";
 export const mainNavigation = [
     {
         name: 'Home',
@@ -16,9 +16,11 @@ export const mainNavigation = [
         href: '/dashboard/clips',
         icon: Library
     },
-
-
-
+    // {
+    //     name: 'Settings',
+    //     href: '/dashboard/settings',
+    //     icon: Library
+    // },
 ]
 
 
