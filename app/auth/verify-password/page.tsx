@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
     InputOTP,
@@ -13,7 +13,8 @@ import { showToaster } from "@/lib/utils";
 
 const RESEND_COOLDOWN = 30; // seconds
 
-export default function VerifyPasswordOtp() {
+// 1. Core OTP form logic isolated here
+function VerifyPasswordOtpContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const email = searchParams.get("email") ?? "";
@@ -142,5 +143,18 @@ export default function VerifyPasswordOtp() {
                 </div>
             </div>
         </div>
+    );
+}
+
+
+export default function VerifyPasswordOtp() {
+    return (
+        <Suspense fallback={
+            <div className="flex min-h-screen items-center justify-center">
+                <p className="text-sm text-muted-foreground">Loading authentication panel...</p>
+            </div>
+        }>
+            <VerifyPasswordOtpContent />
+        </Suspense>
     );
 }
