@@ -1,20 +1,30 @@
 
-import { Newspaper, User, Library, Home, Settings } from "lucide-react";
+import { Newspaper, User, Library, Home, Settings, FolderArchive, Logs } from "lucide-react";
+
 export const mainNavigation = [
     {
         name: 'Home',
         href: '/dashboard',
-        icon: Home
+        icon: Home,
+        redirect: false
     },
     {
         name: 'My Profile',
         href: '/dashboard/profile',
-        icon: User
+        icon: User,
+        redirect: false
     },
     {
         name: 'Clip Library',
         href: '/dashboard/clips',
-        icon: Library
+        icon: FolderArchive,
+        redirect: false
+    },
+    {
+        name: 'Blogs',
+        href: '/blog',
+        icon: Logs,
+        redirect: true
     },
     // {
     //     name: 'Settings',

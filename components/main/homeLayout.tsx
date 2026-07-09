@@ -22,7 +22,7 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
     }, [isAuthenticated])
     return (
         <section>
-            <div className="px-8">
+            <div className="px-4 sm:px-8">
                 <div className="sticky top-0 z-30">
                     <NavigationBar />
                 </div>

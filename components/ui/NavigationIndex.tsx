@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { mainNavigation } from "@/data/constants";
-import { EyeClosed, EyeIcon, Menu, History, LogIn, User, Settings, LogOut } from "lucide-react";
+import { EyeClosed, EyeIcon, Menu, History, LogIn, User, Settings, LogOut, Library, Logs } from "lucide-react";
 import Logo from "../genreral/logo";
 import Link from "next/link";
 import {
@@ -44,14 +44,22 @@ const menuItems: MenuItem[] = [
 
 const AuthMenu = [
     {
-        label: "Register",
-        icon: User,
-        to: "/register",
+        label: "blogs",
+        icon: Logs,
+        to: "/blog",
+        redirect: true
     },
     {
         label: "Login",
         icon: LogIn,
-        to: "/login",
+        to: "/auth/login",
+        redirect: false
+    },
+    {
+        label: "Register",
+        icon: User,
+        to: "/auth/register",
+        redirect: false
     },
 ];
 
@@ -70,7 +78,7 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                     <div className="flex items-center gap-3">
                         <nav className="hidden md:flex items-center space-x-2">
                             {mainNavigation.map((nav, idx) => (
-                                <Link href={nav.href} key={idx} className="text-md text-muted-foreground p-2 hover:text-primary transition duration-200">
+                                <Link href={nav.href} key={idx} target={nav.redirect ? "_blank" : ""} className="text-md text-muted-foreground p-2 hover:text-primary transition duration-200">
                                     <div className="flex items-center gap-1">
                                         <nav.icon className="w-4 h-4" />
                                         <span>{nav.name}</span>
@@ -128,15 +136,22 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                             </PopoverContent>
                         </Popover>
                     ) : (
-                        <div className="hidden md:flex items-center gap-2 w-full">
-                            <Link href="/auth/login" className="text-md font-bold text-primary flex items-center gap-1 bg-tranparent hover:underline transition-colors duration-200">
-                                <LogIn className="w-4 h-4" />
-                                <span>Login</span>
-                            </Link>
-                            <Link href="/auth/login" className="text-sm text-white flex items-center gap-1 px-4 py-2 rounded-2xl bg-primary hover:underline transition-colors duration-200">
-                                <LogIn className="w-4 h-4" />
-                                <span>Get Started</span>
-                            </Link>
+                        <div className="hidden md:flex items-center w-full">
+                            {
+                                AuthMenu.map((nav, idx) => (
+                                    <Link
+                                        key={idx}
+                                        href={nav.to}
+                                        onClick={() => setShowPopover(false)}
+                                        target={nav.redirect ? '_blank' : ""}
+                                        className="flex items-center gap-1 px-2 py-2 rounded-lg text-md text-primary hover:bg-gray-100 hover:text-primary transition-colors duration-200"
+                                    >
+                                        <nav.icon className="text-primary w-4 h-4" />
+                                        <span>{nav.label}</span>
+                                    </Link>
+
+                                ))
+                            }
                         </div>
                     )}
                 </div>
@@ -179,21 +194,32 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
 
                             <hr className="my-1 border-gray-100" />
 
-                            <button
-                                onClick={() => {
-                                    onOpen?.();
-                                    setShowPopover(false);
-                                }}
-                                className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary transition-colors duration-200 w-full text-left">
-                                <History className="w-4 h-4 text-muted-foreground" />
-                                <span>Previous Transcripts</span>
-                            </button>
-                            <button
-                                onClick={logout}
-                                className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary border-t transition-colors duration-200 w-full text-left">
-                                <LogOut className="w-4 h-4 text-muted-foreground" />
-                                <span>logout</span>
-                            </button>
+                            {isAuthenticated ? (
+                                <button
+                                    onClick={() => {
+                                        onOpen?.();
+                                        setShowPopover(false);
+                                    }}
+                                    className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary transition-colors duration-200 w-full text-left">
+                                    <History className="w-4 h-4 text-muted-foreground" />
+                                    <span>Previous Transcripts</span>
+                                </button>
+                            ) : (
+                                <Link href="/blog" target="_blank" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary transition-colors duration-200">
+                                    <div className="flex items-center gap-1">
+                                        <Logs className="w-4 h-4" />
+                                        <span>Blogs</span>
+                                    </div>
+                                </Link>
+                            )}
+                            {isAuthenticated && (
+                                <button
+                                    onClick={logout}
+                                    className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-gray-100 hover:text-primary border-t transition-colors duration-200 w-full text-left">
+                                    <LogOut className="w-4 h-4 text-muted-foreground" />
+                                    <span>logout</span>
+                                </button>
+                            )}
                         </div>
                     </PopoverContent>
                 </Popover>
