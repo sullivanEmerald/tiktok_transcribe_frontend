@@ -6,12 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { ThemeProvider } from 'next-themes'
 import AuthInitializer from "@/components/auth/intitailizeAuth";
-import { useEffect } from "react";
-import { useStore } from "@/stores/store";
-import { useShallow } from "zustand/react/shallow";
-import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
+
 
 const inter = Inter({
   variable: "--font-inter",
@@ -95,15 +90,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isAuthenticated } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname()
 
-  useEffect(() => {
-    if (isAuthenticated && pathname !== "/blogs") {
-      router.replace('/dashboard')
-    }
-  }, [isAuthenticated])
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
