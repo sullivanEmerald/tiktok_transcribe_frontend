@@ -57,7 +57,11 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Skip refresh logic for auth endpoints except /auth/me
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
+
+    // Don't try to refresh for auth endpoints
     const isAuthRoute =
       originalRequest.url?.startsWith("/auth") &&
       !originalRequest.url?.includes("/auth/me");
@@ -70,6 +74,7 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    // Queue requests while a refresh is already in progress
     if (isRefreshing) {
       return new Promise<void>((resolve, reject) => {
         failedQueue.push({ resolve, reject });
@@ -80,19 +85,23 @@ axiosInstance.interceptors.response.use(
     isRefreshing = true;
 
     try {
+      // Browser automatically sends the refreshToken cookie
       await axiosInstance.post("/auth/refresh");
 
+      // Retry queued requests
       processQueue();
 
+      // Retry the original request
       return axiosInstance(originalRequest);
     } catch (refreshError) {
+      // Reject queued requests
       processQueue(refreshError);
 
+      // Clear auth state
       useStore.getState().setUser(null);
 
-      if (window.location.pathname !== "/auth/login") {
-        window.location.href = "/auth/login";
-      }
+      // Redirect to login
+      window.location.replace("/auth/login");
 
       return Promise.reject(refreshError);
     } finally {
@@ -100,7 +109,6 @@ axiosInstance.interceptors.response.use(
     }
   }
 );
-
 // export function getDeviceId() {
 //   if (typeof window === 'undefined') {
 //     return null;

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { phonePattern, validNamePattern, emailPattern, validatePassword } from "@/data/constants";
 import { register } from "@/services/auth";
 import LineLoader from "@/components/genreral/lineLoader";
+import { showToaster } from "@/lib/utils";
 
 
 export default function LoginPage() {
@@ -105,6 +106,7 @@ export default function LoginPage() {
                     confirmPassword: "",
                 });
                 console.log(response)
+                showToaster('Registration successful. Continue with email verification')
                 router.push(`/auth/verify`);
                 console.log('Registration successful:',);
             } else {
