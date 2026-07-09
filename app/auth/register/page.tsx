@@ -105,7 +105,7 @@ export default function LoginPage() {
                     confirmPassword: "",
                 });
                 console.log(response)
-                router.push('/auth/login');
+                router.push(`/auth/verify`);
                 console.log('Registration successful:',);
             } else {
                 setSubmitting(false);
