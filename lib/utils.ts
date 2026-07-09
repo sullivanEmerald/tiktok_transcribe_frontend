@@ -34,62 +34,70 @@ export const axiosInstance = axios.create({
 
 let isRefreshing = false;
 
-let failedQueue: any[] = [];
+let failedQueue: {
+  resolve: () => void;
+  reject: (error: any) => void;
+}[] = [];
 
-const processQueue = (error: any) => {
-  failedQueue.forEach(({ reject }) => reject(error));
-  failedQueue = [];
-};
+const processQueue = (error?: any) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve();
+    }
+  });
 
-const processSuccess = () => {
-  failedQueue.forEach(({ resolve }) => resolve());
   failedQueue = [];
 };
 
 axiosInstance.interceptors.response.use(
-  response => response,
+  (response) => response,
 
-  async error => {
+  async (error) => {
     const originalRequest = error.config;
 
+    // Skip refresh logic for auth endpoints except /auth/me
+    const isAuthRoute =
+      originalRequest.url?.startsWith("/auth") &&
+      !originalRequest.url?.includes("/auth/me");
+
     if (
-      error.response?.status === 401 &&
-      !originalRequest._retry
+      error.response?.status !== 401 ||
+      originalRequest._retry ||
+      isAuthRoute
     ) {
-
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        }).then(() => axiosInstance(originalRequest));
-      }
-
-      originalRequest._retry = true;
-      isRefreshing = true;
-
-      try {
-
-        await axiosInstance.post("/auth/refresh");
-
-        processSuccess();
-
-        return axiosInstance(originalRequest);
-
-      } catch (err) {
-
-        processQueue(err);
-
-        useStore.getState().setUser(null);
-
-        window.location.href = "/auth/login";
-
-        return Promise.reject(err);
-
-      } finally {
-        isRefreshing = false;
-      }
+      return Promise.reject(error);
     }
 
-    return Promise.reject(error);
+    if (isRefreshing) {
+      return new Promise<void>((resolve, reject) => {
+        failedQueue.push({ resolve, reject });
+      }).then(() => axiosInstance(originalRequest));
+    }
+
+    originalRequest._retry = true;
+    isRefreshing = true;
+
+    try {
+      await axiosInstance.post("/auth/refresh");
+
+      processQueue();
+
+      return axiosInstance(originalRequest);
+    } catch (refreshError) {
+      processQueue(refreshError);
+
+      useStore.getState().setUser(null);
+
+      if (window.location.pathname !== "/auth/login") {
+        window.location.href = "/auth/login";
+      }
+
+      return Promise.reject(refreshError);
+    } finally {
+      isRefreshing = false;
+    }
   }
 );
 

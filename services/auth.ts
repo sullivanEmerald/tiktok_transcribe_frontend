@@ -3,6 +3,7 @@ import { showToaster } from "@/lib/utils";
 
 
 export const login = async (data: { email: string; password: string }) => {
+
     try {
         const response = await axiosInstance.post('/auth/login', data);
         return response.data;
