@@ -84,7 +84,6 @@ export const CurrentUser = async () => {
         if (error.status === 500) {
             showToaster("Check your internet connetion. Please try again later.", "error");
         } else {
-            showToaster(error?.response?.data?.message || "An error occurred while resending verification email. Please try again.");
             throw error;
         }
 
