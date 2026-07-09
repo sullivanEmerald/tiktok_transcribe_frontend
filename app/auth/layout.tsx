@@ -9,17 +9,6 @@ import { useShallow } from "zustand/react/shallow";
 import AuthLoader from "@/components/auth/loader";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
-    const { isAuthenticated } = useAuth();
-    const router = useRouter();
-    const { isloading } = useStore(useShallow((state) => ({
-        isloading: state.isRefreshingUser,
-    })))
-
-    useLayoutEffect(() => {
-        if (isAuthenticated) {
-            router.replace('/dashboard')
-        }
-    }, [isAuthenticated])
 
     return (
         <div className="w-full min-h-screen">
