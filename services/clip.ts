@@ -36,7 +36,8 @@ export const moveClipToCollection = async (clipId: string, collectionId: string)
     try {
         const response = await axiosInstance.patch(`/clips/${clipId}/move`, { collectionId });
         return response.data;
-    } catch (error) {
+    } catch (error: any) {
+        showToaster(error.response?.data?.message || "Moving clip failed. Please try again.", "error");
         console.error("Error moving clip:", error);
         throw error;
     }

@@ -92,7 +92,7 @@ export default function TranscribedChats({ open, setOpen }: TranscribedChatsProp
                     recentTranscripts.map((chat, index) => (
                         <div key={chat._id} className="relative">
                             <Link
-                                href={`/transcript/${chat._id}`}
+                                href={`/dashboard/transcript/${chat._id}`}
                                 className="w-full flex flex-col px-5 py-4 border-b border-text hover:bg-[#0209b2]/5 transition group cursor-pointer rounded"
                                 onClick={() => {
                                     // Only close sidebar on mobile
