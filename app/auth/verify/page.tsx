@@ -43,9 +43,6 @@ function VerifyEmailContent() {
                 }
             };
             verifyToken();
-        } else {
-            // FIXED: Only redirect if there's no token to verify
-            router.push('/auth/login');
         }
     }, [token, router]);
 

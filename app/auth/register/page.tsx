@@ -107,7 +107,7 @@ export default function LoginPage() {
                 });
                 console.log(response)
                 showToaster('Registration successful. Continue with email verification')
-                router.push(`/auth/verify`);
+                router.replace(`/auth/verify`);
                 console.log('Registration successful:',);
             } else {
                 setSubmitting(false);

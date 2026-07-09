@@ -5,7 +5,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { ThemeProvider } from 'next-themes'
-import AuthInitializer from "@/components/auth/intitailizeAuth";
 
 const inter = Inter({
   variable: "--font-inter",
