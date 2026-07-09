@@ -47,7 +47,7 @@ export const createAuthSlice: StateCreator<Store, [['zustand/immer', never]], []
                 user: null,
             });
         } finally {
-            set({ isRefreshingUser: false, initialized: true })
+            set({ isRefreshingUser: false, initialized: false })
         }
     },
 

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useStore } from "@/stores/store";
 import { useShallow } from "zustand/react/shallow";
 import AuthLoader from "@/components/auth/loader";
+import AuthInitializer from "@/components/auth/intitailizeAuth";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
     const { isAuthenticated } = useAuth();
@@ -23,6 +24,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <div className="w-full min-h-screen">
+            <AuthInitializer />
             <Navigation />
             <div className="min-h-screen w-full flex flex-col md:flex-row bg-background">
                 <div className="hidden lg:block w-full md:w-1/2">
