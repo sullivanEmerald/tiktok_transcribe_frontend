@@ -9,28 +9,23 @@ import AuthLoader from "@/components/auth/loader";
 
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
-    const { user, isloading, initialized } = useStore(useShallow((state) => ({
+    const { user, isloading } = useStore(useShallow((state) => ({
         user: state.user,
         isloading: state.isRefreshingUser,
-        initialized: state.initialized
     })))
 
     const router = useRouter();
 
     useEffect(() => {
-        if (initialized && !isloading && !user) {
+        if (!isloading && !user) {
             router.push('/auth/login')
         }
-    }, [isloading, user, router, initialized])
+    }, [isloading, user, router])
 
 
 
-    if (isloading) return <AuthLoader />
+    if (isloading && !user) return <AuthLoader />
 
-
-    if (!user) {
-        return null;
-    }
 
     return <>{children}</>
 }
