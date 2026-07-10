@@ -100,9 +100,6 @@ axiosInstance.interceptors.response.use(
       // Clear auth state
       useStore.getState().setUser(null);
 
-      // Redirect to login
-      window.location.replace("/auth/login");
-
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;
