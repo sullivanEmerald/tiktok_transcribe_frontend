@@ -31,11 +31,11 @@ const menuItems: MenuItem[] = [
         icon: User,
         to: "/dashboard/profile",
     },
-    {
-        label: "Settings",
-        icon: Settings,
-        to: "/dashbaord/account",
-    },
+    // {
+    //     label: "Settings",
+    //     icon: Settings,
+    //     to: "/dashbaord/account",
+    // },
     {
         label: "Logout",
         icon: LogOut,
