@@ -11,7 +11,6 @@ const PUBLIC_ONLY_ROUTES = [
 ];
 
 export function middleware(req: NextRequest) {
-
     const pathname = req.nextUrl.pathname;
 
     const hasRefreshToken = !!req.cookies.get("refreshToken");
@@ -34,11 +33,7 @@ export function middleware(req: NextRequest) {
 export const config = {
     matcher: [
         "/",
-        "/auth/login",
-        "/auth/register",
-        "/auth/verify",
-        "/auth/forgot-password",
-        "/auth/reset-password",
-        "/auth/verify-password"
+        "/dashboard/:path*",
+        "/auth/:path*",
     ],
 };

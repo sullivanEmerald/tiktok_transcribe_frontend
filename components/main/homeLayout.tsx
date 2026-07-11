@@ -9,17 +9,17 @@ import { useAuth } from "@/hooks/useAuth";
 import AuthLoader from "../auth/loader";
 
 export default function HomeLayout({ children }: { children: React.ReactNode }) {
-    const router = useRouter();
-    const { isloading } = useStore(useShallow((state) => ({
-        isloading: state.isRefreshingUser,
-    })))
-    const { isAuthenticated } = useAuth();
+    // const router = useRouter();
+    // const { isloading } = useStore(useShallow((state) => ({
+    //     isloading: state.isRefreshingUser,
+    // })))
+    // const { isAuthenticated } = useAuth();
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            router.replace('/dashboard')
-        }
-    }, [isAuthenticated])
+    // useEffect(() => {
+    //     if (isAuthenticated) {
+    //         router.replace('/dashboard')
+    //     }
+    // }, [isAuthenticated])
     return (
         <section>
             <div className="px-4 sm:px-8">

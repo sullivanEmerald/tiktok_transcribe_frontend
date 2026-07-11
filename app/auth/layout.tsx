@@ -24,7 +24,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <div className="w-full min-h-screen">
-            <AuthInitializer />
+            {/* <AuthInitializer /> */}
             <Navigation />
             <div className="min-h-screen w-full flex flex-col md:flex-row bg-background">
                 <div className="hidden lg:block w-full md:w-1/2">
