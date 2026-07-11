@@ -18,7 +18,7 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         if (!isloading && !user) {
-            router.push('/auth/login')
+            router.push('/')
         }
     }, [isloading, user, router])
 
