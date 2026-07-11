@@ -26,6 +26,5 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
 
     if (isloading && !user) return <AuthLoader />
 
-
     return <>{children}</>
 }

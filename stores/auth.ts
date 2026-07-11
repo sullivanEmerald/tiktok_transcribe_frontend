@@ -22,7 +22,7 @@ type AuthActions = {
 export type AuthSlice = {
     user: User | null,
     isRefreshingUser: boolean,
-    // initialized: boolean,
+
 } & AuthActions;
 
 
@@ -31,7 +31,7 @@ export const createAuthSlice: StateCreator<Store, [['zustand/immer', never]], []
     user: null,
     isRefreshingUser: true,
     error: null,
-    // initialized: false,
+
 
     setUser: (user) => set({ user }),
 

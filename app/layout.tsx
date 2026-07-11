@@ -100,6 +100,7 @@ export default function RootLayout({
         className={`${inter.variable} ${geistMono.variable} antialiased`}
       >
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_ANALYSTIC_ID!} />
+        <AuthInitializer />
         <ToastContainer
           position="top-right"
           autoClose={3000}
