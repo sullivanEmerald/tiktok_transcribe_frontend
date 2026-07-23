@@ -13,18 +13,14 @@ import { showToaster } from "@/lib/utils";
 export default function LoginPage() {
     const router = useRouter();
     const [form, setForm] = useState({
-        firstName: "",
-        lastName: "",
+        fullName: "",
         email: "",
-        phoneNumber: "",
         password: "",
         confirmPassword: "",
     });
     const [errors, setErrors] = useState({
-        firstName: "",
-        lastName: "",
+        fullName: "",
         email: "",
-        phoneNumber: "",
         password: "",
         confirmPassword: "",
     });
@@ -34,29 +30,17 @@ export default function LoginPage() {
     // Validate a single field
     const validateField = (name: string, value: string) => {
         let error = '';
-        if (name === 'firstName') {
+        if (name === 'fullName') {
             if (!value.trim()) {
                 error = 'First name is required';
             } else if (!validNamePattern.test(value.trim())) {
                 error = 'First name cannot contain special characters';
-            }
-        } else if (name === 'lastName') {
-            if (!value.trim()) {
-                error = 'Last name is required';
-            } else if (!validNamePattern.test(value.trim())) {
-                error = 'Last name cannot contain special characters';
             }
         } else if (name === 'email') {
             if (!value) {
                 error = 'Email is required';
             } else if (!emailPattern.test(value)) {
                 error = 'Please enter a valid email address';
-            }
-        } else if (name === 'phoneNumber') {
-            if (!value) {
-                error = 'Phone number is required';
-            } else if (!phonePattern.test(value)) {
-                error = 'Please enter a valid phone number';
             }
         } else if (name === 'password') {
             error = validatePassword(value);
@@ -71,10 +55,8 @@ export default function LoginPage() {
     // Validate all fields
     const validateAll = () => {
         const newErrors: typeof errors = {
-            firstName: validateField('firstName', form.firstName),
-            lastName: validateField('lastName', form.lastName),
+            fullName: validateField('firstName', form.fullName),
             email: validateField('businessEmail', form.email),
-            phoneNumber: validateField('phoneNumber', form.phoneNumber),
             password: validateField('password', form.password),
             confirmPassword: validateField('confirmPassword', form.confirmPassword || ''),
         };
@@ -98,10 +80,8 @@ export default function LoginPage() {
                 const { confirmPassword, ...registerData } = form;
                 const response = await register({ ...registerData });
                 setForm({
-                    firstName: "",
-                    lastName: "",
+                    fullName: "",
                     email: "",
-                    phoneNumber: "",
                     password: "",
                     confirmPassword: "",
                 });
@@ -130,33 +110,18 @@ export default function LoginPage() {
             <form className="space-y-6" onSubmit={handleSubmit} noValidate>
                 <div>
                     <Input
-                        id="firstName"
-                        name="firstName"
-                        label="first Name"
+                        id="fullName"
+                        name="fullName"
+                        label="fullname"
                         type="text"
                         autoComplete="given-name"
                         required
-                        placeholder="Enter your first name"
-                        value={form.firstName}
+                        placeholder="Enter your fullname"
+                        value={form.fullName}
                         onChange={handleChange}
-                        aria-invalid={!!errors.firstName}
+                        aria-invalid={!!errors.fullName}
                     />
-                    {errors.firstName && <span className="text-xs text-red-500 mt-1 block">{errors.firstName}</span>}
-                </div>
-                <div>
-                    <Input
-                        id="lastName"
-                        name="lastName"
-                        label="Last Name"
-                        type="text"
-                        autoComplete="family-name"
-                        required
-                        placeholder="Enter your last name"
-                        value={form.lastName}
-                        onChange={handleChange}
-                        aria-invalid={!!errors.lastName}
-                    />
-                    {errors.lastName && <span className="text-xs text-red-500 mt-1 block">{errors.lastName}</span>}
+                    {errors.fullName && <span className="text-xs text-red-500 mt-1 block">{errors.fullName}</span>}
                 </div>
                 <div>
                     <Input
@@ -172,21 +137,6 @@ export default function LoginPage() {
                         aria-invalid={!!errors.email}
                     />
                     {errors.email && <span className="text-xs text-red-500 mt-1 block">{errors.email}</span>}
-                </div>
-                <div>
-                    <Input
-                        id="phoneNumber"
-                        name="phoneNumber"
-                        label="Phone Number"
-                        type="text"
-                        autoComplete="family-name"
-                        required
-                        placeholder="Enter your phone number"
-                        value={form.phoneNumber}
-                        onChange={handleChange}
-                        aria-invalid={!!errors.phoneNumber}
-                    />
-                    {errors.phoneNumber && <span className="text-xs text-red-500 mt-1 block">{errors.phoneNumber}</span>}
                 </div>
                 <div>
                     <Input

@@ -102,30 +102,34 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                         <Popover>
                             <PopoverTrigger asChild>
                                 <div className="hidden sm:block flex items-center gap-2 cursor-pointer">
-                                    <DisplayAvatar name={user?.firstName} />
+                                    <DisplayAvatar user={user} />
                                 </div>
                             </PopoverTrigger>
-                            <PopoverContent>
+                            <PopoverContent className="border-none">
                                 <PopoverHeader>
-                                    <PopoverTitle>Account menu</PopoverTitle>
+                                    <PopoverTitle>
+                                        <div className="flex flex-col mb-4">
+                                            <span className="">Account menu</span>
+                                            <span className="text-sm text-muted-foreground">{user?.email}</span>
+                                        </div>
+                                    </PopoverTitle>
                                 </PopoverHeader>
                                 <div>
                                     {menuItems.map(({ label, icon: Icon, to }, index) => (
                                         <div key={label}>
                                             {to ? (
                                                 <>
-                                                    <Link href={to} className="flex items-center gap-3 py-3 cursor-pointer hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-primary">
+                                                    <Link href={to} className="flex items-center gap-3 py-3 px-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded-2xl transition focus:outline-none focus:ring-2 focus:ring-primary">
                                                         <Icon size={18} className="text-muted-foreground" />
-                                                        <span className="text-sm font-medium text-gray-700">
+                                                        <span className="text-sm font-medium text-foreground">
                                                             {label}
                                                         </span>
                                                     </Link>
-                                                    <hr className="border-gray-200 mx-4" />
                                                 </>
                                             ) : (
-                                                <button className="flex items-center gap-3 py-3 w-full cursor-pointer hover:bg-gray-100 transition border-none outline-none bg-transparent focus:outline-none" onClick={logout}>
+                                                <button className="flex items-center gap-3 py-3 px-2 w-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700  rounded-2xl transition border-none outline-none bg-transparent focus:outline-none" onClick={logout}>
                                                     <Icon size={18} className="text-muted-foreground" />
-                                                    <span className="text-sm font-medium text-gray-700">
+                                                    <span className="text-sm font-medium text-foreground">
                                                         {label}
                                                     </span>
                                                 </button>
@@ -144,9 +148,9 @@ export function NavigationBar({ onOpen, isOpen }: { onOpen?: () => void, isOpen?
                                         href={nav.to}
                                         onClick={() => setShowPopover(false)}
                                         target={nav.redirect ? '_blank' : ""}
-                                        className="flex items-center gap-1 px-2 py-2 rounded-lg text-md text-primary hover:bg-gray-100 hover:text-primary transition-colors duration-200"
+                                        className="flex items-center gap-1 px-2 py-2 rounded-lg text-md text-foreground hover:bg-gray-100 hover:text-primary transition-colors duration-200"
                                     >
-                                        <nav.icon className="text-primary w-4 h-4" />
+                                        <nav.icon className="text-foreground w-4 h-4" />
                                         <span>{nav.label}</span>
                                     </Link>
 

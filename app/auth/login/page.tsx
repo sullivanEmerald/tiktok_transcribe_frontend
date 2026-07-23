@@ -10,9 +10,11 @@ import LineLoader from "@/components/genreral/lineLoader";
 import { Eye, EyeOff } from "lucide-react";
 import { login } from "@/services/auth";
 import { useStore } from "@/stores/store";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
     const router = useRouter();
+    const { userlogin } = useAuth();
     const [submitting, setSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
@@ -135,6 +137,20 @@ export default function LoginPage() {
                         {submitting ? <div className="flex items-center justify-center gap-2"><LineLoader /> <span>Logging in...</span></div> : "Login"}
                     </Button>
                 </div>
+                {/* Google Authentication here */}
+                <div className="flex items-center justify-center gap-2 my-4 w-full ">
+                    <div className="w-full border-t border-gray-600" />
+                    <span className="text-muted-foreground text-lg">or</span>
+                    <div className="w-full border-t border-gray-600" />
+                </div>
+
+                <Button
+                    type="button"
+                    className="w-full bg-white text-black hover:bg-gray-100 border border-gray-300 flex items-center justify-center gap-2"
+                    onClick={userlogin}
+                >
+                    Continue with Google
+                </Button>
             </form>
             <p className="text-center text-muted-foreground pt-2">Don't have an account? <Link href="/auth/register" className="text-primary text-bold">Create one</Link></p>
         </div>

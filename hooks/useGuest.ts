@@ -53,7 +53,7 @@ export function useGuestTranscription() {
         setIsDownloading(true);
 
         try {
-            const result = await downloadService.downloadVideo(videoUrl, captchaToken);
+            const result = await downloadService.downloadVideoAsQuest(videoUrl, captchaToken);
             console.log(result);
         } catch (error) {
             console.error("Error downloading video:", error);

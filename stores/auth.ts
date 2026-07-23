@@ -4,12 +4,8 @@ import { axiosInstance } from '@/lib/utils';
 import { Store } from "@/types/store";
 import { CurrentUser } from "@/services/auth";
 import { Logout } from "@/services/auth";
+import { User } from "@/types/user";
 
-interface User {
-    id: string;
-    email: string;
-    firstName: string,
-}
 
 type AuthActions = {
     setUser: (user: User | null) => void;
